@@ -1,6 +1,7 @@
 package com.bntu.departmentsystem.service.impl;
 
 import com.bntu.departmentsystem.model.dto.student.EditStudentRequest;
+import com.bntu.departmentsystem.model.dto.student.StudentReportRequest;
 import com.bntu.departmentsystem.model.entity.Group;
 import com.bntu.departmentsystem.model.entity.Person;
 import com.bntu.departmentsystem.model.entity.Student;
@@ -13,16 +14,15 @@ import com.bntu.departmentsystem.service.parser.ExcelParseService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
+import com.bntu.departmentsystem.utils.PersonPhoneUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class StudentServiceImpl implements StudentService {
+    private static final String STUDENTS_TEMPLATE_NAME = "students.docx";
+
     private final StudentRepository studentRepository;
     private final GroupRepository groupRepository;
     private final ExcelStudentMapper excelStudentMapper;
@@ -132,22 +134,20 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ByteArrayOutputStream generateReport(List<Student> students) {
-        try {
-            File template = ResourceUtils.getFile("classpath:templates/students.docx");
-            Map<String, String> singleData = new HashMap<String, String>() {{
-                put("group", students.get(0).getGroup().getNumber());
-            }};
-            List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
-                add(new HashMap<String, List<String>>() {{
-                    put("fullName", students.stream().map(Person::getFullName).collect(Collectors.toList()));
-                    put("birthDate", students.stream().map(student -> student.getBirthDate().toString()).collect(Collectors.toList()));
-                }});
-            }};
-            return wordReportService.generateReport(new FileInputStream(template), singleData, tableData);
-        } catch (IOException exception) {
-
-        }
-        return null;
+    public ByteArrayOutputStream generateReport(StudentReportRequest reportRequest) {
+        Group group = groupRepository.findById(reportRequest.getGroupId()).orElse(null);
+        List<Student> students = group == null ? Collections.emptyList() : studentRepository.findByGroup(group);
+        Map<String, String> singleData = new HashMap<String, String>() {{
+            put("group", group == null ? "" : group.getNumber());
+            put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate().toString())));
+        }};
+        List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
+            add(new HashMap<String, List<String>>() {{
+                put("fullName", students.stream().map(Person::getFullName).collect(Collectors.toList()));
+                put("birthDate", students.stream().map(student -> student.getBirthDate().toString())
+                        .collect(Collectors.toList()));
+            }});
+        }};
+        return wordReportService.generateReport(STUDENTS_TEMPLATE_NAME, singleData, tableData);
     }
 }

@@ -8,7 +8,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DateUtils {
@@ -23,5 +22,9 @@ public class DateUtils {
         } catch (ParseException exception) {
             return LocalDate.now();
         }
+    }
+
+    public static String format(LocalDate date) {
+        return date.format(DATE_TIME_FORMATTER);
     }
 }

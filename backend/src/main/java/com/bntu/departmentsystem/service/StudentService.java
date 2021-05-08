@@ -1,13 +1,12 @@
 package com.bntu.departmentsystem.service;
 
 import com.bntu.departmentsystem.model.dto.student.EditStudentRequest;
-import com.bntu.departmentsystem.model.entity.Group;
+import com.bntu.departmentsystem.model.dto.student.StudentReportRequest;
 import com.bntu.departmentsystem.model.entity.Student;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayOutputStream;;
 import java.util.List;
 
 public interface StudentService {
@@ -29,5 +28,5 @@ public interface StudentService {
 
     List<Student> uploadData(MultipartFile excelFile) throws InvalidUploadFileException;
 
-    ByteArrayOutputStream generateReport(List<Student> students);
+    ByteArrayOutputStream generateReport(StudentReportRequest reportRequest);
 }

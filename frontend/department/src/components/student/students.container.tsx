@@ -6,8 +6,7 @@ import {Student} from "../../model/student/student.model";
 import StudentsDataContainer from "./students-data.container";
 import StudentsUploadDataContainer from "./students-upload-data.container";
 import {useHistory} from "react-router";
-import {Button} from "antd";
-import {download} from "../../utils/download.utils";
+import StudentsReportGenerationContainer from "./students-report-generation.container";
 
 const StudentsContainer: FC = () => {
 
@@ -28,11 +27,7 @@ const StudentsContainer: FC = () => {
                                                  label: entity.fullName
                                              }
                                          }} onSelect={handleSelect}/>
-            <Button onClick={() => {
-                download()
-            }}>
-                Download
-            </Button>
+            <StudentsReportGenerationContainer/>
             <StudentsUploadDataContainer/>
             <StudentsDataContainer/>
         </>

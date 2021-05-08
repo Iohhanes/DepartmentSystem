@@ -2,6 +2,7 @@ package com.bntu.departmentsystem.controller;
 
 import com.bntu.departmentsystem.model.dto.DeleteEntitiesRequest;
 import com.bntu.departmentsystem.model.dto.student.EditStudentRequest;
+import com.bntu.departmentsystem.model.dto.student.StudentReportRequest;
 import com.bntu.departmentsystem.model.entity.Student;
 import com.bntu.departmentsystem.service.StudentService;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
@@ -9,17 +10,23 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.List;
 
+import static com.bntu.departmentsystem.constants.HTTPConstants.CONTENT_DISPOSITION;
+import static com.bntu.departmentsystem.constants.HTTPConstants.DOCX_CONTENT_TYPE;
+import static com.bntu.departmentsystem.constants.PaginationConstants.DEFAULT_PAGE_SIZE;
+import static com.bntu.departmentsystem.constants.PaginationConstants.FIRST_PAGE_INDEX;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/students")
 public class StudentsController {
+    private static final String REPORT_FILE_NAME = "students_report.docx";
+
     private final StudentService studentService;
 
     @GetMapping("/page/{page}/count/{count}")
@@ -63,19 +70,20 @@ public class StudentsController {
         try {
             List<Student> students = studentService.uploadData(file);
             studentService.addAll(students);
-            return new ResponseEntity<>(studentService.getAll(0, 10).toArray(new Student[0]), HttpStatus.OK);
+            return new ResponseEntity<>(studentService.getAll(FIRST_PAGE_INDEX, DEFAULT_PAGE_SIZE)
+                    .toArray(new Student[0]), HttpStatus.OK);
         } catch (InvalidUploadFileException exception) {
             return new ResponseEntity<>(null, HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @PostMapping("/report")
-    public ResponseEntity<byte[]> test() {
-        List<Student> students = studentService.getAll(0, 10);
-        ByteArrayOutputStream outputStream = studentService.generateReport(students);
+    public ResponseEntity<byte[]> downloadReport(@RequestBody StudentReportRequest reportRequest) {
+        ByteArrayOutputStream outputStream = studentService.generateReport(reportRequest);
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment;filename=students.docx");
-        headers.add("Content-Type", "application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-        return ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, CONTENT_DISPOSITION + REPORT_FILE_NAME);
+        headers.add(HttpHeaders.CONTENT_TYPE, DOCX_CONTENT_TYPE);
+        return outputStream == null ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() :
+                ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
     }
 }

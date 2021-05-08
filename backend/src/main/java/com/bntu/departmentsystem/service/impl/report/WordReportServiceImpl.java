@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.util.HashMap;
@@ -17,13 +18,15 @@ public class WordReportServiceImpl implements WordReportService {
     private static final String MARKUP_START = "${";
     private static final String MARKUP_END = "}";
     private static final String TABLE_MARKUP_CHARACTER = "!";
+    private static final String TEMPLATES_PATH = "classpath:templates/";
 
     @Override
-    public ByteArrayOutputStream generateReport(InputStream template,
-                                       Map<String, String> singleData,
-                                       List<Map<String, List<String>>> tableData) {
+    public ByteArrayOutputStream generateReport(String templateName,
+                                                Map<String, String> singleData,
+                                                List<Map<String, List<String>>> tableData) {
         try {
-            XWPFDocument document = new XWPFDocument(template);
+            File template = ResourceUtils.getFile(TEMPLATES_PATH + templateName);
+            XWPFDocument document = new XWPFDocument(new FileInputStream(template));
             insertSingleValues(document, singleData);
             for (int i = 0; i < tableData.size(); i++) {
                 insertTableValues(document, i, tableData.get(i));

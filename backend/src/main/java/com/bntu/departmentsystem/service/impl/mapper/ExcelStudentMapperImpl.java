@@ -6,6 +6,7 @@ import com.bntu.departmentsystem.repository.GroupRepository;
 import com.bntu.departmentsystem.service.mapper.ExcelStudentMapper;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
+import com.bntu.departmentsystem.utils.PersonPhoneUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,13 @@ import org.springframework.util.StringUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
 public class ExcelStudentMapperImpl implements ExcelStudentMapper {
+    private static final String PHONE__PATTERN = "\\d{9}";
+
     private final GroupRepository groupRepository;
 
     @Override
@@ -44,7 +48,7 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
                 .firstName(excelStudent.getFirstName())
                 .middleName(excelStudent.getMiddleName())
                 .birthDate(DateUtils.format(excelStudent.getBirthDate()))
-                .phone(excelStudent.getPhone())
+                .phone(PersonPhoneUtils.format(excelStudent.getPhone()))
                 .email(excelStudent.getEmail())
                 .fullName(PersonNameUtils.getFullName(excelStudent.getLastName(),
                         excelStudent.getFirstName(),
@@ -60,6 +64,7 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
         return excelStudent == null ||
                 !StringUtils.hasLength(excelStudent.getLastName()) ||
                 !StringUtils.hasLength(excelStudent.getFirstName()) ||
-                excelStudent.getBirthDate() == null;
+                excelStudent.getBirthDate() == null ||
+                (excelStudent.getPhone() != null && !excelStudent.getPhone().matches(PHONE__PATTERN));
     }
 }

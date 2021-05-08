@@ -19,7 +19,7 @@ const PhoneFormComponent: FC<PhoneFormComponentProps> = ({defaultValue}) => {
                 },
             ]}
         >
-            <MaskedInput mask="+375(11)111-11-11" className="phone-form__input" defaultValue={defaultValue}/>
+            <MaskedInput mask="+375(11)1111111" className="phone-form__input" defaultValue={defaultValue}/>
         </Form.Item>
     )
 }
