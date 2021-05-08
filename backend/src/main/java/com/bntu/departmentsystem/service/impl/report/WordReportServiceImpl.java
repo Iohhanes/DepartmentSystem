@@ -1,0 +1,118 @@
+package com.bntu.departmentsystem.service.impl.report;
+
+import com.bntu.departmentsystem.service.report.WordReportService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xwpf.usermodel.*;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@Slf4j
+public class WordReportServiceImpl implements WordReportService {
+    private static final String MARKUP_START = "${";
+    private static final String MARKUP_END = "}";
+    private static final String TABLE_MARKUP_CHARACTER = "!";
+
+    @Override
+    public ByteArrayOutputStream generateReport(InputStream template,
+                                       Map<String, String> singleData,
+                                       List<Map<String, List<String>>> tableData) {
+        try {
+            XWPFDocument document = new XWPFDocument(template);
+            insertSingleValues(document, singleData);
+            for (int i = 0; i < tableData.size(); i++) {
+                insertTableValues(document, i, tableData.get(i));
+            }
+            ByteArrayOutputStream documentBytes = new ByteArrayOutputStream();
+            document.write(documentBytes);
+            return documentBytes;
+        } catch (IOException exception) {
+            log.warn("Cannot read template: {}", exception.getMessage());
+        }
+        return null;
+    }
+
+    private void insertSingleValues(XWPFDocument document, Map<String, String> singleData) {
+        List<XWPFParagraph> paragraphs = document.getParagraphs();
+        for (XWPFParagraph paragraph : paragraphs) {
+            String text = paragraph.getText();
+            if (checkSingleValueText(text)) {
+                List<XWPFRun> runs = paragraph.getRuns();
+                for (XWPFRun run : runs) {
+                    String value = getReplacedSingleValue(run.toString(), singleData);
+                    if (value != null) {
+                        run.setText(value, 0);
+                    }
+                }
+            }
+        }
+    }
+
+    private void insertTableValues(XWPFDocument document, int tableIndex, Map<String, List<String>> tableData) {
+        List<XWPFTable> tables = document.getTables();
+        if (!CollectionUtils.isEmpty(tables) && tables.get(tableIndex) != null) {
+
+            XWPFTable table = tables.get(tableIndex);
+            XWPFTableRow firstRow = table.getRow(0);
+            insertNewRows(table, tableData);
+            Map<String, List<String>> transformedTableData = transformTableData(firstRow, tableData);
+
+            List<XWPFTableRow> rows = table.getRows();
+            for (int i = 0; i < rows.size(); i++) {
+                XWPFTableRow newRow = table.getRow(i);
+                List<XWPFTableCell> cells = newRow.getTableCells();
+                for (Map.Entry<String, List<String>> entry : transformedTableData.entrySet()) {
+                    XWPFTableCell cell = cells.get(Integer.parseInt(entry.getKey()));
+                    String newValue = entry.getValue().get(i);
+                    if (newValue != null) {
+                        cell.removeParagraph(0);
+                        cell.setText(newValue);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean checkSingleValueText(String text) {
+        return text.contains(MARKUP_START) && !text.contains(MARKUP_START + TABLE_MARKUP_CHARACTER);
+    }
+
+    private String getReplacedSingleValue(String value, Map<String, String> singleData) {
+        for (Map.Entry<String, String> entry : singleData.entrySet()) {
+            String wordKey = MARKUP_START + entry.getKey() + MARKUP_END;
+            if (value.contains(wordKey)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
+
+    private void insertNewRows(XWPFTable table, Map<String, List<String>> tableData) {
+        int count = tableData.values().stream().mapToInt(List::size).max().orElse(0);
+        if (count != 0) {
+            for (int i = 1; i < count; i++) {
+                table.createRow();
+            }
+        }
+    }
+
+    private Map<String, List<String>> transformTableData(XWPFTableRow firstRow, Map<String, List<String>> tableData) {
+        Map<String, List<String>> transformedTableData = new HashMap<>();
+        for (Map.Entry<String, List<String>> entry : tableData.entrySet()) {
+            int index = 0;
+            for (XWPFTableCell cell : firstRow.getTableCells()) {
+                if (cell.getText().contains(MARKUP_START + TABLE_MARKUP_CHARACTER + entry.getKey() + MARKUP_END)) {
+                    break;
+                }
+                index++;
+            }
+            transformedTableData.put(String.valueOf(index), entry.getValue());
+        }
+        return transformedTableData;
+    }
+}
