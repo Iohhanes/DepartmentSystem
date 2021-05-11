@@ -61,17 +61,17 @@ public class WordReportServiceImpl implements WordReportService {
         if (!CollectionUtils.isEmpty(tables) && tables.get(tableIndex) != null) {
 
             XWPFTable table = tables.get(tableIndex);
-            XWPFTableRow firstRow = table.getRow(0);
+            XWPFTableRow firstRow = table.getRow(1);
             insertNewRows(table, tableData);
             Map<String, List<String>> transformedTableData = transformTableData(firstRow, tableData);
 
             List<XWPFTableRow> rows = table.getRows();
-            for (int i = 0; i < rows.size(); i++) {
+            for (int i = 1; i < rows.size(); i++) {
                 XWPFTableRow newRow = table.getRow(i);
                 List<XWPFTableCell> cells = newRow.getTableCells();
                 for (Map.Entry<String, List<String>> entry : transformedTableData.entrySet()) {
                     XWPFTableCell cell = cells.get(Integer.parseInt(entry.getKey()));
-                    String newValue = entry.getValue().get(i);
+                    String newValue = entry.getValue().get(i - 1);
                     if (newValue != null) {
                         cell.removeParagraph(0);
                         cell.setText(newValue);

@@ -1,4 +1,4 @@
-import React, {FC, useState} from "react";
+import React, {FC, useCallback, useState} from "react";
 import {RcFile} from "antd/es/upload";
 import {Alert, Button, Modal, Spin} from "antd";
 import UploadDataComponent from "../upload-data/upload-data.component";
@@ -17,6 +17,7 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                                                                                onCloseShowingUploadStatus
                                                                            }) => {
     const [visible, setVisible] = useState(false);
+    const [mainFile, setMainFile] = useState<RcFile>()
 
     const loading = uploadStatus === UploadStatus.PENDING;
 
@@ -30,6 +31,16 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
         }
         setVisible(false);
     }
+
+    const handleSubmit = () => {
+        if (mainFile) {
+            onUpload(mainFile)
+        }
+    }
+
+    const handleSetMainFile = useCallback((file: RcFile | undefined) => {
+        setMainFile(file);
+    }, [])
 
     return (
         <>
@@ -51,7 +62,14 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                                closable
                                banner
                                onClose={onCloseShowingUploadStatus}/>}
-                        <UploadDataComponent onUpload={onUpload}/></>}
+                        <div style={{flexDirection: "column"}}>
+                            <UploadDataComponent onSetMainFile={handleSetMainFile}/>
+                            <Button type="primary" onClick={handleSubmit}
+                                    style={{marginBottom: "20px", marginTop: "20px"}}>
+                                Submit
+                            </Button>
+                        </div>
+                    </>}
                 </Spin>
             </Modal>
         </>

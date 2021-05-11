@@ -33,8 +33,8 @@ public class CurriculumContent {
     @Column(name = "lab_work_hours")
     private Integer labWorkHours;
 
-    @OneToOne
-    @JoinColumn(nullable = false, name = "curriculum_id")
+    @ManyToOne
+    @JoinColumn(name = "curriculum_id")
     private Curriculum curriculum;
 
     @ManyToOne

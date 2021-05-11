@@ -41,7 +41,7 @@ public class RanksController {
     }
 
     @PostMapping("/delete")
-    public List<Rank> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Rank> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         rankService.deleteAll(deleteEntitiesRequest.getIds());
         return rankService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

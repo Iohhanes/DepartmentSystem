@@ -21,7 +21,7 @@ export const loadSpecialities = createAsyncThunk("loadSpecialities", async (requ
 });
 
 export const addSpeciality = createAsyncThunk("addSpeciality", async (requestData: SpecialityData) => {
-    await axios.post<Speciality[]>("/specialities/add", requestData);
+    await axios.post("/specialities/add", requestData);
 });
 
 export const editSpeciality = createAsyncThunk("editSpeciality", async (requestData: Speciality) => {
@@ -33,7 +33,7 @@ export const loadSpeciality = createAsyncThunk("loadSpeciality", async (id: stri
     return data;
 });
 
-export const deleteSpecialities = createAsyncThunk("deleteSpeciality", async (requestData: DeleteEntitiesRequest) => {
+export const deleteSpecialities = createAsyncThunk("deleteSpecialities", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<Speciality[]>("/specialities/delete", requestData);
     return data;
 });

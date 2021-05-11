@@ -4,7 +4,7 @@ import {DepartmentType} from "../../model/department-type.model";
 import {StudentReportRequest} from "../../model/student/student-report-request.model";
 import {selectAllData} from "../../utils/select-all-data.utils";
 import {Group} from "../../model/group/group.model";
-import {downloadReport} from "../../utils/report.utils";
+import {downloadDocument} from "../../utils/report.utils";
 import StudentReportFormComponent from "./student-report-form.component";
 
 const StudentsReportGenerationContainer: FC = () => {
@@ -20,8 +20,8 @@ const StudentsReportGenerationContainer: FC = () => {
 
     const handleSubmit = useCallback((data) => {
         setDownloadError(false);
-        downloadReport(
-            DepartmentType.STUDENTS,
+        downloadDocument(
+            `/${DepartmentType.STUDENTS}/report`,
             "students_report.docx",
             {
                 groupId: data.group,

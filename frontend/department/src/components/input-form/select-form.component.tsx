@@ -11,6 +11,7 @@ interface SelectFormComponentProps {
     label?: string;
     rules?: Rule[];
     defaultValue?: string;
+    disabled?: boolean;
 }
 
 const SelectFormComponent: FC<SelectFormComponentProps> = ({
@@ -21,7 +22,8 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                                                                name,
                                                                label,
                                                                rules,
-                                                               defaultValue
+                                                               defaultValue,
+                                                               disabled
                                                            }) => {
     return (
         <Form.Item
@@ -34,7 +36,8 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
             <Select className={"select__input " + (selectClassName ? selectClassName : "")}
                     placeholder={placeholder}
                     showSearch
-                    defaultValue={defaultValue}>
+                    defaultValue={defaultValue}
+                    disabled={disabled}>
                 {options?.map(option => <Select.Option value={option.value} key={option.value}>
                     {option.label}
                 </Select.Option>)}

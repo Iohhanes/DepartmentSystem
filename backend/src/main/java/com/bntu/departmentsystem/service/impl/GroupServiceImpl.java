@@ -44,7 +44,8 @@ public class GroupServiceImpl implements GroupService {
         groupRepository.save(Group.builder()
                 .number(groupRequest.getNumber())
                 .yearOfEntry(groupRequest.getYearOfEntry())
-                .speciality(specialityRepository.findById(groupRequest.getSpecialityId()).orElse(null))
+                .speciality(groupRequest.getSpecialityId() != null ?
+                        specialityRepository.findById(groupRequest.getSpecialityId()).orElse(null) : null)
                 .build());
     }
 

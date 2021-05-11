@@ -27,7 +27,7 @@ export const loadStudents = createAsyncThunk("loadStudents", async (requestData:
 });
 
 export const addStudent = createAsyncThunk("addStudent", async (requestData: AddStudentRequest) => {
-    await axios.post<Student[]>("/students/add", requestData);
+    await axios.post("/students/add", requestData);
 });
 
 export const editStudent = createAsyncThunk("editStudent", async (requestData: EditStudentRequest) => {

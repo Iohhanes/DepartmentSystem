@@ -45,17 +45,17 @@ public class StudentsController {
     }
 
     @PostMapping("/add")
-    public void addSpeciality(@RequestBody EditStudentRequest studentRequest) {
+    public void add(@RequestBody EditStudentRequest studentRequest) {
         studentService.add(studentRequest);
     }
 
     @PostMapping("/{id}/edit")
-    public void editSpeciality(@PathVariable Long id, @RequestBody EditStudentRequest studentRequest) {
+    public void edit(@PathVariable Long id, @RequestBody EditStudentRequest studentRequest) {
         studentService.edit(id, studentRequest);
     }
 
     @PostMapping("/delete")
-    public List<Student> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Student> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         studentService.deleteAll(deleteEntitiesRequest.getIds());
         return studentService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

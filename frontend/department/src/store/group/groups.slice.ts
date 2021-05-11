@@ -23,7 +23,7 @@ export const loadGroups = createAsyncThunk("loadGroups", async (requestData: Pag
 });
 
 export const addGroup = createAsyncThunk("addGroup", async (requestData: AddGroupRequest) => {
-    await axios.post<Group[]>("/groups/add", requestData);
+    await axios.post("/groups/add", requestData);
 });
 
 export const editGroup = createAsyncThunk("editGroup", async (requestData: EditGroupRequest) => {

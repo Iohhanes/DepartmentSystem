@@ -41,7 +41,7 @@ public class DegreesController {
     }
 
     @PostMapping("/delete")
-    public List<Degree> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Degree> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         degreeService.deleteAll(deleteEntitiesRequest.getIds());
         return degreeService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

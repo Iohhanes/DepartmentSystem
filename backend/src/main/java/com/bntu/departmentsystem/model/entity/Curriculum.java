@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -12,7 +13,7 @@ import javax.persistence.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class Curriculum {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +25,4 @@ public class Curriculum {
     @ManyToOne
     @JoinColumn(name = "speciality_id")
     private Speciality speciality;
-
-    @OneToOne(mappedBy = "curriculum")
-    private CurriculumContent curriculumContent;
 }

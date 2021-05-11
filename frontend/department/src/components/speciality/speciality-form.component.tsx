@@ -18,11 +18,19 @@ const SpecialityFormComponent: FC<SpecialityFormComponentProps> = ({
         <Form name="speciality" onFinish={onSubmit}>
             <TextFormComponent label="Code" name="code" defaultValue={current?.code} rules={[
                 {
+                    required: true,
+                    message: 'Please input code'
+                },
+                {
                     max: 50,
                     message: 'Max 50 chars',
                 }
             ]}/>
             <TextFormComponent label="Title" name="title" defaultValue={current?.title} rules={[
+                {
+                    required: true,
+                    message: 'Please input title'
+                },
                 {
                     max: 100,
                     message: 'Max 100 chars',

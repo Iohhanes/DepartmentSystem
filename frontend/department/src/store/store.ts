@@ -2,12 +2,22 @@ import {configureStore, ThunkAction, Action} from "@reduxjs/toolkit";
 import {specialitiesReducer} from "./speciality/specialities.slice";
 import {groupsReducer} from "./group/groups.slice";
 import {studentsReducer} from "./student/students.slice";
+import {subjectsReducer} from "./subject/subjects.slice";
+import {curriculumsReducer} from "./curriculum/curriculums.slice";
+import {degreesReducer} from "./degree/degrees.slice";
+import {ranksReducer} from "./rank/ranks.slice";
+import {positionsReducer} from "./position/positions.slice";
 
 const store = configureStore({
     reducer: {
         specialities: specialitiesReducer,
         groups: groupsReducer,
-        students: studentsReducer
+        students: studentsReducer,
+        subjects: subjectsReducer,
+        curriculums: curriculumsReducer,
+        degrees: degreesReducer,
+        ranks: ranksReducer,
+        positions: positionsReducer
     }
 })
 

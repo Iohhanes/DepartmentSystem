@@ -5,21 +5,22 @@ import {search} from "../../utils/search-utils";
 import {debounce} from "lodash";
 import {Entity} from "../../model/entity.model";
 import {DEBOUNCE_WAIT} from "../../utils/constants.utils";
+import {useHistory} from "react-router";
 
 
 interface SearchBarComponentProps<T extends Entity> {
     prefix: string;
     placeholder: string;
     onConvert: (entity: T) => Suggestion;
-    onSelect?: (value: string) => void;
 }
 
 const SearchBarComponent = <T extends Entity>({
                                                   prefix,
                                                   placeholder,
-                                                  onConvert,
-                                                  onSelect
+                                                  onConvert
                                               }: PropsWithChildren<SearchBarComponentProps<T>>): ReactElement<any, any> | null => {
+    const history = useHistory();
+
     const [options, setOptions] = useState<Suggestion[]>([]);
     const [value, setValue] = useState("");
 
@@ -38,6 +39,10 @@ const SearchBarComponent = <T extends Entity>({
         setValue(option.label)
     }, [setValue])
 
+    const handleSelect = useCallback((value: string) => {
+        history.push(`/${prefix}/${value}`)
+    }, [history, prefix]);
+
     return (
         <div className="search-bar">
             <AutoComplete
@@ -46,7 +51,7 @@ const SearchBarComponent = <T extends Entity>({
                 }}
                 value={value}
                 options={options}
-                onSelect={onSelect}
+                onSelect={handleSelect}
                 onSearch={handleSearch}
                 onChange={handleChange}
                 placeholder={placeholder}

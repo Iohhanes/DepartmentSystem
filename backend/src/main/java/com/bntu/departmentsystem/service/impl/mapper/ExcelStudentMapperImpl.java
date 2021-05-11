@@ -30,8 +30,8 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
         if (!CollectionUtils.isEmpty(excelStudents)) {
             List<Student> students = new ArrayList<>();
             for (ExcelStudent excelStudent : excelStudents) {
-                Student from = from(excelStudent);
-                students.add(from);
+                Student student = from(excelStudent);
+                students.add(student);
             }
             return students;
         }
@@ -40,7 +40,7 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
 
     @Override
     public Student from(ExcelStudent excelStudent) throws InvalidUploadFileException {
-        if (noValidStudent(excelStudent)) {
+        if (notValidStudent(excelStudent)) {
             throw new InvalidUploadFileException();
         }
         return Student.builder()
@@ -56,11 +56,12 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
                 .abbreviatedName(PersonNameUtils.getAbbreviatedName(excelStudent.getLastName(),
                         excelStudent.getFirstName(),
                         excelStudent.getMiddleName()))
-                .group(groupRepository.findByNumber(excelStudent.getGroupNumber()))
+                .group(excelStudent.getGroupNumber() != null ?
+                        groupRepository.findByNumber(excelStudent.getGroupNumber()) : null)
                 .build();
     }
 
-    private boolean noValidStudent(ExcelStudent excelStudent) {
+    private boolean notValidStudent(ExcelStudent excelStudent) {
         return excelStudent == null ||
                 !StringUtils.hasLength(excelStudent.getLastName()) ||
                 !StringUtils.hasLength(excelStudent.getFirstName()) ||

@@ -1,20 +1,11 @@
-import React, {FC, useCallback} from "react";
-import 'antd/dist/antd.css';
+import React, {FC} from "react";
 import NavigationComponent from "../navigation/navigation.component";
 import {DepartmentType} from "../../model/department-type.model";
 import {Speciality} from "../../model/speciality/speciality.model";
-import {useHistory} from "react-router";
 import SearchBarComponent from "../search-bar/search-bar.component";
 import SpecialitiesDataContainer from "./specialities-data.container";
 
 const SpecialitiesContainer: FC = () => {
-
-    const history = useHistory();
-
-    const handleSelect = useCallback((value: string) => {
-        history.push(`/${DepartmentType.SPECIALITIES}/${value}`)
-    }, [history]);
-
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.SPECIALITIES}/>
@@ -25,7 +16,7 @@ const SpecialitiesContainer: FC = () => {
                                                     value: entity.id,
                                                     label: entity.code
                                                 }
-                                            }} onSelect={handleSelect}/>
+                                            }}/>
             <SpecialitiesDataContainer/>
         </>
     )

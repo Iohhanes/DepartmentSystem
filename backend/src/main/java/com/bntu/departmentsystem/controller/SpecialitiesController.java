@@ -31,17 +31,17 @@ public class SpecialitiesController {
     }
 
     @PostMapping("/add")
-    public void addSpeciality(@RequestBody EditSpecialityRequest specialityRequest) {
+    public void add(@RequestBody EditSpecialityRequest specialityRequest) {
         specialityService.add(specialityRequest);
     }
 
     @PostMapping("/{id}/edit")
-    public void editSpeciality(@PathVariable Long id, @RequestBody EditSpecialityRequest specialityRequest) {
+    public void edit(@PathVariable Long id, @RequestBody EditSpecialityRequest specialityRequest) {
         specialityService.edit(id, specialityRequest);
     }
 
     @PostMapping("/delete")
-    public List<Speciality> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Speciality> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         specialityService.deleteAll(deleteEntitiesRequest.getIds());
         return specialityService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

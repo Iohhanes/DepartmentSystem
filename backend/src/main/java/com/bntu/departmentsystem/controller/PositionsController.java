@@ -41,7 +41,7 @@ public class PositionsController {
     }
 
     @PostMapping("/delete")
-    public List<Position> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Position> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         positionService.deleteAll(deleteEntitiesRequest.getIds());
         return positionService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

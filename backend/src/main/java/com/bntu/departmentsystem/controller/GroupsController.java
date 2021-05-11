@@ -41,7 +41,7 @@ public class GroupsController {
     }
 
     @PostMapping("/delete")
-    public List<Group> deleteSpeciality(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
+    public List<Group> delete(@RequestBody DeleteEntitiesRequest deleteEntitiesRequest) {
         groupService.deleteAll(deleteEntitiesRequest.getIds());
         return groupService.getAll(deleteEntitiesRequest.getPage(), deleteEntitiesRequest.getCount());
     }

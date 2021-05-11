@@ -14,7 +14,6 @@ import com.bntu.departmentsystem.service.parser.ExcelParseService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
-import com.bntu.departmentsystem.utils.PersonPhoneUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,7 +66,8 @@ public class StudentServiceImpl implements StudentService {
                 .abbreviatedName(PersonNameUtils.getAbbreviatedName(studentRequest.getLastName(),
                         studentRequest.getFirstName(),
                         studentRequest.getMiddleName()))
-                .group(groupRepository.findById(studentRequest.getGroupId()).orElse(null))
+                .group(studentRequest.getGroupId() != null ?
+                        groupRepository.findById(studentRequest.getGroupId()).orElse(null) : null)
                 .build());
     }
 
@@ -125,8 +125,12 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> uploadData(MultipartFile excelFile) throws InvalidUploadFileException {
         try {
-            List<ExcelStudent> excelStudents = excelParseService.parse(excelFile, ExcelStudent.class);
-            return excelStudentMapper.from(excelStudents);
+            if (!excelFile.isEmpty()) {
+                List<ExcelStudent> excelStudents = excelParseService.parse(excelFile, ExcelStudent.class);
+                return excelStudentMapper.from(excelStudents);
+            } else {
+                return Collections.emptyList();
+            }
         } catch (Exception exception) {
             log.warn("Cannot parse excel file: {}", exception.getMessage());
             throw new InvalidUploadFileException(exception.getMessage());

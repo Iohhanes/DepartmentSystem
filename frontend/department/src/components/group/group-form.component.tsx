@@ -27,6 +27,10 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
         <Form name="group" onFinish={onSubmit}>
             <TextFormComponent label="Number" name="number" defaultValue={current?.number} rules={[
                 {
+                    required: true,
+                    message: 'Please input number'
+                },
+                {
                     max: 20,
                     message: 'Max 20 chars',
                 }
@@ -34,12 +38,23 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
             <NumberFormComponent label="Year of entry"
                                  name="yearOfEntry"
                                  defaultValue={current?.yearOfEntry}
-                                 min={1999}/>
+                                 min={1999}
+                                 rules={[
+                                     {
+                                         required: true,
+                                         message: 'Please input year of entry'
+                                     }
+                                 ]}/>
             <SelectFormComponent label="Speciality" name="speciality" placeholder="Select speciality"
                                  options={specialities?.map(speciality => {
                                      return {label: speciality.code, value: speciality.id}
                                  })}
-                                 defaultValue={current?.speciality.id}/>
+                                 defaultValue={current?.speciality.id}
+                                 rules={[{
+                                     required: true,
+                                     message: 'Please select speciality'
+                                 }]}/>
+            {"Students"}
             <Table style={{width: "25%"}} dataSource={students?.map(entity => {
                 return {
                     key: entity.id,
