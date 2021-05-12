@@ -5,9 +5,9 @@ import com.bntu.departmentsystem.model.dto.student.EditStudentRequest;
 import com.bntu.departmentsystem.model.dto.student.StudentReportRequest;
 import com.bntu.departmentsystem.model.entity.Student;
 import com.bntu.departmentsystem.service.StudentService;
+import com.bntu.departmentsystem.utils.HTTPUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.*;
 import java.util.List;
 
-import static com.bntu.departmentsystem.constants.HTTPConstants.CONTENT_DISPOSITION;
-import static com.bntu.departmentsystem.constants.HTTPConstants.DOCX_CONTENT_TYPE;
 import static com.bntu.departmentsystem.constants.PaginationConstants.DEFAULT_PAGE_SIZE;
 import static com.bntu.departmentsystem.constants.PaginationConstants.FIRST_PAGE_INDEX;
 
@@ -80,10 +78,6 @@ public class StudentsController {
     @PostMapping("/report")
     public ResponseEntity<byte[]> downloadReport(@RequestBody StudentReportRequest reportRequest) {
         ByteArrayOutputStream outputStream = studentService.generateReport(reportRequest);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, CONTENT_DISPOSITION + REPORT_FILE_NAME);
-        headers.add(HttpHeaders.CONTENT_TYPE, DOCX_CONTENT_TYPE);
-        return outputStream == null ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() :
-                ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
+        return HTTPUtils.formResponseWithFile(outputStream, REPORT_FILE_NAME);
     }
 }

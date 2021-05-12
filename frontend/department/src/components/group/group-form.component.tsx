@@ -54,21 +54,26 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
                                      required: true,
                                      message: 'Please select speciality'
                                  }]}/>
-            {"Students"}
-            <Table style={{width: "25%"}} dataSource={students?.map(entity => {
-                return {
-                    key: entity.id,
-                    fullName: <Link to={{pathname: `/${DepartmentType.STUDENTS}/${entity.id}`}}>
-                        {entity.fullName}</Link>
-                };
+            {students && <div>
+                {"Students"}
+                <Table style={{width: "25%", marginBottom: 20}} dataSource={students?.map(entity => {
+                    return {
+                        key: entity.id,
+                        fullName: <Link to={{pathname: `/${DepartmentType.STUDENTS}/${entity.id}`}}>
+                            {entity.fullName}</Link>
+                    };
 
-            })} columns={[
-                {
-                    dataIndex: "fullName",
-                    key: "fullName"
-                }
-            ]} size={"small"}
-                   pagination={false}/>
+                })} columns={[
+                    {
+                        dataIndex: "fullName",
+                        key: "fullName"
+                    }
+                ]} size={"small"}
+                       pagination={false}
+                       showHeader={false}
+                       bordered/>
+            </div>
+            }
             <div style={{display: "flex"}}>
                 <Form.Item>
                     <Button style={{marginRight: 10}} type="primary" htmlType="submit">

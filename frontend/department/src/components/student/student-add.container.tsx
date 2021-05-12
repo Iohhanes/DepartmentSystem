@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {addStudent, selectLoadingOnAdd} from "../../store/student/students.slice";
 import StudentFormComponent from "./student-form.component";
 import {Group} from "../../model/group/group.model";
-import {selectAllData} from "../../utils/select-all-data.utils";
+import {selectAllData} from "../../utils/select-data.utils";
 import {DepartmentType} from "../../model/department-type.model";
 import {LoadingOutlined} from "@ant-design/icons";
 import {Spin} from "antd";

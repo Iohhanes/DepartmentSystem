@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from "react";
 import EntityActionReportGenerationComponent from "../entity/entity-action-report-generation.component";
 import {DepartmentType} from "../../model/department-type.model";
 import {StudentReportRequest} from "../../model/student/student-report-request.model";
-import {selectAllData} from "../../utils/select-all-data.utils";
+import {selectAllData} from "../../utils/select-data.utils";
 import {Group} from "../../model/group/group.model";
 import {downloadDocument} from "../../utils/report.utils";
 import StudentReportFormComponent from "./student-report-form.component";

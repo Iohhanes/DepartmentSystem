@@ -31,19 +31,29 @@ const CurriculumFormComponent: FC<CurriculumFormComponentProps> = ({
             <NumberFormComponent label="Year of entry"
                                  name="yearOfEntry"
                                  defaultValue={current?.yearOfEntry}
-                                 min={1999}/>
+                                 min={1999}
+                                 rules={[{
+                                     required: true,
+                                     message: 'Please input year of entry'
+                                 }]}/>
             <SelectFormComponent label="Speciality" name="speciality" placeholder="Select speciality"
                                  options={specialities?.map(speciality => {
                                      return {label: speciality.code, value: speciality.id}
                                  })}
-                                 defaultValue={current?.speciality.id}/>
+                                 defaultValue={current?.speciality.id}
+                                 rules={[{
+                                     required: true,
+                                     message: 'Please select speciality'
+                                 }]}/>
             {uploadStatus === UploadStatus.ERROR &&
             <Alert type="error"
                    message="Invalid file content"
                    closable
                    banner
                    onClose={onCloseShowingUploadStatus}/>}
-            <UploadDataComponent onSetMainFile={onSetMainFile}/>
+            <div style={{marginBottom: 20}}>
+                <UploadDataComponent onSetMainFile={onSetMainFile}/>
+            </div>
             <div style={{display: "flex"}}>
                 <Form.Item>
                     <Button style={{marginRight: 10}} type="primary" htmlType="submit">

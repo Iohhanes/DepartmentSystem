@@ -6,7 +6,7 @@ import {Spin} from "antd";
 import {editStudent, loadStudent, selectCurrentStudent, selectLoadingOnEdit} from "../../store/student/students.slice";
 import {Entity} from "../../model/entity.model";
 import StudentFormComponent from "./student-form.component";
-import {selectAllData} from "../../utils/select-all-data.utils";
+import {selectAllData} from "../../utils/select-data.utils";
 import {Group} from "../../model/group/group.model";
 import {DepartmentType} from "../../model/department-type.model";
 

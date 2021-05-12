@@ -1,6 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {selectAllData} from "../../utils/select-all-data.utils";
+import {selectAllData} from "../../utils/select-data.utils";
 import {DepartmentType} from "../../model/department-type.model";
 import {LoadingOutlined} from "@ant-design/icons";
 import {Spin} from "antd";

@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import {LoadingOutlined} from "@ant-design/icons";
 import {Spin} from "antd";
 import {Entity} from "../../model/entity.model";
-import {selectAllData} from "../../utils/select-all-data.utils";
+import {selectAllData} from "../../utils/select-data.utils";
 import {DepartmentType} from "../../model/department-type.model";
 import {Speciality} from "../../model/speciality/speciality.model";
 import {RcFile} from "antd/es/upload";

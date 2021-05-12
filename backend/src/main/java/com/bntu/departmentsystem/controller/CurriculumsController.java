@@ -4,9 +4,9 @@ import com.bntu.departmentsystem.model.dto.DeleteEntitiesRequest;
 import com.bntu.departmentsystem.model.entity.Curriculum;
 import com.bntu.departmentsystem.service.CurriculumContentService;
 import com.bntu.departmentsystem.service.CurriculumService;
+import com.bntu.departmentsystem.utils.HTTPUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-
-import static com.bntu.departmentsystem.constants.HTTPConstants.CONTENT_DISPOSITION;
-import static com.bntu.departmentsystem.constants.HTTPConstants.DOCX_CONTENT_TYPE;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -72,10 +68,6 @@ public class CurriculumsController {
     @PostMapping("/{id}/content")
     public ResponseEntity<byte[]> downloadContent(@PathVariable Long id) {
         ByteArrayOutputStream outputStream = curriculumService.downloadContent(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, CONTENT_DISPOSITION + CURRICULUM_CONTENT_FILE_NAME);
-        headers.add(HttpHeaders.CONTENT_TYPE, DOCX_CONTENT_TYPE);
-        return outputStream == null ? ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build() :
-                ResponseEntity.ok().headers(headers).body(outputStream.toByteArray());
+        return HTTPUtils.formResponseWithFile(outputStream, CURRICULUM_CONTENT_FILE_NAME);
     }
 }
