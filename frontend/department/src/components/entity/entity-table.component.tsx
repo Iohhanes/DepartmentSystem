@@ -13,6 +13,8 @@ interface EntityTableComponentProps<T extends Entity> {
     onDisplay: (entity: T) => any;
     columns: ColumnsType<object>;
     onChangePagination: (page: number, count?: number | undefined) => void;
+    currentPage: number;
+    totalCount: number;
     defaultPageSize: number;
     onDelete: (selectedRowKeys: string[]) => void;
     loading: boolean;
@@ -25,6 +27,8 @@ const EntityTableComponent = <T extends Entity>({
                                                     onDisplay,
                                                     columns,
                                                     onChangePagination,
+                                                    currentPage,
+                                                    totalCount,
                                                     defaultPageSize,
                                                     onDelete,
                                                     loading,
@@ -41,7 +45,7 @@ const EntityTableComponent = <T extends Entity>({
             <Spin indicator={<LoadingOutlined style={{fontSize: 24}} spin/>} spinning={loading}>
                 {!loading &&
                 <div>
-                    <div style={{display: "flex"}}>
+                    <div style={{display: "flex", marginBottom: 20}}>
                         <Button style={{marginRight: 10}} type="primary" onClick={() => onDelete(selectedRowKeys)}>
                             Delete
                         </Button>
@@ -52,35 +56,42 @@ const EntityTableComponent = <T extends Entity>({
                             </>
                         </Button>
                     </div>
-                    <Table className={componentClass ? componentClass : ""} dataSource={dataSource?.map(entity => {
-                        return {
-                            key: entity.id,
-                            ...onDisplay(entity),
-                            moreInfoButton: <Button type="primary">
-                                <>
-                                    {"More info"}
-                                    <Link to={{pathname: `/${type}/${entity.id}`}}/>
-                                </>
-                            </Button>
-                        };
+                    <Table className={componentClass ? componentClass : ""}
+                           dataSource={dataSource?.map(entity => {
+                               return {
+                                   key: entity.id,
+                                   ...onDisplay(entity),
+                                   moreInfoButton: <Button type="primary">
+                                       <>
+                                           {"More info"}
+                                           <Link to={{pathname: `/${type}/${entity.id}`}}/>
+                                       </>
+                                   </Button>
+                               };
 
-                    })} pagination={{
-                        pageSize: defaultPageSize,
-                        onChange: onChangePagination
-                    }} columns={[
-                        ...columns,
-                        {
-                            dataIndex: "moreInfoButton",
-                            key: "moreInfoButton"
-                        }
-                    ]} size={"middle"} rowSelection={{
-                        selectedRowKeys,
-                        onChange: handleCheck,
-                        selections: [
-                            Table.SELECTION_ALL,
-                            Table.SELECTION_INVERT,
-                            Table.SELECTION_NONE]
-                    }}
+                           })}
+                           pagination={{
+                               pageSize: defaultPageSize,
+                               onChange: onChangePagination,
+                               total: totalCount,
+                               current: currentPage,
+                           }}
+                           columns={[
+                               ...columns,
+                               {
+                                   dataIndex: "moreInfoButton",
+                                   key: "moreInfoButton"
+                               }
+                           ]}
+                           size={"middle"}
+                           rowSelection={{
+                               selectedRowKeys,
+                               onChange: handleCheck,
+                               selections: [
+                                   Table.SELECTION_ALL,
+                                   Table.SELECTION_INVERT,
+                                   Table.SELECTION_NONE]
+                           }}
                     />
                 </div>}
             </Spin>

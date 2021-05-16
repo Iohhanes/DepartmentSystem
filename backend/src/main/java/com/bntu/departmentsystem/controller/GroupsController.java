@@ -25,6 +25,11 @@ public class GroupsController {
         return groupService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return groupService.count();
+    }
+
     @GetMapping("/{id}")
     public Group getById(@PathVariable Long id) {
         return groupService.getById(id);

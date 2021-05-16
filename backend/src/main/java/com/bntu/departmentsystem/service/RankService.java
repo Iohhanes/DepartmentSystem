@@ -19,4 +19,6 @@ public interface RankService {
     void deleteAll(List<Long> ids);
 
     List<Rank> findByTitle(String query);
+
+    long count();
 }

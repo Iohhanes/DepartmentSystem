@@ -7,6 +7,7 @@ import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
 import {Group} from "../../model/group/group.model";
 import {AddGroupRequest} from "../../model/group/add-group-request.model";
 import {EditGroupRequest} from "../../model/group/edit-group-request.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface GroupsState extends DataState<Group> {
 }
@@ -15,6 +16,7 @@ const initialState: GroupsState = {
     loadingOnAdd: false,
     loading: false,
     loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadGroups = createAsyncThunk("loadGroups", async (requestData: PageRequest) => {
@@ -44,6 +46,11 @@ export const deleteGroups = createAsyncThunk("deleteGroups", async (requestData:
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/groups/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "groups",
     initialState,
@@ -52,6 +59,12 @@ const slice = createSlice({
         builder.addCase(loadGroup.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(addGroup.fulfilled, editGroup.fulfilled), () => {
@@ -88,5 +101,6 @@ export const selectLoading = (state: RootState) => state.groups.loading;
 export const selectCurrentGroup = (state: RootState) => state.groups.current;
 export const selectLoadingOnEdit = (state: RootState) => state.groups.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.groups.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.groups.totalCount;
 
 export const groupsReducer = slice.reducer;

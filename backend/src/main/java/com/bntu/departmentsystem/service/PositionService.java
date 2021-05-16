@@ -19,4 +19,6 @@ public interface PositionService {
     void deleteAll(List<Long> ids);
 
     List<Position> findByTitle(String query);
+
+    long count();
 }

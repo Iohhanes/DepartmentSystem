@@ -33,6 +33,11 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    public long count() {
+        return subjectRepository.count();
+    }
+
+    @Override
     public Subject getById(Long id) {
         return subjectRepository.findById(id).orElse(null);
     }

@@ -1,9 +1,16 @@
-import React, {FC, useCallback, useEffect} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import {DepartmentType} from "../../model/department-type.model";
 import DataTableComponent from "../entity/entity-table.component";
 import {DEFAULT_PAGE_SIZE, FIRST_TABLE_PAGE_INDEX} from "../../utils/constants.utils";
 import {useDispatch, useSelector} from "react-redux";
-import {deleteDegrees, loadDegrees, selectDegrees, selectLoading} from "../../store/degree/degrees.slice";
+import {
+    deleteDegrees,
+    loadCount,
+    loadDegrees,
+    selectDegrees,
+    selectLoading,
+    selectTotalCount
+} from "../../store/degree/degrees.slice";
 import {ProgressInfo} from "../../model/progress-info/progress-info.model";
 
 const DegreesDataContainer: FC = () => {
@@ -11,6 +18,13 @@ const DegreesDataContainer: FC = () => {
     const dispatch = useDispatch();
     const degrees = useSelector(selectDegrees);
     const loading = useSelector(selectLoading);
+    const totalCount = useSelector(selectTotalCount);
+
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        dispatch(loadCount())
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(loadDegrees({
@@ -23,7 +37,8 @@ const DegreesDataContainer: FC = () => {
         dispatch(loadDegrees({
             page: page - 1,
             count: count ? count : DEFAULT_PAGE_SIZE
-        }))
+        }));
+        setCurrentPage(page);
     }, [dispatch]);
 
     const handleDelete = useCallback((selectedRowKeys) => {
@@ -61,6 +76,8 @@ const DegreesDataContainer: FC = () => {
                 ]}
                 onChangePagination={handleChangePagination}
                 defaultPageSize={DEFAULT_PAGE_SIZE}
+                currentPage={currentPage}
+                totalCount={totalCount}
                 onDelete={handleDelete}
                 loading={loading}
             />

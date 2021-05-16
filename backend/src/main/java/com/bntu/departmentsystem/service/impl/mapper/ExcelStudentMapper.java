@@ -3,40 +3,21 @@ package com.bntu.departmentsystem.service.impl.mapper;
 import com.bntu.departmentsystem.model.entity.Student;
 import com.bntu.departmentsystem.model.excel.ExcelStudent;
 import com.bntu.departmentsystem.repository.GroupRepository;
-import com.bntu.departmentsystem.service.mapper.ExcelStudentMapper;
+import com.bntu.departmentsystem.service.mapper.ExcelEntityMapper;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
 import com.bntu.departmentsystem.utils.PersonPhoneUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Pattern;
+import static com.bntu.departmentsystem.constants.ParsingConstants.PHONE_PATTERN;
 
 @Service
 @RequiredArgsConstructor
-public class ExcelStudentMapperImpl implements ExcelStudentMapper {
-    private static final String PHONE__PATTERN = "\\d{9}";
-
+public class ExcelStudentMapper extends ExcelEntityMapper<ExcelStudent, Student> {
     private final GroupRepository groupRepository;
-
-    @Override
-    public List<Student> from(List<ExcelStudent> excelStudents) throws InvalidUploadFileException {
-        if (!CollectionUtils.isEmpty(excelStudents)) {
-            List<Student> students = new ArrayList<>();
-            for (ExcelStudent excelStudent : excelStudents) {
-                Student student = from(excelStudent);
-                students.add(student);
-            }
-            return students;
-        }
-        return Collections.emptyList();
-    }
 
     @Override
     public Student from(ExcelStudent excelStudent) throws InvalidUploadFileException {
@@ -47,7 +28,7 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
                 .lastName(excelStudent.getLastName())
                 .firstName(excelStudent.getFirstName())
                 .middleName(excelStudent.getMiddleName())
-                .birthDate(DateUtils.format(excelStudent.getBirthDate()))
+                .birthDate(DateUtils.format(DateUtils.format(excelStudent.getBirthDate())))
                 .phone(PersonPhoneUtils.format(excelStudent.getPhone()))
                 .email(excelStudent.getEmail())
                 .fullName(PersonNameUtils.getFullName(excelStudent.getLastName(),
@@ -66,6 +47,6 @@ public class ExcelStudentMapperImpl implements ExcelStudentMapper {
                 !StringUtils.hasLength(excelStudent.getLastName()) ||
                 !StringUtils.hasLength(excelStudent.getFirstName()) ||
                 excelStudent.getBirthDate() == null ||
-                (excelStudent.getPhone() != null && !excelStudent.getPhone().matches(PHONE__PATTERN));
+                (excelStudent.getPhone() != null && !excelStudent.getPhone().matches(PHONE_PATTERN));
     }
 }

@@ -5,6 +5,7 @@ import {PageRequest} from "../../model/page-request.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
 import {ProgressInfo, ProgressInfoData} from "../../model/progress-info/progress-info.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface RanksState extends DataState<ProgressInfo> {
 }
@@ -12,7 +13,8 @@ interface RanksState extends DataState<ProgressInfo> {
 const initialState: RanksState = {
     loadingOnAdd: false,
     loading: false,
-    loadingOnEdit: false
+    loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadRanks = createAsyncThunk("loadRanks", async (requestData: PageRequest) => {
@@ -41,6 +43,11 @@ export const deleteRanks = createAsyncThunk("deleteRanks", async (requestData: D
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/ranks/count");
+    return data;
+})
+
 const slice = createSlice({
     name: "ranks",
     initialState,
@@ -49,6 +56,12 @@ const slice = createSlice({
         builder.addCase(loadRank.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editRank.fulfilled, addRank.fulfilled), () => {
@@ -86,5 +99,6 @@ export const selectLoading = (state: RootState) => state.ranks.loading;
 export const selectCurrentRank = (state: RootState) => state.ranks.current;
 export const selectLoadingOnEdit = (state: RootState) => state.ranks.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.ranks.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.ranks.totalCount;
 
 export const ranksReducer = slice.reducer;

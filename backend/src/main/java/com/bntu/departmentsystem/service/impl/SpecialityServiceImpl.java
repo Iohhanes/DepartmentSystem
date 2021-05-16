@@ -33,6 +33,11 @@ public class SpecialityServiceImpl implements SpecialityService {
     }
 
     @Override
+    public long count() {
+        return specialityRepository.count();
+    }
+
+    @Override
     public Speciality getById(Long id) {
         return specialityRepository.findById(id).orElse(null);
     }

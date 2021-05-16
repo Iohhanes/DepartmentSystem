@@ -20,4 +20,6 @@ public interface SpecialityService {
     void deleteAll(List<Long> ids);
 
     List<Speciality> findByCode(String query);
+
+    long count();
 }

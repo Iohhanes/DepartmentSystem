@@ -33,6 +33,11 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public long count() {
+        return positionRepository.count();
+    }
+
+    @Override
     public Position getById(Long id) {
         return positionRepository.findById(id).orElse(null);
     }

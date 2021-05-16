@@ -8,6 +8,7 @@ import {Curriculum} from "../../model/curriculum/curriculum.model";
 import {AddCurriculumRequest} from "../../model/curriculum/add-curriculum-request.model";
 import {EditCurriculumRequest} from "../../model/curriculum/edit-curriculum-request.model";
 import {UploadStatus} from "../../model/upload-status.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface CurriculumsState extends DataState<Curriculum> {
     uploadStatus: UploadStatus;
@@ -17,7 +18,8 @@ const initialState: CurriculumsState = {
     loadingOnAdd: false,
     loading: false,
     loadingOnEdit: false,
-    uploadStatus: UploadStatus.NO_UPLOADING
+    uploadStatus: UploadStatus.NO_UPLOADING,
+    totalCount: 0
 };
 
 export const loadCurriculums = createAsyncThunk("loadCurriculums", async (requestData: PageRequest) => {
@@ -63,6 +65,11 @@ export const deleteCurriculums = createAsyncThunk("deleteCurriculums", async (re
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/curriculums/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "curriculums",
     initialState,
@@ -75,6 +82,12 @@ const slice = createSlice({
         builder.addCase(loadCurriculum.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editCurriculum.fulfilled, addCurriculum.fulfilled), () => {
@@ -122,5 +135,6 @@ export const selectCurrentCurriculum = (state: RootState) => state.curriculums.c
 export const selectLoadingOnEdit = (state: RootState) => state.curriculums.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.curriculums.loadingOnAdd;
 export const selectUploadStatus = (state: RootState) => state.curriculums.uploadStatus;
+export const selectTotalCount = (state: RootState) => state.curriculums.totalCount;
 
 export const curriculumsReducer = slice.reducer;

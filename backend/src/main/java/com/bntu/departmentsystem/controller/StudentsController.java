@@ -32,6 +32,11 @@ public class StudentsController {
         return studentService.getAll(page, count);
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return studentService.count();
+    }
+
     @GetMapping("/{id}")
     public Student getById(@PathVariable Long id) {
         return studentService.getById(id);

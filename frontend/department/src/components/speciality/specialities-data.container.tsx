@@ -1,13 +1,14 @@
-import React, {FC, useCallback, useEffect} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import {DepartmentType} from "../../model/department-type.model";
 import DataTableComponent from "../entity/entity-table.component";
 import {DEFAULT_PAGE_SIZE, FIRST_TABLE_PAGE_INDEX} from "../../utils/constants.utils";
 import {useDispatch, useSelector} from "react-redux";
 import {
     deleteSpecialities,
+    loadCount,
     loadSpecialities,
     selectLoading,
-    selectSpecialities
+    selectSpecialities, selectTotalCount
 } from "../../store/speciality/specialities.slice";
 import {Speciality} from "../../model/speciality/speciality.model";
 
@@ -16,6 +17,13 @@ const SpecialitiesDataContainer: FC = () => {
     const dispatch = useDispatch();
     const specialities = useSelector(selectSpecialities);
     const loading = useSelector(selectLoading);
+    const totalCount = useSelector(selectTotalCount);
+
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        dispatch(loadCount())
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(loadSpecialities({
@@ -28,7 +36,8 @@ const SpecialitiesDataContainer: FC = () => {
         dispatch(loadSpecialities({
             page: page - 1,
             count: count ? count : DEFAULT_PAGE_SIZE
-        }))
+        }));
+        setCurrentPage(page);
     }, [dispatch]);
 
     const handleDelete = useCallback((selectedRowKeys) => {
@@ -66,6 +75,8 @@ const SpecialitiesDataContainer: FC = () => {
                 ]}
                 onChangePagination={handleChangePagination}
                 defaultPageSize={DEFAULT_PAGE_SIZE}
+                currentPage={currentPage}
+                totalCount={totalCount}
                 onDelete={handleDelete}
                 loading={loading}
             />

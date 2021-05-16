@@ -35,6 +35,11 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    public long count() {
+        return groupRepository.count();
+    }
+
+    @Override
     public Group getById(Long id) {
         return groupRepository.findById(id).orElse(null);
     }
@@ -59,7 +64,6 @@ public class GroupServiceImpl implements GroupService {
                     .setSpeciality(specialityRepository.findById(specialityId).orElse(null)));
             groupRepository.save(group);
         }
-
     }
 
     @Override

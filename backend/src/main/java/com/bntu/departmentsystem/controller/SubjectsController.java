@@ -25,6 +25,11 @@ public class SubjectsController {
         return subjectService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return subjectService.count();
+    }
+
     @GetMapping("/id/{id}")
     public Subject getById(@PathVariable Long id) {
         return subjectService.getById(id);

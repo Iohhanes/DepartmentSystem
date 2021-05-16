@@ -11,4 +11,6 @@ public interface FacultyMemberRepository extends JpaRepository<FacultyMember, Lo
     void deleteByIdIn(List<Long> ids);
 
     List<FacultyMember> findAllByFullNameIsContaining(String query);
+
+    FacultyMember findByFullName(String fullName);
 }

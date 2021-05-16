@@ -7,6 +7,9 @@ import {curriculumsReducer} from "./curriculum/curriculums.slice";
 import {degreesReducer} from "./degree/degrees.slice";
 import {ranksReducer} from "./rank/ranks.slice";
 import {positionsReducer} from "./position/positions.slice";
+import {masterCandidatesReducer} from "./master-candidate/master-candidates.slice";
+import {graduateStudentsReducer} from "./graduate-student/graduate-students.slice";
+import {facultyMembersReducer} from "./faculty-member/faculty-members.slice";
 
 const store = configureStore({
     reducer: {
@@ -17,7 +20,10 @@ const store = configureStore({
         curriculums: curriculumsReducer,
         degrees: degreesReducer,
         ranks: ranksReducer,
-        positions: positionsReducer
+        positions: positionsReducer,
+        masterCandidates: masterCandidatesReducer,
+        graduateStudents: graduateStudentsReducer,
+        facultyMembers: facultyMembersReducer
     }
 })
 

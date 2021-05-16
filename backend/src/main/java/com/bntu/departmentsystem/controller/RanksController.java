@@ -25,6 +25,11 @@ public class RanksController {
         return rankService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return rankService.count();
+    }
+
     @GetMapping("/id/{id}")
     public Rank getById(@PathVariable Long id) {
         return rankService.getById(id);

@@ -1,21 +1,12 @@
 import {Group} from "../group/group.model";
 import {Entity} from "../entity.model";
+import {PersonData} from "../person/person.model";
 
 export interface Student extends Entity, ExtendStudentData {
     group: Group;
 }
 
-
-export interface StudentData {
-    lastName: string;
-    firstName: string;
-    middleName: string;
-    birthDate: Date;
-    phone: string;
-    email: string;
-}
-
-export interface ExtendStudentData extends StudentData {
+export interface ExtendStudentData extends PersonData {
     fullName: string;
     abbreviatedName: string;
 }

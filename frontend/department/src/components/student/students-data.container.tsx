@@ -1,4 +1,4 @@
-import React, {FC, useCallback, useEffect} from "react";
+import React, {FC, useCallback, useEffect, useState} from "react";
 import {DepartmentType} from "../../model/department-type.model";
 import {Student} from "../../model/student/student.model";
 import DataTableComponent from "../entity/entity-table.component";
@@ -6,9 +6,11 @@ import {DEFAULT_PAGE_SIZE, FIRST_TABLE_PAGE_INDEX} from "../../utils/constants.u
 import {useDispatch, useSelector} from "react-redux";
 import {
     deleteStudents,
+    loadCount,
     loadStudents,
     selectLoading,
     selectStudents,
+    selectTotalCount,
 } from "../../store/student/students.slice";
 import {Link} from "react-router-dom";
 import {DatePicker} from "antd";
@@ -19,6 +21,13 @@ const StudentsDataContainer: FC = () => {
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
     const loading = useSelector(selectLoading);
+    const totalCount = useSelector(selectTotalCount);
+
+    const [currentPage, setCurrentPage] = useState<number>(1);
+
+    useEffect(() => {
+        dispatch(loadCount())
+    }, [dispatch]);
 
     useEffect(() => {
         dispatch(loadStudents({
@@ -32,6 +41,7 @@ const StudentsDataContainer: FC = () => {
             page: page - 1,
             count: count ? count : DEFAULT_PAGE_SIZE
         }))
+        setCurrentPage(page);
     }, [dispatch]);
 
     const handleDelete = useCallback((selectedRowKeys) => {
@@ -75,6 +85,8 @@ const StudentsDataContainer: FC = () => {
                     }
                 ]}
                 onChangePagination={handleChangePagination}
+                currentPage={currentPage}
+                totalCount={totalCount}
                 defaultPageSize={DEFAULT_PAGE_SIZE}
                 onDelete={handleDelete}
                 loading={loading}

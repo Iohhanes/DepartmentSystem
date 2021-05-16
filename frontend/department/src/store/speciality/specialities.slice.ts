@@ -5,6 +5,7 @@ import {PageRequest} from "../../model/page-request.model";
 import {Speciality, SpecialityData} from "../../model/speciality/speciality.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface SpecialitiesState extends DataState<Speciality> {
 }
@@ -12,7 +13,8 @@ interface SpecialitiesState extends DataState<Speciality> {
 const initialState: SpecialitiesState = {
     loadingOnAdd: false,
     loading: false,
-    loadingOnEdit: false
+    loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadSpecialities = createAsyncThunk("loadSpecialities", async (requestData: PageRequest) => {
@@ -38,6 +40,11 @@ export const deleteSpecialities = createAsyncThunk("deleteSpecialities", async (
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/specialities/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "specialities",
     initialState,
@@ -46,6 +53,12 @@ const slice = createSlice({
         builder.addCase(loadSpeciality.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editSpeciality.fulfilled, addSpeciality.fulfilled), () => {
@@ -83,5 +96,6 @@ export const selectLoading = (state: RootState) => state.specialities.loading;
 export const selectCurrentSpeciality = (state: RootState) => state.specialities.current;
 export const selectLoadingOnEdit = (state: RootState) => state.specialities.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.specialities.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.specialities.totalCount;
 
 export const specialitiesReducer = slice.reducer;

@@ -25,6 +25,11 @@ public class PositionsController {
         return positionService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return positionService.count();
+    }
+
     @GetMapping("/id/{id}")
     public Position getById(@PathVariable Long id) {
         return positionService.getById(id);

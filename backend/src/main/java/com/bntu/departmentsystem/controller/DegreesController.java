@@ -25,6 +25,11 @@ public class DegreesController {
         return degreeService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return degreeService.count();
+    }
+
     @GetMapping("/id/{id}")
     public Degree getById(@PathVariable Long id) {
         return degreeService.getById(id);

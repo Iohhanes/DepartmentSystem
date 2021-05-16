@@ -9,10 +9,11 @@ import com.bntu.departmentsystem.model.excel.ExcelStudent;
 import com.bntu.departmentsystem.repository.GroupRepository;
 import com.bntu.departmentsystem.repository.StudentRepository;
 import com.bntu.departmentsystem.service.StudentService;
-import com.bntu.departmentsystem.service.mapper.ExcelStudentMapper;
+import com.bntu.departmentsystem.service.impl.mapper.ExcelStudentMapper;
 import com.bntu.departmentsystem.service.parser.ExcelParseService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
+import com.bntu.departmentsystem.utils.PersonDataUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +48,11 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public long count() {
+        return studentRepository.count();
+    }
+
+    @Override
     public Student getById(Long id) {
         return studentRepository.findById(id).orElse(null);
     }
@@ -57,7 +63,7 @@ public class StudentServiceImpl implements StudentService {
                 .lastName(studentRequest.getLastName())
                 .firstName(studentRequest.getFirstName())
                 .middleName(studentRequest.getMiddleName())
-                .birthDate(DateUtils.format(studentRequest.getBirthDate().toString()))
+                .birthDate(DateUtils.format(studentRequest.getBirthDate()))
                 .phone(studentRequest.getPhone())
                 .email(studentRequest.getEmail())
                 .fullName(PersonNameUtils.getFullName(studentRequest.getLastName(),
@@ -80,21 +86,7 @@ public class StudentServiceImpl implements StudentService {
     public void edit(Long id, EditStudentRequest studentRequest) {
         Student student = studentRepository.findById(id).orElse(null);
         if (student != null) {
-            Optional.ofNullable(studentRequest.getLastName()).ifPresent(student::setLastName);
-            Optional.ofNullable(studentRequest.getFirstName()).ifPresent(student::setFirstName);
-            Optional.ofNullable(studentRequest.getMiddleName()).ifPresent(student::setMiddleName);
-            Optional.ofNullable(studentRequest.getBirthDate()).ifPresent(birthDate -> student
-                    .setBirthDate(DateUtils.format(studentRequest.getBirthDate().toString())));
-            Optional.ofNullable(studentRequest.getPhone()).ifPresent(student::setPhone);
-            Optional.ofNullable(studentRequest.getEmail()).ifPresent(student::setEmail);
-            if (studentRequest.getLastName() != null && studentRequest.getFirstName() != null) {
-                student.setFullName(PersonNameUtils.getFullName(studentRequest.getLastName(),
-                        studentRequest.getFirstName(),
-                        studentRequest.getMiddleName()));
-                student.setAbbreviatedName(PersonNameUtils.getAbbreviatedName(studentRequest.getLastName(),
-                        studentRequest.getFirstName(),
-                        studentRequest.getMiddleName()));
-            }
+            PersonDataUtils.editPerson(student, studentRequest);
             Optional.ofNullable(studentRequest.getGroupId()).ifPresent(groupId -> student
                     .setGroup(groupRepository.findById(groupId).orElse(null)));
             studentRepository.save(student);
@@ -143,7 +135,7 @@ public class StudentServiceImpl implements StudentService {
         List<Student> students = group == null ? Collections.emptyList() : studentRepository.findByGroup(group);
         Map<String, String> singleData = new HashMap<String, String>() {{
             put("group", group == null ? "" : group.getNumber());
-            put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate().toString())));
+            put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate())));
         }};
         List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{

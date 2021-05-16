@@ -1,20 +1,15 @@
 package com.bntu.departmentsystem.model.dto.student;
 
+import com.bntu.departmentsystem.model.dto.person.EditPersonRequest;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EditStudentRequest {
-    private String lastName;
-    private String firstName;
-    private String middleName;
-    private Date birthDate;
-    private String phone;
-    private String email;
+@EqualsAndHashCode(callSuper = true)
+public class EditStudentRequest extends EditPersonRequest {
     private Long groupId;
 }

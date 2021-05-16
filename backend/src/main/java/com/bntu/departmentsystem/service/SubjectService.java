@@ -19,4 +19,6 @@ public interface SubjectService {
     void deleteAll(List<Long> ids);
 
     List<Subject> findByTitle(String query);
+
+    long count();
 }

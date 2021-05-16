@@ -19,4 +19,6 @@ public interface GroupService {
     void deleteAll(List<Long> ids);
 
     List<Group> findByNumber(String query);
+
+    long count();
 }

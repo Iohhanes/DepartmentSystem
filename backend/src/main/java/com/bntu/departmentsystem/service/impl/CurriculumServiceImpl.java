@@ -6,7 +6,7 @@ import com.bntu.departmentsystem.repository.CurriculumRepository;
 import com.bntu.departmentsystem.repository.SpecialityRepository;
 import com.bntu.departmentsystem.service.CurriculumContentService;
 import com.bntu.departmentsystem.service.CurriculumService;
-import com.bntu.departmentsystem.service.mapper.ExcelCurriculumContentMapper;
+import com.bntu.departmentsystem.service.impl.mapper.ExcelCurriculumContentMapper;
 import com.bntu.departmentsystem.service.parser.ExcelParseService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
@@ -41,6 +41,11 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public List<Curriculum> getAll(Integer page, Integer count) {
         return curriculumRepository.findAll(PageRequest.of(page, count)).getContent();
+    }
+
+    @Override
+    public long count() {
+        return curriculumRepository.count();
     }
 
     @Override

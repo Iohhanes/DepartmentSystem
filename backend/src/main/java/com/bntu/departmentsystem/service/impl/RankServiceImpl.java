@@ -33,6 +33,11 @@ public class RankServiceImpl implements RankService {
     }
 
     @Override
+    public long count() {
+        return rankRepository.count();
+    }
+
+    @Override
     public Rank getById(Long id) {
         return rankRepository.findById(id).orElse(null);
     }

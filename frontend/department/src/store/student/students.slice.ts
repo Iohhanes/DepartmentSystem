@@ -9,6 +9,7 @@ import {AddStudentRequest} from "../../model/student/add-student-request.model";
 import {UploadDataRequest} from "../../model/upload-data-request.model";
 import {UploadStatus} from "../../model/upload-status.model";
 import {EditStudentRequest} from "../../model/student/edit-student-request.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface StudentsState extends DataState<Student> {
     uploadStatus: UploadStatus;
@@ -18,6 +19,7 @@ const initialState: StudentsState = {
     loadingOnAdd: false,
     loading: false,
     loadingOnEdit: false,
+    totalCount: 0,
     uploadStatus: UploadStatus.NO_UPLOADING
 };
 
@@ -63,6 +65,11 @@ export const uploadStudentData = createAsyncThunk("uploadStudentData", async (re
     return data;
 })
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/students/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "students",
     initialState,
@@ -88,6 +95,12 @@ const slice = createSlice({
         builder.addCase(loadStudent.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(addStudent.fulfilled, editStudent.fulfilled), () => {
@@ -127,5 +140,6 @@ export const selectCurrentStudent = (state: RootState) => state.students.current
 export const selectLoadingOnEdit = (state: RootState) => state.students.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.students.loadingOnAdd;
 export const selectUploadStatus = (state: RootState) => state.students.uploadStatus;
+export const selectTotalCount = (state: RootState) => state.students.totalCount;
 
 export const studentsReducer = slice.reducer;

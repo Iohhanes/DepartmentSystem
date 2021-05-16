@@ -5,6 +5,7 @@ import {PageRequest} from "../../model/page-request.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
 import {Subject, SubjectData} from "../../model/subject/subject.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface SubjectsState extends DataState<Subject> {
 }
@@ -12,7 +13,8 @@ interface SubjectsState extends DataState<Subject> {
 const initialState: SubjectsState = {
     loadingOnAdd: false,
     loading: false,
-    loadingOnEdit: false
+    loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadSubjects = createAsyncThunk("loadSubjects", async (requestData: PageRequest) => {
@@ -38,6 +40,11 @@ export const deleteSubjects = createAsyncThunk("deleteSubjects", async (requestD
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/subjects/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "subjects",
     initialState,
@@ -46,6 +53,12 @@ const slice = createSlice({
         builder.addCase(loadSubject.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editSubject.fulfilled, addSubject.fulfilled), () => {
@@ -83,5 +96,6 @@ export const selectLoading = (state: RootState) => state.subjects.loading;
 export const selectCurrentSubject = (state: RootState) => state.subjects.current;
 export const selectLoadingOnEdit = (state: RootState) => state.subjects.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.subjects.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.subjects.totalCount;
 
 export const subjectsReducer = slice.reducer;

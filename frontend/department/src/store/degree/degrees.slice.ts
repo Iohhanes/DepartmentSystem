@@ -5,6 +5,7 @@ import {PageRequest} from "../../model/page-request.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
 import {ProgressInfo, ProgressInfoData} from "../../model/progress-info/progress-info.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface DegreesState extends DataState<ProgressInfo> {
 }
@@ -12,7 +13,8 @@ interface DegreesState extends DataState<ProgressInfo> {
 const initialState: DegreesState = {
     loadingOnAdd: false,
     loading: false,
-    loadingOnEdit: false
+    loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadDegrees = createAsyncThunk("loadDegrees", async (requestData: PageRequest) => {
@@ -41,6 +43,11 @@ export const deleteDegrees = createAsyncThunk("deleteDegrees", async (requestDat
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/degrees/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "degrees",
     initialState,
@@ -49,6 +56,12 @@ const slice = createSlice({
         builder.addCase(loadDegree.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editDegree.fulfilled, addDegree.fulfilled), () => {
@@ -86,5 +99,6 @@ export const selectLoading = (state: RootState) => state.degrees.loading;
 export const selectCurrentDegree = (state: RootState) => state.degrees.current;
 export const selectLoadingOnEdit = (state: RootState) => state.degrees.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.degrees.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.degrees.totalCount;
 
 export const degreesReducer = slice.reducer;

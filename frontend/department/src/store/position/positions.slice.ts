@@ -5,6 +5,7 @@ import {PageRequest} from "../../model/page-request.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
 import {ProgressInfo, ProgressInfoData} from "../../model/progress-info/progress-info.model";
+import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
 
 interface PositionsState extends DataState<ProgressInfo> {
 }
@@ -12,7 +13,8 @@ interface PositionsState extends DataState<ProgressInfo> {
 const initialState: PositionsState = {
     loadingOnAdd: false,
     loading: false,
-    loadingOnEdit: false
+    loadingOnEdit: false,
+    totalCount: 0
 };
 
 export const loadPositions = createAsyncThunk("loadPositions", async (requestData: PageRequest) => {
@@ -41,6 +43,11 @@ export const deletePositions = createAsyncThunk("deletePositions", async (reques
     return data;
 });
 
+export const loadCount = createAsyncThunk("loadTotalCount", async () => {
+    const {data} = await axios.get<number>("/positions/count");
+    return data;
+});
+
 const slice = createSlice({
     name: "positions",
     initialState,
@@ -49,6 +56,12 @@ const slice = createSlice({
         builder.addCase(loadPosition.fulfilled, (state, action) => {
             state.current = action.payload;
             state.loadingOnEdit = false;
+        });
+        builder.addCase(loadCount.fulfilled, (state, action) => {
+            state.totalCount = action.payload;
+        })
+        builder.addCase(loadCount.rejected, (state) => {
+            state.totalCount = DEFAULT_PAGE_SIZE;
         });
         builder.addMatcher(
             isAnyOf(editPosition.fulfilled, addPosition.fulfilled), () => {
@@ -86,5 +99,6 @@ export const selectLoading = (state: RootState) => state.positions.loading;
 export const selectCurrentPosition = (state: RootState) => state.positions.current;
 export const selectLoadingOnEdit = (state: RootState) => state.positions.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.positions.loadingOnAdd;
+export const selectTotalCount = (state: RootState) => state.positions.totalCount;
 
 export const positionsReducer = slice.reducer;

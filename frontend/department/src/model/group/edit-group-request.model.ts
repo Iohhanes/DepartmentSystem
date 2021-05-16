@@ -1,6 +1,5 @@
-import {GroupData} from "./group.model";
 import {Entity} from "../entity.model";
+import {AddGroupRequest} from "./add-group-request.model";
 
-export interface EditGroupRequest extends Entity, GroupData {
-    specialityId: string;
+export interface EditGroupRequest extends Entity, AddGroupRequest {
 }

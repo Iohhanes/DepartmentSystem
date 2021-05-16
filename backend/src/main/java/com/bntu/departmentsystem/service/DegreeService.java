@@ -19,4 +19,6 @@ public interface DegreeService {
     void deleteAll(List<Long> ids);
 
     List<Degree> findByTitle(String query);
+
+    long count();
 }

@@ -25,6 +25,11 @@ public class SpecialitiesController {
         return specialityService.getAll();
     }
 
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return specialityService.count();
+    }
+
     @GetMapping("/{id}")
     public Speciality getById(@PathVariable Long id) {
         return specialityService.getById(id);

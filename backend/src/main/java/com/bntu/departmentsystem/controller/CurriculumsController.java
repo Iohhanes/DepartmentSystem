@@ -22,11 +22,15 @@ public class CurriculumsController {
     private static final String CURRICULUM_CONTENT_FILE_NAME = "content.docx";
 
     private final CurriculumService curriculumService;
-    private final CurriculumContentService curriculumContentService;
 
     @GetMapping("/page/{page}/count/{count}")
     public List<Curriculum> getAll(@PathVariable Integer page, @PathVariable Integer count) {
         return curriculumService.getAll(page, count);
+    }
+
+    @GetMapping("/count")
+    public Long getTotalCount() {
+        return curriculumService.count();
     }
 
     @GetMapping("/{id}")

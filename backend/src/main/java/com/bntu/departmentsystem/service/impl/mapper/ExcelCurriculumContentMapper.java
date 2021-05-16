@@ -1,37 +1,19 @@
 package com.bntu.departmentsystem.service.impl.mapper;
 
-import com.bntu.departmentsystem.model.entity.Curriculum;
 import com.bntu.departmentsystem.model.entity.CurriculumContent;
 import com.bntu.departmentsystem.model.entity.Subject;
 import com.bntu.departmentsystem.model.excel.ExcelCurriculumContent;
 import com.bntu.departmentsystem.repository.SubjectRepository;
-import com.bntu.departmentsystem.service.mapper.ExcelCurriculumContentMapper;
+import com.bntu.departmentsystem.service.mapper.ExcelEntityMapper;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class ExcelCurriculumContentMapperImpl implements ExcelCurriculumContentMapper {
+public class ExcelCurriculumContentMapper extends ExcelEntityMapper<ExcelCurriculumContent, CurriculumContent> {
     private final SubjectRepository subjectRepository;
-
-    @Override
-    public List<CurriculumContent> from(List<ExcelCurriculumContent> excelCurriculumContents) throws InvalidUploadFileException {
-        if (!CollectionUtils.isEmpty(excelCurriculumContents)) {
-            List<CurriculumContent> curriculumContents = new ArrayList<>();
-            for (ExcelCurriculumContent excelCurriculumContent : excelCurriculumContents) {
-                CurriculumContent curriculumContent = from(excelCurriculumContent);
-                curriculumContents.add(curriculumContent);
-            }
-            return curriculumContents;
-        }
-        return Collections.emptyList();
-    }
 
     @Override
     public CurriculumContent from(ExcelCurriculumContent excelCurriculumContent) throws InvalidUploadFileException {

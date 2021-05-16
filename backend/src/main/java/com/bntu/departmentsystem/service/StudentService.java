@@ -29,4 +29,6 @@ public interface StudentService {
     List<Student> uploadData(MultipartFile excelFile) throws InvalidUploadFileException;
 
     ByteArrayOutputStream generateReport(StudentReportRequest reportRequest);
+
+    long count();
 }

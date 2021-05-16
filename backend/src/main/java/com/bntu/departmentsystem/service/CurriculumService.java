@@ -19,4 +19,6 @@ public interface CurriculumService {
     ByteArrayOutputStream downloadContent(Long id);
 
     void deleteAll(List<Long> ids);
+
+    long count();
 }

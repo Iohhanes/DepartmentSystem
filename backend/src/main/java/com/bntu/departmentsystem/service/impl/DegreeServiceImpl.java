@@ -33,6 +33,11 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
+    public long count() {
+        return degreeRepository.count();
+    }
+
+    @Override
     public Degree getById(Long id) {
         return degreeRepository.findById(id).orElse(null);
     }

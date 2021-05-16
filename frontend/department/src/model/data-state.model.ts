@@ -4,4 +4,5 @@ export interface DataState<T> {
     loadingOnAdd: boolean;
     loadingOnEdit: boolean;
     current?: T;
+    totalCount: number;
 }

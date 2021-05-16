@@ -1,5 +1,5 @@
-import {StudentData} from "./student.model";
+import {PersonData} from "../person/person.model";
 
-export interface AddStudentRequest extends StudentData {
+export interface AddStudentRequest extends PersonData {
     groupId: string;
 }
