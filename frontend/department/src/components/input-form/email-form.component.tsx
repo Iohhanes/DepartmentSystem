@@ -3,15 +3,21 @@ import isEmail from "validator/lib/isEmail";
 import {Form, Input} from "antd";
 
 interface EmailFormComponentProps {
+    formClassName?: string;
+    inputClassName?: string;
     defaultValue?: string;
 }
 
-const EmailFormComponent: FC<EmailFormComponentProps> = ({defaultValue}) => {
+const EmailFormComponent: FC<EmailFormComponentProps> = ({
+                                                             formClassName,
+                                                             inputClassName,
+                                                             defaultValue
+                                                         }) => {
     return (
         <Form.Item
             label="Email"
             labelCol={{span: 24}}
-            className="email-form"
+            className={formClassName ? formClassName : ""}
             name="email"
             rules={[
                 {
@@ -27,7 +33,10 @@ const EmailFormComponent: FC<EmailFormComponentProps> = ({defaultValue}) => {
                 }
             ]}
         >
-            <Input className="email-form__input" placeholder="test@subdomain.domain" defaultValue={defaultValue}/>
+            <Input
+                className={inputClassName ? inputClassName : ""}
+                placeholder="test@subdomain.domain"
+            />
         </Form.Item>
     )
 }

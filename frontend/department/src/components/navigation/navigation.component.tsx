@@ -10,7 +10,7 @@ interface NavigationComponentProps {
 
 const NavigationComponent: FC<NavigationComponentProps> = ({currentOption}) => {
     return (
-        <div style={{marginBottom: "20px"}}>
+        <div className="navigation">
             <Menu defaultSelectedKeys={[currentOption]} mode="horizontal">
                 <Menu.Item key={DepartmentType.STUDENTS} icon={<ProfileOutlined/>}>
                     Students
@@ -31,6 +31,18 @@ const NavigationComponent: FC<NavigationComponentProps> = ({currentOption}) => {
                 <Menu.Item key={DepartmentType.CURRICULUMS} icon={<ProfileOutlined/>}>
                     Curriculums
                     {<Link to={{pathname: `/${DepartmentType.CURRICULUMS}`}}/>}
+                </Menu.Item>
+                <Menu.Item key={DepartmentType.FACULTY_MEMBERS} icon={<ProfileOutlined/>}>
+                    Faculty Members
+                    {<Link to={{pathname: `/${DepartmentType.FACULTY_MEMBERS}`}}/>}
+                </Menu.Item>
+                <Menu.Item key={DepartmentType.MASTER_CANDIDATES} icon={<ProfileOutlined/>}>
+                    Master Candidates
+                    {<Link to={{pathname: `/${DepartmentType.MASTER_CANDIDATES}`}}/>}
+                </Menu.Item>
+                <Menu.Item key={DepartmentType.GRADUATE_STUDENTS} icon={<ProfileOutlined/>}>
+                    Graduate Students
+                    {<Link to={{pathname: `/${DepartmentType.GRADUATE_STUDENTS}`}}/>}
                 </Menu.Item>
                 <Menu.Item key={DepartmentType.DEGREES} icon={<ProfileOutlined/>}>
                     Degrees

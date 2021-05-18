@@ -27,18 +27,20 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                                                            }) => {
     return (
         <Form.Item
-            className={"select-form " + (formClassName ? formClassName : "")}
+            className={formClassName ? formClassName : ""}
             label={label}
             labelCol={{span: 24}}
             name={name}
             rules={rules}
         >
-            <Select className={"select__input " + (selectClassName ? selectClassName : "")}
-                    placeholder={placeholder}
-                    showSearch
-                    defaultValue={defaultValue}
-                    disabled={disabled}>
-                {options?.map(option => <Select.Option value={option.value} key={option.value}>
+            <Select
+                className={selectClassName ? selectClassName : ""}
+                placeholder={placeholder}
+                showSearch
+                disabled={disabled}>
+                {options?.map(option => <Select.Option
+                    value={option.value}
+                    key={option.value}>
                     {option.label}
                 </Select.Option>)}
             </Select>

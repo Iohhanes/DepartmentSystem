@@ -29,11 +29,15 @@ const UploadDataComponent: FC<UploadDataComponentProps> = ({onSetMainFile}) => {
     }
 
     return (
-        <Upload fileList={fileList}
-                beforeUpload={handleBeforeUpload}
-                onRemove={handleRemove}
-                multiple={false}>
-            <Button icon={<UploadOutlined/>}>Click to Upload</Button>
+        <Upload
+            fileList={fileList}
+            beforeUpload={handleBeforeUpload}
+            onRemove={handleRemove}
+            multiple={false}>
+            <Button
+                icon={<UploadOutlined/>}>
+                Click to Upload
+            </Button>
         </Upload>
     )
 }

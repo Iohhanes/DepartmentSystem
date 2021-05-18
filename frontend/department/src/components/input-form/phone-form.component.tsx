@@ -3,15 +3,21 @@ import {MaskedInput} from "antd-mask-input";
 import {Form} from "antd";
 
 interface PhoneFormComponentProps {
+    formClassName?: string;
+    inputClassName?: string;
     defaultValue?: string;
 }
 
-const PhoneFormComponent: FC<PhoneFormComponentProps> = ({defaultValue}) => {
+const PhoneFormComponent: FC<PhoneFormComponentProps> = ({
+                                                             formClassName,
+                                                             inputClassName,
+                                                             defaultValue
+                                                         }) => {
     return (
         <Form.Item
             label="Phone"
             labelCol={{span: 24}}
-            className="phone-form"
+            className={formClassName ? formClassName : ""}
             name="phone"
             rules={[
                 {
@@ -19,7 +25,10 @@ const PhoneFormComponent: FC<PhoneFormComponentProps> = ({defaultValue}) => {
                 },
             ]}
         >
-            <MaskedInput mask="+375(11)1111111" className="phone-form__input" defaultValue={defaultValue}/>
+            <MaskedInput
+                mask="+375(11)1111111"
+                className={inputClassName ? inputClassName : ""}
+            />
         </Form.Item>
     )
 }

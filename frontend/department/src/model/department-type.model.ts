@@ -6,5 +6,8 @@ export enum DepartmentType {
     CURRICULUMS = "curriculums",
     DEGREES = "degrees",
     RANKS = "ranks",
-    POSITIONS = "positions"
+    POSITIONS = "positions",
+    FACULTY_MEMBERS = "faculty-members",
+    MASTER_CANDIDATES = "master-candidates",
+    GRADUATE_STUDENTS = "graduate-students"
 }

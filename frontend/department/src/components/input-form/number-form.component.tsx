@@ -25,16 +25,16 @@ const NumberFormComponent: FC<NumberFormComponentProps> = ({
                                                            }) => {
     return (
         <Form.Item
-            className={"number-form " + (formClassName ? formClassName : "")}
+            className={formClassName ? formClassName : ""}
             label={label}
             labelCol={{span: 24}}
             name={name}
             rules={rules}
         >
-            <InputNumber className={"number-form__input " + (inputClassName ? inputClassName : "")}
-                         defaultValue={defaultValue}
-                         min={min}
-                         max={max}/>
+            <InputNumber
+                className={inputClassName ? inputClassName : ""}
+                min={min}
+                max={max}/>
         </Form.Item>
     )
 }

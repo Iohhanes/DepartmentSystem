@@ -1,23 +1,24 @@
 import React, {FC} from "react";
-import {Form, Input} from "antd";
+import {Form} from "antd";
 import {Rule} from "rc-field-form/lib/interface";
+import TextArea from "antd/es/input/TextArea";
 
-interface TextFormComponentProps {
+interface MemoFormComponentProps {
     formClassName?: string;
     inputClassName?: string;
     name: string;
     label?: string;
     rules?: Rule[];
-    defaultValue?: string;
+    maxLength: number;
 }
 
-const TextFormComponent: FC<TextFormComponentProps> = ({
+const MemoFormComponent: FC<MemoFormComponentProps> = ({
                                                            formClassName,
                                                            inputClassName,
                                                            name,
                                                            label,
                                                            rules,
-                                                           defaultValue
+                                                           maxLength
                                                        }) => {
     return (
         <Form.Item
@@ -27,11 +28,12 @@ const TextFormComponent: FC<TextFormComponentProps> = ({
             name={name}
             rules={rules}
         >
-            <Input
+            <TextArea
                 className={inputClassName ? inputClassName : ""}
-            />
+                showCount
+                maxLength={maxLength}/>
         </Form.Item>
     )
 }
 
-export default React.memo(TextFormComponent)
+export default React.memo(MemoFormComponent)

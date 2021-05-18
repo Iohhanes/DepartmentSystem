@@ -15,31 +15,23 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                                                                          }) => {
 
     return (
-        <Form
-            name="student-report"
-            onFinish={onSubmit}>
-            <DatePickerFormComponent
-                label="Sign date"
-                name="signDate"
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please input sign date'
-                    },
-                ]}/>
-            <SelectFormComponent
-                label="Group"
-                name="group"
-                placeholder="Select group"
-                options={groups?.map(group => {
-                    return {label: group.number, value: group.id}
-                })}
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please select group'
-                    },
-                ]}/>
+        <Form name="student-report" onFinish={onSubmit}>
+            <DatePickerFormComponent label="Sign date" name="signDate" rules={[
+                {
+                    required: true,
+                    message: 'Please input sign date'
+                },
+            ]}/>
+            <SelectFormComponent label="Group" name="group" placeholder="Select group"
+                                 options={groups?.map(group => {
+                                     return {label: group.number, value: group.id}
+                                 })}
+                                 rules={[
+                                     {
+                                         required: true,
+                                         message: 'Please select group'
+                                     },
+                                 ]}/>
             <Form.Item>
                 <Button type="primary" htmlType="submit">
                     Download

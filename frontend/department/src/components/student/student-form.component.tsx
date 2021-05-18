@@ -8,6 +8,8 @@ import DatePickerFormComponent from "../input-form/date-picker-form.component";
 import SelectFormComponent from "../input-form/select-form.component";
 import {Student} from "../../model/student/student.model";
 import {Link} from "react-router-dom";
+import moment from "moment";
+import {DepartmentType} from "../../model/department-type.model";
 
 interface StudentFormComponentProps {
     current?: Student;
@@ -22,56 +24,83 @@ const StudentFormComponent: FC<StudentFormComponentProps> = ({
                                                              }) => {
 
     return (
-        <Form name="student" onFinish={onSubmit}>
-            <TextFormComponent label="Last name" name="lastName" defaultValue={current?.lastName} rules={[
-                {
-                    required: true,
-                    message: 'Please input last name'
-                },
-                {
-                    max: 20,
-                    message: 'Max 20 chars',
-                }
-            ]}/>
-            <TextFormComponent label="First name" name="firstName" defaultValue={current?.firstName} rules={[
-                {
-                    required: true,
-                    message: 'Please input first name'
-                },
-                {
-                    max: 20,
-                    message: 'Max 20 chars',
-                },
-            ]}/>
-            <TextFormComponent label="Middle name" name="middleName" defaultValue={current?.middleName} rules={[
-                {
-                    max: 20,
-                    message: 'Max 20 chars',
-                },
-            ]}/>
-            <DatePickerFormComponent label="Birth date" name="birthDate" defaultValue={current?.birthDate} rules={[
-                {
-                    required: true,
-                    message: 'Please input birth date'
-                },
-            ]}/>
-            <PhoneInputComponent defaultValue={current?.phone}/>
-            <EmailFormComponent defaultValue={current?.email}/>
-            <SelectFormComponent label="Group" name="group" placeholder="Select group"
-                                 options={groups?.map(group => {
-                                     return {label: group.number, value: group.id}
-                                 })}
-                                 defaultValue={current?.group.id}/>
-            <div style={{display: "flex"}}>
+        <Form
+            className="student-form"
+            name="student"
+            onFinish={onSubmit}
+            initialValues={current && {
+                lastName: current.lastName,
+                firstName: current.firstName,
+                middleName: current.middleName,
+                birthDate: moment(current.birthDate),
+                phone: current.phone,
+                email: current.email,
+                group: current.group?.id,
+            }}>
+            <TextFormComponent
+                label="Last name"
+                name="lastName"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input last name'
+                    },
+                    {
+                        max: 20,
+                        message: 'Max 20 chars',
+                    }
+                ]}/>
+            <TextFormComponent
+                label="First name"
+                name="firstName"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input first name'
+                    },
+                    {
+                        max: 20,
+                        message: 'Max 20 chars',
+                    },
+                ]}/>
+            <TextFormComponent
+                label="Middle name"
+                name="middleName"
+                rules={[
+                    {
+                        max: 20,
+                        message: 'Max 20 chars',
+                    },
+                ]}/>
+            <DatePickerFormComponent
+                label="Birth date"
+                name="birthDate"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input birth date'
+                    },
+                ]}/>
+            <PhoneInputComponent/>
+            <EmailFormComponent/>
+            <SelectFormComponent
+                label="Group"
+                name="group"
+                placeholder="Select group"
+                options={groups?.map(group => {
+                    return {label: group.number, value: group.id}
+                })}
+            />
+            <div className="entity-form__buttons">
                 <Form.Item>
-                    <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                    <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
                         Save
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: '/students/'}}/>
+                        <Link to={{pathname: `/${DepartmentType.STUDENTS}/`}}/>
                     </>
                 </Button>
             </div>

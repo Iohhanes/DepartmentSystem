@@ -41,9 +41,7 @@ const StudentsReportGenerationContainer: FC = () => {
             <EntityActionReportGenerationComponent
                 downloadError={downloadError}
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
-                reportForm={<StudentReportFormComponent
-                    groups={groups}
-                    onSubmit={handleSubmit}/>}
+                reportForm={<StudentReportFormComponent groups={groups} onSubmit={handleSubmit}/>}
             />
         </>
     )

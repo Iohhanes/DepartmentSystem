@@ -4,8 +4,6 @@ import SpecialitiesContainer from "../components/speciality/specialities.contain
 import SpecialityEditContainer from "../components/speciality/speciality-edit.container";
 import StudentsContainer from "../components/student/students.container";
 import {DepartmentType} from "../model/department-type.model";
-import StudentEditContainer from "../components/student/student-edit.container";
-import StudentAddContainer from "../components/student/student-add.container";
 import GroupsContainer from "../components/group/groups.container";
 import GroupEditContainer from "../components/group/group-edit.container";
 import SpecialityAddContainer from "../components/speciality/speciality-add.container";
@@ -25,6 +23,11 @@ import RankAddContainer from "../components/rank/rank-add.container";
 import PositionsContainer from "../components/position/positions.container";
 import PositionEditContainer from "../components/position/position-edit.container";
 import PositionAddContainer from "../components/position/position-add.container";
+import StudentAddContainer from "../components/student/student-add.container";
+import StudentEditContainer from "../components/student/student-edit.container";
+import FacultyMembersContainer from "../components/faculty-member/faculty-members.container";
+import FacultyMemberEditContainer from "../components/faculty-member/faculty-member-edit.container";
+import FacultyMemberAddContainer from "../components/faculty-member/faculty-member-add.container";
 
 const MainRouterComponent: FC = () => {
     return (
@@ -63,6 +66,10 @@ const MainRouterComponent: FC = () => {
                 <Route exact path={`/${DepartmentType.POSITIONS}`} component={PositionsContainer}/>
                 <Route path={`/${DepartmentType.POSITIONS}/:id`} component={PositionEditContainer}/>
                 <Route exact path={`/${DepartmentType.POSITIONS}-new`} component={PositionAddContainer}/>
+
+                <Route exact path={`/${DepartmentType.FACULTY_MEMBERS}`} component={FacultyMembersContainer}/>
+                <Route path={`/${DepartmentType.FACULTY_MEMBERS}/:id`} component={FacultyMemberEditContainer}/>
+                <Route exact path={`/${DepartmentType.FACULTY_MEMBERS}-new`} component={FacultyMemberAddContainer}/>
             </Switch>
         </>
     );

@@ -10,15 +10,17 @@ import StudentsReportGenerationContainer from "./students-report-generation.cont
 const StudentsContainer: FC = () => {
     return (
         <>
-            <NavigationComponent currentOption={DepartmentType.STUDENTS}/>
-            <SearchBarComponent<Student> placeholder="Input name"
-                                         prefix={DepartmentType.STUDENTS}
-                                         onConvert={(entity: Student) => {
-                                             return {
-                                                 value: entity.id,
-                                                 label: entity.fullName
-                                             }
-                                         }}/>
+            <NavigationComponent
+                currentOption={DepartmentType.STUDENTS}/>
+            <SearchBarComponent<Student>
+                placeholder="Input name"
+                prefix={DepartmentType.STUDENTS}
+                onConvert={(entity: Student) => {
+                    return {
+                        value: entity.id,
+                        label: entity.fullName
+                    }
+                }}/>
             <StudentsReportGenerationContainer/>
             <StudentsUploadDataContainer/>
             <StudentsDataContainer/>
