@@ -1,7 +1,6 @@
 package com.bntu.departmentsystem.model.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -25,4 +24,6 @@ public class Curriculum {
     @ManyToOne
     @JoinColumn(name = "speciality_id")
     private Speciality speciality;
+
+    private boolean hasContent;
 }

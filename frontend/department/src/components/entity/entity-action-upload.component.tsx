@@ -44,7 +44,7 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
 
     return (
         <>
-            <Button style={{marginBottom: 20}} type="primary" onClick={handleOpenUploadModal}>
+            <Button className="entity-action-upload__button-upload" type="primary" onClick={handleOpenUploadModal}>
                 Upload data
             </Button>
             <Modal
@@ -62,10 +62,11 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                                closable
                                banner
                                onClose={onCloseShowingUploadStatus}/>}
-                        <div style={{flexDirection: "column"}}>
-                            <UploadDataComponent onSetMainFile={handleSetMainFile}/>
+                        <div className="entity-action-upload__footer">
+                            <UploadDataComponent
+                                onSetMainFile={handleSetMainFile}/>
                             <Button type="primary" onClick={handleSubmit}
-                                    style={{marginBottom: "20px", marginTop: "20px"}}>
+                                    className="entity-action-upload__footer__submit-button">
                                 Submit
                             </Button>
                         </div>

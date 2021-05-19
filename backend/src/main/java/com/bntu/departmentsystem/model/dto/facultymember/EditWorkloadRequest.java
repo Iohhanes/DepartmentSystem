@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EditWorkloadRequest {
-    private Integer hours;
+    private Double rate;
     private Integer support;
     private Integer hourly;
     private Long positionId;

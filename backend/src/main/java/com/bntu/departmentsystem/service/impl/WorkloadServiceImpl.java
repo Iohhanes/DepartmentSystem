@@ -36,7 +36,7 @@ public class WorkloadServiceImpl implements WorkloadService {
     public Workload add(EditWorkloadRequest workloadRequest) {
         if (workloadRequest != null) {
             return Workload.builder()
-                    .hours(workloadRequest.getHours())
+                    .rate(workloadRequest.getRate())
                     .hourly(workloadRequest.getHourly())
                     .support(workloadRequest.getSupport())
                     .position(workloadRequest.getPositionId() != null ?
@@ -50,13 +50,10 @@ public class WorkloadServiceImpl implements WorkloadService {
 
     @Override
     public Workload add(ExcelFacultyMember excelFacultyMember) {
-        if (excelFacultyMember.getHours() != null ||
-                excelFacultyMember.getHourly() != null ||
-                excelFacultyMember.getSupport() != null ||
-                excelFacultyMember.getPositionTitle() != null ||
-                excelFacultyMember.getPositionPTTitle() != null) {
+        if (excelFacultyMember.getRate() != null ||
+                excelFacultyMember.getPositionTitle() != null) {
             return Workload.builder()
-                    .hours(excelFacultyMember.getHours())
+                    .rate(excelFacultyMember.getRate())
                     .hourly(excelFacultyMember.getHourly())
                     .support(excelFacultyMember.getSupport())
                     .position(excelFacultyMember.getPositionTitle() != null ?
@@ -71,13 +68,13 @@ public class WorkloadServiceImpl implements WorkloadService {
     @Override
     public void edit(Workload workload, EditWorkloadRequest workloadRequest) {
         if (workload != null && workloadRequest != null) {
-            Optional.ofNullable(workloadRequest.getHours()).ifPresent(workload::setHours);
-            Optional.ofNullable(workloadRequest.getHourly()).ifPresent(workload::setHourly);
-            Optional.ofNullable(workloadRequest.getSupport()).ifPresent(workload::setSupport);
+            Optional.ofNullable(workloadRequest.getRate()).ifPresent(workload::setRate);
+            workload.setHourly(workloadRequest.getHourly());
+            workload.setSupport(workloadRequest.getSupport());
             Optional.ofNullable(workloadRequest.getPositionId()).ifPresent(positionId -> workload
                     .setPosition(positionRepository.findById(positionId).orElse(null)));
-            Optional.ofNullable(workloadRequest.getPositionPTId()).ifPresent(positionPTId -> workload
-                    .setPositionPT(positionRepository.findById(positionPTId).orElse(null)));
+            workload.setPositionPT(workloadRequest.getPositionPTId() == null ?
+                    null : positionRepository.findById(workloadRequest.getPositionPTId()).orElse(null));
             workloadRepository.save(workload);
         }
     }

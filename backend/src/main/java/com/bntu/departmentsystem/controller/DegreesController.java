@@ -30,7 +30,7 @@ public class DegreesController {
         return degreeService.count();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Degree getById(@PathVariable Long id) {
         return degreeService.getById(id);
     }

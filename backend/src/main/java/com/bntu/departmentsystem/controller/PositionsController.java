@@ -30,7 +30,7 @@ public class PositionsController {
         return positionService.count();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Position getById(@PathVariable Long id) {
         return positionService.getById(id);
     }

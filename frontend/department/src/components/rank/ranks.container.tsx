@@ -9,14 +9,15 @@ const RanksContainer: FC = () => {
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.RANKS}/>
-            <SearchBarComponent<ProgressInfo> placeholder="Input title"
-                                              prefix={DepartmentType.RANKS}
-                                              onConvert={(entity: ProgressInfo) => {
-                                                  return {
-                                                      value: entity.id,
-                                                      label: entity.title
-                                                  }
-                                              }}/>
+            <SearchBarComponent<ProgressInfo>
+                placeholder="Input title"
+                prefix={DepartmentType.RANKS}
+                onConvert={(entity: ProgressInfo) => {
+                    return {
+                        value: entity.id,
+                        label: entity.title
+                    }
+                }}/>
             <RanksDataContainer/>
         </>
     )

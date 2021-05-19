@@ -87,8 +87,8 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findById(id).orElse(null);
         if (student != null) {
             PersonDataUtils.editPerson(student, studentRequest);
-            Optional.ofNullable(studentRequest.getGroupId()).ifPresent(groupId -> student
-                    .setGroup(groupRepository.findById(groupId).orElse(null)));
+            student.setGroup(studentRequest.getGroupId() == null ?
+                    null : groupRepository.findById(studentRequest.getGroupId()).orElse(null));
             studentRepository.save(student);
         }
     }

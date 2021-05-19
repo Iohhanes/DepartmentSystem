@@ -13,11 +13,11 @@ public class PersonDataUtils {
     public static void editPerson(Person person, EditPersonRequest personRequest) {
         Optional.ofNullable(personRequest.getLastName()).ifPresent(person::setLastName);
         Optional.ofNullable(personRequest.getFirstName()).ifPresent(person::setFirstName);
-        Optional.ofNullable(personRequest.getMiddleName()).ifPresent(person::setMiddleName);
+        person.setMiddleName(personRequest.getMiddleName());
         Optional.ofNullable(personRequest.getBirthDate()).ifPresent(birthDate -> person
                 .setBirthDate(DateUtils.format(personRequest.getBirthDate())));
-        Optional.ofNullable(personRequest.getPhone()).ifPresent(person::setPhone);
-        Optional.ofNullable(personRequest.getEmail()).ifPresent(person::setEmail);
+        person.setPhone(personRequest.getPhone());
+        person.setEmail(personRequest.getEmail());
         if (personRequest.getLastName() != null && personRequest.getFirstName() != null) {
             person.setFullName(PersonNameUtils.getFullName(personRequest.getLastName(),
                     personRequest.getFirstName(),

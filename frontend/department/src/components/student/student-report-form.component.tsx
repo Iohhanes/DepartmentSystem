@@ -34,12 +34,7 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                 options={groups?.map(group => {
                     return {label: group.number, value: group.id}
                 })}
-                rules={[
-                    {
-                        required: true,
-                        message: 'Please select group'
-                    },
-                ]}/>
+            />
             <Form.Item>
                 <Button type="primary" htmlType="submit">
                     Download

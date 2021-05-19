@@ -8,7 +8,6 @@ interface TextFormComponentProps {
     name: string;
     label?: string;
     rules?: Rule[];
-    defaultValue?: string;
 }
 
 const TextFormComponent: FC<TextFormComponentProps> = ({
@@ -16,8 +15,7 @@ const TextFormComponent: FC<TextFormComponentProps> = ({
                                                            inputClassName,
                                                            name,
                                                            label,
-                                                           rules,
-                                                           defaultValue
+                                                           rules
                                                        }) => {
     return (
         <Form.Item

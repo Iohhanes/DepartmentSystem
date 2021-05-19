@@ -5,13 +5,11 @@ import {Form} from "antd";
 interface PhoneFormComponentProps {
     formClassName?: string;
     inputClassName?: string;
-    defaultValue?: string;
 }
 
 const PhoneFormComponent: FC<PhoneFormComponentProps> = ({
                                                              formClassName,
-                                                             inputClassName,
-                                                             defaultValue
+                                                             inputClassName
                                                          }) => {
     return (
         <Form.Item

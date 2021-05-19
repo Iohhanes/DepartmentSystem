@@ -19,7 +19,7 @@ export interface Workload extends Entity, WorkloadData {
 }
 
 export interface WorkloadData {
-    hours: number;
+    rate: number;
     hourly: number;
     support: number;
 }

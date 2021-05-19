@@ -25,7 +25,7 @@ const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComp
 
     return (
         <>
-            <Button style={{marginBottom: 20, marginRight: 10}} type="primary"
+            <Button className="entity-action-report-generation__button-report" type="primary"
                     onClick={handleOpenReportGenerationModal}>
                 Report
             </Button>

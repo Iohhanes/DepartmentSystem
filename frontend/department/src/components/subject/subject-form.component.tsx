@@ -3,6 +3,7 @@ import {Button, Form} from "antd";
 import TextFormComponent from "../input-form/text-form.component";
 import {Link} from "react-router-dom";
 import {Subject} from "../../model/subject/subject.model";
+import {DepartmentType} from "../../model/department-type.model";
 
 interface SubjectFormComponentProps {
     current?: Subject;
@@ -15,27 +16,36 @@ const SubjectFormComponent: FC<SubjectFormComponentProps> = ({
                                                              }) => {
 
     return (
-        <Form name="subject" onFinish={onSubmit}>
-            <TextFormComponent label="Title" name="title" defaultValue={current?.title} rules={[
-                {
-                    required: true,
-                    message: 'Please input title'
-                },
-                {
-                    max: 100,
-                    message: 'Max 100 chars',
-                }
-            ]}/>
-            <div style={{display: "flex"}}>
+        <Form
+            className="subject-form"
+            name="subject"
+            onFinish={onSubmit}
+            initialValues={current && {
+                title: current.title
+            }}>
+            <TextFormComponent
+                label="Title"
+                name="title"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input title'
+                    },
+                    {
+                        max: 100,
+                        message: 'Max 100 chars',
+                    }
+                ]}/>
+            <div className="entity-form__buttons">
                 <Form.Item>
-                    <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                    <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
                         Save
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: '/subjects/'}}/>
+                        <Link to={{pathname: `/${DepartmentType.SUBJECTS}`}}/>
                     </>
                 </Button>
             </div>

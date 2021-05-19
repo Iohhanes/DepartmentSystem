@@ -30,7 +30,7 @@ public class RanksController {
         return rankService.count();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Rank getById(@PathVariable Long id) {
         return rankService.getById(id);
     }

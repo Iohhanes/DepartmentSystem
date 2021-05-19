@@ -36,7 +36,7 @@ public class ExcelFacultyMember {
     private String rankTitle;
 
     @ExcelCellName("Hours")
-    private Integer hours;
+    private Double rate;
 
     @ExcelCellName("Hourly")
     private Integer hourly;

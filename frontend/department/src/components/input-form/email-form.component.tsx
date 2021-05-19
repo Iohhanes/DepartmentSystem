@@ -5,13 +5,11 @@ import {Form, Input} from "antd";
 interface EmailFormComponentProps {
     formClassName?: string;
     inputClassName?: string;
-    defaultValue?: string;
 }
 
 const EmailFormComponent: FC<EmailFormComponentProps> = ({
                                                              formClassName,
-                                                             inputClassName,
-                                                             defaultValue
+                                                             inputClassName
                                                          }) => {
     return (
         <Form.Item

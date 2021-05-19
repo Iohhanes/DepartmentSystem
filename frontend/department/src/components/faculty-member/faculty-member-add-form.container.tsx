@@ -47,7 +47,7 @@ const FacultyMemberAddFormContainer: FC = () => {
             degreeId: data.degree,
             rankId: data.rank,
             workloadRequest: {
-                hours: data.hours,
+                rate: data.rate,
                 hourly: data.hourly,
                 support: data.support,
                 positionId: data.position,

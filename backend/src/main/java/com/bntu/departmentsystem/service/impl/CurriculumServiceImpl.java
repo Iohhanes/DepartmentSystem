@@ -40,7 +40,12 @@ public class CurriculumServiceImpl implements CurriculumService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public List<Curriculum> getAll(Integer page, Integer count) {
-        return curriculumRepository.findAll(PageRequest.of(page, count)).getContent();
+        List<Curriculum> curriculums = curriculumRepository.findAll(PageRequest.of(page, count)).getContent();
+        curriculums.forEach(curriculum -> {
+            List<CurriculumContent> curriculumContents = curriculumContentService.getAllByCurriculum(curriculum);
+            curriculum.setHasContent(!CollectionUtils.isEmpty(curriculumContents));
+        });
+        return curriculums;
     }
 
     @Override

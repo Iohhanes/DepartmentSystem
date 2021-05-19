@@ -59,6 +59,8 @@ public class ExcelFacultyMemberMapper extends ExcelEntityMapper<ExcelFacultyMemb
                 !StringUtils.hasLength(excelFacultyMember.getLastName()) ||
                 !StringUtils.hasLength(excelFacultyMember.getFirstName()) ||
                 excelFacultyMember.getBirthDate() == null ||
-                (excelFacultyMember.getPhone() != null && !excelFacultyMember.getPhone().matches(PHONE_PATTERN));
+                (excelFacultyMember.getPhone() != null && !excelFacultyMember.getPhone().matches(PHONE_PATTERN)) ||
+                excelFacultyMember.getRate() == null ||
+                excelFacultyMember.getPositionTitle() == null;
     }
 }

@@ -4,6 +4,8 @@ import {DepartmentType} from "../../model/department-type.model";
 import SearchBarComponent from "../search-bar/search-bar.component";
 import FacultyMembersDataContainer from "./faculty-members-data.container";
 import {FacultyMember} from "../../model/faculty-member/faculty-member.model";
+import FacultyMembersReportGenerationContainer from "./faculty-members-report-generation.container";
+import FacultyMembersUploadDataContainer from "./faculty-members-upload-data.container";
 
 const FacultyMembersContainer: FC = () => {
     return (
@@ -19,8 +21,8 @@ const FacultyMembersContainer: FC = () => {
                         label: entity.fullName
                     }
                 }}/>
-            {/*<StudentsReportGenerationContainer/>*/}
-            {/*<StudentsUploadDataContainer/>*/}
+            <FacultyMembersReportGenerationContainer/>
+            <FacultyMembersUploadDataContainer/>
             <FacultyMembersDataContainer/>
         </>
     )

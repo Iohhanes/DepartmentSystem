@@ -1,33 +1,33 @@
 import React, {FC} from "react";
 import {Switch, Route} from "react-router-dom";
 import SpecialitiesContainer from "../components/speciality/specialities.container";
-import SpecialityEditContainer from "../components/speciality/speciality-edit.container";
 import StudentsContainer from "../components/student/students.container";
 import {DepartmentType} from "../model/department-type.model";
 import GroupsContainer from "../components/group/groups.container";
-import GroupEditContainer from "../components/group/group-edit.container";
-import SpecialityAddContainer from "../components/speciality/speciality-add.container";
 import SubjectsContainer from "../components/subject/subjects.container";
-import SubjectEditContainer from "../components/subject/subject-edit.container";
-import SubjectAddContainer from "../components/subject/subject-add.container";
-import CurriculumAddContainer from "../components/curriculum/curriculum-add.container";
-import CurriculumEditContainer from "../components/curriculum/curriculum-edit.container";
 import CurriculumsContainer from "../components/curriculum/curriculums.container";
-import GroupAddContainer from "../components/group/group-add.container";
 import DegreesContainer from "../components/degree/degrees.container";
-import DegreeEditContainer from "../components/degree/degree-edit.container";
-import DegreeAddContainer from "../components/degree/degree-add.container";
 import RanksContainer from "../components/rank/ranks.container";
-import RankEditContainer from "../components/rank/rank-edit.container";
-import RankAddContainer from "../components/rank/rank-add.container";
 import PositionsContainer from "../components/position/positions.container";
-import PositionEditContainer from "../components/position/position-edit.container";
-import PositionAddContainer from "../components/position/position-add.container";
 import StudentAddContainer from "../components/student/student-add.container";
 import StudentEditContainer from "../components/student/student-edit.container";
 import FacultyMembersContainer from "../components/faculty-member/faculty-members.container";
 import FacultyMemberEditContainer from "../components/faculty-member/faculty-member-edit.container";
 import FacultyMemberAddContainer from "../components/faculty-member/faculty-member-add.container";
+import CurriculumEditContainer from "../components/curriculum/curriculum-edit.container";
+import CurriculumAddContainer from "../components/curriculum/curriculum-add.container";
+import DegreeEditContainer from "../components/degree/degree-edit.container";
+import DegreeAddContainer from "../components/degree/degree-add.container";
+import RankEditContainer from "../components/rank/rank-edit.container";
+import RankAddContainer from "../components/rank/rank-add.container";
+import PositionEditContainer from "../components/position/position-edit.container";
+import PositionAddContainer from "../components/position/position-add.container";
+import GroupEditContainer from "../components/group/group-edit.container";
+import GroupAddContainer from "../components/group/group-add.container";
+import SpecialityAddContainer from "../components/speciality/speciality-add.container";
+import SpecialityEditContainer from "../components/speciality/speciality-edit.container";
+import SubjectEditContainer from "../components/subject/subject-edit.container";
+import SubjectAddContainer from "../components/subject/subject-add.container";
 
 const MainRouterComponent: FC = () => {
     return (

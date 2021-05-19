@@ -7,4 +7,5 @@ export interface Curriculum extends Entity, CurriculumData {
 
 export interface CurriculumData {
     yearOfEntry: number;
+    hasContent?: boolean;
 }

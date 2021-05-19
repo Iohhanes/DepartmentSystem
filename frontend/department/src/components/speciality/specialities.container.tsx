@@ -9,14 +9,15 @@ const SpecialitiesContainer: FC = () => {
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.SPECIALITIES}/>
-            <SearchBarComponent<Speciality> placeholder="Input code"
-                                            prefix={DepartmentType.SPECIALITIES}
-                                            onConvert={(entity: Speciality) => {
-                                                return {
-                                                    value: entity.id,
-                                                    label: entity.code
-                                                }
-                                            }}/>
+            <SearchBarComponent<Speciality>
+                placeholder="Input code"
+                prefix={DepartmentType.SPECIALITIES}
+                onConvert={(entity: Speciality) => {
+                    return {
+                        value: entity.id,
+                        label: entity.code
+                    }
+                }}/>
             <SpecialitiesDataContainer/>
         </>
     )

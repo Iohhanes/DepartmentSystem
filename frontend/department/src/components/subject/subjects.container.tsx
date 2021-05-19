@@ -9,14 +9,15 @@ const SubjectsContainer: FC = () => {
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.SUBJECTS}/>
-            <SearchBarComponent<Subject> placeholder="Input title"
-                                         prefix={DepartmentType.SUBJECTS}
-                                         onConvert={(entity: Subject) => {
-                                             return {
-                                                 value: entity.id,
-                                                 label: entity.title
-                                             }
-                                         }}/>
+            <SearchBarComponent<Subject>
+                placeholder="Input title"
+                prefix={DepartmentType.SUBJECTS}
+                onConvert={(entity: Subject) => {
+                    return {
+                        value: entity.id,
+                        label: entity.title
+                    }
+                }}/>
             <SubjectsDataContainer/>
         </>
     )

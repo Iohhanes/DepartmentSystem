@@ -9,14 +9,15 @@ const DegreesContainer: FC = () => {
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.DEGREES}/>
-            <SearchBarComponent<ProgressInfo> placeholder="Input title"
-                                              prefix={DepartmentType.DEGREES}
-                                              onConvert={(entity: ProgressInfo) => {
-                                                  return {
-                                                      value: entity.id,
-                                                      label: entity.title
-                                                  }
-                                              }}/>
+            <SearchBarComponent<ProgressInfo>
+                placeholder="Input title"
+                prefix={DepartmentType.DEGREES}
+                onConvert={(entity: ProgressInfo) => {
+                    return {
+                        value: entity.id,
+                        label: entity.title
+                    }
+                }}/>
             <DegreesDataContainer/>
         </>
     )

@@ -42,11 +42,11 @@ const FacultyMemberFormComponent: FC<FacultyMemberFormComponentProps> = ({
                 email: current.email,
                 degree: current.degree?.id,
                 rank: current.rank?.id,
-                hours: current.workload?.hours,
+                rate: current.workload?.rate,
                 support: current.workload?.support,
                 hourly: current.workload?.hourly,
                 position: current.workload?.position?.id,
-                positionPT: current.workload?.positionPT.id
+                positionPT: current.workload?.positionPT?.id
             }}>
             <TextFormComponent
                 label="Last name"
@@ -112,9 +112,17 @@ const FacultyMemberFormComponent: FC<FacultyMemberFormComponentProps> = ({
             />
             <div className="faculty-member-form__workload">
                 <NumberFormComponent
-                    label="Hours"
-                    name="hours"
+                    label="Rate"
+                    name="rate"
                     min={0}
+                    max={1}
+                    strictMode={true}
+                    step="0.1"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input rate'
+                        }]}
                 />
                 <NumberFormComponent
                     label="Support"
@@ -134,6 +142,12 @@ const FacultyMemberFormComponent: FC<FacultyMemberFormComponentProps> = ({
                 options={positions?.map(position => {
                     return {label: position.title, value: position.id}
                 })}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please select position'
+                    },
+                ]}
             />
             <SelectFormComponent
                 label="Position PT"
@@ -152,7 +166,7 @@ const FacultyMemberFormComponent: FC<FacultyMemberFormComponentProps> = ({
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: `/${DepartmentType.FACULTY_MEMBERS}/`}}/>
+                        <Link to={{pathname: `/${DepartmentType.FACULTY_MEMBERS}`}}/>
                     </>
                 </Button>
             </div>

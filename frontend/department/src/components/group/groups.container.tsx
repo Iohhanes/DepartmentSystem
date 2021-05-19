@@ -9,14 +9,15 @@ const GroupsContainer: FC = () => {
     return (
         <>
             <NavigationComponent currentOption={DepartmentType.GROUPS}/>
-            <SearchBarComponent<Group> placeholder="Input number"
-                                       prefix={DepartmentType.GROUPS}
-                                       onConvert={(entity: Group) => {
-                                           return {
-                                               value: entity.id,
-                                               label: entity.number
-                                           }
-                                       }}/>
+            <SearchBarComponent<Group>
+                placeholder="Input number"
+                prefix={DepartmentType.GROUPS}
+                onConvert={(entity: Group) => {
+                    return {
+                        value: entity.id,
+                        label: entity.number
+                    }
+                }}/>
             <GroupsDataContainer/>
         </>
     )

@@ -45,8 +45,9 @@ const EntityTableComponent = <T extends Entity>({
             <Spin indicator={<LoadingOutlined style={{fontSize: 24}} spin/>} spinning={loading}>
                 {!loading &&
                 <div>
-                    <div style={{display: "flex", marginBottom: 20}}>
-                        <Button style={{marginRight: 10}} type="primary" onClick={() => onDelete(selectedRowKeys)}>
+                    <div className="entity-table__buttons">
+                        <Button className="entity-table__buttons__delete" type="primary"
+                                onClick={() => onDelete(selectedRowKeys)}>
                             Delete
                         </Button>
                         <Button type="primary">

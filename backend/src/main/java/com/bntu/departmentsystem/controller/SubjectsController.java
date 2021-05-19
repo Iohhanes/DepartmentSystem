@@ -30,7 +30,7 @@ public class SubjectsController {
         return subjectService.count();
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public Subject getById(@PathVariable Long id) {
         return subjectService.getById(id);
     }

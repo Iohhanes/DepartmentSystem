@@ -1,5 +1,6 @@
 package com.bntu.departmentsystem.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,12 +19,14 @@ public class Workload {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Integer hours;
+    @Column(nullable = false, precision = 2, scale = 1)
+    private Double rate;
 
     private Integer support;
 
     private Integer hourly;
 
+    @JsonIgnore
     @OneToOne
     @JoinColumn(nullable = false, name = "faculty_member_id")
     private FacultyMember facultyMember;

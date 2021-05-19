@@ -8,6 +8,7 @@ import {Curriculum} from "../../model/curriculum/curriculum.model";
 import UploadDataComponent from "../upload-data/upload-data.component";
 import {RcFile} from "antd/es/upload";
 import {UploadStatus} from "../../model/upload-status.model";
+import {DepartmentType} from "../../model/department-type.model";
 
 interface CurriculumFormComponentProps {
     current?: Curriculum;
@@ -27,43 +28,52 @@ const CurriculumFormComponent: FC<CurriculumFormComponentProps> = ({
                                                                        onCloseShowingUploadStatus
                                                                    }) => {
     return (
-        <Form name="curriculum" onFinish={onSubmit}>
-            <NumberFormComponent label="Year of entry"
-                                 name="yearOfEntry"
-                                 defaultValue={current?.yearOfEntry}
-                                 min={1999}
-                                 rules={[{
-                                     required: true,
-                                     message: 'Please input year of entry'
-                                 }]}/>
-            <SelectFormComponent label="Speciality" name="speciality" placeholder="Select speciality"
-                                 options={specialities?.map(speciality => {
-                                     return {label: speciality.code, value: speciality.id}
-                                 })}
-                                 defaultValue={current?.speciality.id}
-                                 rules={[{
-                                     required: true,
-                                     message: 'Please select speciality'
-                                 }]}/>
+        <Form
+            className="curriculum-form"
+            name="curriculum"
+            onFinish={onSubmit}
+            initialValues={current && {
+                yearOfEntry: current.yearOfEntry,
+                speciality: current.speciality.id
+            }}>
+            <NumberFormComponent
+                label="Year of entry"
+                name="yearOfEntry"
+                min={1999}
+                rules={[{
+                    required: true,
+                    message: 'Please input year of entry'
+                }]}/>
+            <SelectFormComponent
+                label="Speciality"
+                name="speciality"
+                placeholder="Select speciality"
+                options={specialities?.map(speciality => {
+                    return {label: speciality.code, value: speciality.id}
+                })}
+                rules={[{
+                    required: true,
+                    message: 'Please select speciality'
+                }]}/>
             {uploadStatus === UploadStatus.ERROR &&
             <Alert type="error"
                    message="Invalid file content"
                    closable
                    banner
                    onClose={onCloseShowingUploadStatus}/>}
-            <div style={{marginBottom: 20}}>
+            <div className="curriculum-form__content">
                 <UploadDataComponent onSetMainFile={onSetMainFile}/>
             </div>
-            <div style={{display: "flex"}}>
+            <div className="entity-form__buttons">
                 <Form.Item>
-                    <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                    <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
                         Save
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: '/curriculums/'}}/>
+                        <Link to={{pathname: `/${DepartmentType.CURRICULUMS}`}}/>
                     </>
                 </Button>
             </div>

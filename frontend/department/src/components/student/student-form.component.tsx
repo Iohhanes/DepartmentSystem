@@ -100,7 +100,7 @@ const StudentFormComponent: FC<StudentFormComponentProps> = ({
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: `/${DepartmentType.STUDENTS}/`}}/>
+                        <Link to={{pathname: `/${DepartmentType.STUDENTS}`}}/>
                     </>
                 </Button>
             </div>

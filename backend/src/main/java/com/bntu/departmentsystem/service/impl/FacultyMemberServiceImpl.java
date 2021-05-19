@@ -82,6 +82,7 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
                 .build();
         if (workload != null) {
             facultyMember.setWorkload(workload);
+            workload.setFacultyMember(facultyMember);
         }
         facultyMemberRepository.save(facultyMember);
     }
@@ -96,10 +97,10 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
         FacultyMember facultyMember = facultyMemberRepository.findById(id).orElse(null);
         if (facultyMember != null) {
             PersonDataUtils.editPerson(facultyMember, facultyMemberRequest);
-            Optional.ofNullable(facultyMemberRequest.getDegreeId()).ifPresent(degreeId -> facultyMember
-                    .setDegree(degreeRepository.findById(degreeId).orElse(null)));
-            Optional.ofNullable(facultyMemberRequest.getRankId()).ifPresent(rankId -> facultyMember
-                    .setRank(rankRepository.findById(rankId).orElse(null)));
+            facultyMember.setDegree(facultyMemberRequest.getDegreeId() == null ?
+                    null : degreeRepository.findById(facultyMemberRequest.getDegreeId()).orElse(null));
+            facultyMember.setRank(facultyMemberRequest.getRankId() == null ?
+                    null : rankRepository.findById(facultyMemberRequest.getRankId()).orElse(null));
             workloadService.edit(facultyMember.getWorkload(), facultyMemberRequest.getWorkloadRequest());
             facultyMemberRepository.save(facultyMember);
         }
@@ -154,11 +155,11 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
                                 .map(ProgressInfo::getTitle)
                                 .orElse(""))
                         .collect(Collectors.toList()));
-                put("hours", facultyMembers
+                put("rate", facultyMembers
                         .stream()
                         .map(FacultyMember::getWorkload)
                         .map(workload -> Optional.ofNullable(workload)
-                                .map(Workload::getHours)
+                                .map(Workload::getRate)
                                 .map(Object::toString)
                                 .orElse(""))
                         .collect(Collectors.toList()));

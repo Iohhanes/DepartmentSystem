@@ -10,7 +10,6 @@ interface SelectFormComponentProps {
     name: string;
     label?: string;
     rules?: Rule[];
-    defaultValue?: string;
     disabled?: boolean;
 }
 
@@ -22,7 +21,6 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                                                                name,
                                                                label,
                                                                rules,
-                                                               defaultValue,
                                                                disabled
                                                            }) => {
     return (
@@ -37,6 +35,7 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                 className={selectClassName ? selectClassName : ""}
                 placeholder={placeholder}
                 showSearch
+                allowClear
                 disabled={disabled}>
                 {options?.map(option => <Select.Option
                     value={option.value}

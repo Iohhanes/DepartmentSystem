@@ -24,66 +24,81 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
                                                          }) => {
 
     return (
-        <Form name="group" onFinish={onSubmit}>
-            <TextFormComponent label="Number" name="number" defaultValue={current?.number} rules={[
-                {
+        <Form
+            className="group-form"
+            name="group"
+            onFinish={onSubmit}
+            initialValues={current && {
+                number: current.number,
+                yearOfEntry: current.yearOfEntry,
+                speciality: current.speciality.id
+            }}>
+            <TextFormComponent
+                label="Number"
+                name="number"
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input number'
+                    },
+                    {
+                        max: 20,
+                        message: 'Max 20 chars',
+                    }
+                ]}/>
+            <NumberFormComponent
+                label="Year of entry"
+                name="yearOfEntry"
+                min={1999}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please input year of entry'
+                    }
+                ]}/>
+            <SelectFormComponent
+                label="Speciality"
+                name="speciality"
+                placeholder="Select speciality"
+                options={specialities?.map(speciality => {
+                    return {label: speciality.code, value: speciality.id}
+                })}
+                rules={[{
                     required: true,
-                    message: 'Please input number'
-                },
-                {
-                    max: 20,
-                    message: 'Max 20 chars',
-                }
-            ]}/>
-            <NumberFormComponent label="Year of entry"
-                                 name="yearOfEntry"
-                                 defaultValue={current?.yearOfEntry}
-                                 min={1999}
-                                 rules={[
-                                     {
-                                         required: true,
-                                         message: 'Please input year of entry'
-                                     }
-                                 ]}/>
-            <SelectFormComponent label="Speciality" name="speciality" placeholder="Select speciality"
-                                 options={specialities?.map(speciality => {
-                                     return {label: speciality.code, value: speciality.id}
-                                 })}
-                                 defaultValue={current?.speciality.id}
-                                 rules={[{
-                                     required: true,
-                                     message: 'Please select speciality'
-                                 }]}/>
+                    message: 'Please select speciality'
+                }]}/>
             {students && <div>
                 {"Students"}
-                <Table style={{width: "25%", marginBottom: 20}} dataSource={students?.map(entity => {
-                    return {
-                        key: entity.id,
-                        fullName: <Link to={{pathname: `/${DepartmentType.STUDENTS}/${entity.id}`}}>
-                            {entity.fullName}</Link>
-                    };
+                <Table
+                    className="group-form__students"
+                    dataSource={students?.map(entity => {
+                        return {
+                            key: entity.id,
+                            fullName: <Link to={{pathname: `/${DepartmentType.STUDENTS}/${entity.id}`}}>
+                                {entity.fullName}</Link>
+                        };
 
-                })} columns={[
+                    })} columns={[
                     {
                         dataIndex: "fullName",
                         key: "fullName"
                     }
                 ]} size={"small"}
-                       pagination={false}
-                       showHeader={false}
-                       bordered/>
+                    pagination={false}
+                    showHeader={false}
+                    bordered/>
             </div>
             }
-            <div style={{display: "flex"}}>
+            <div className="entity-form__buttons">
                 <Form.Item>
-                    <Button style={{marginRight: 10}} type="primary" htmlType="submit">
+                    <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
                         Save
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: '/groups/'}}/>
+                        <Link to={{pathname: `/${DepartmentType.GROUPS}`}}/>
                     </>
                 </Button>
             </div>

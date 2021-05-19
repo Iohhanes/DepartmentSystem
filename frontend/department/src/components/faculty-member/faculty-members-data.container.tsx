@@ -55,12 +55,14 @@ const FacultyMembersDataContainer: FC = () => {
         return {
             fullName: entity.fullName,
             birthDate: <DatePicker value={moment(entity.birthDate)} disabled format="DD/MM/YYYY"/>,
-            degree: entity.degree ? entity.degree.abbreviated ?
-                <Link to={{pathname: `/${DepartmentType.GROUPS}/${entity.degree.id}`}}>
-                    {entity.degree.abbreviated}</Link> : "" : "",
-            rank: entity.rank ? entity.rank.abbreviated ?
-                <Link to={{pathname: `/${DepartmentType.GROUPS}/${entity.rank.id}`}}>
-                    {entity.rank.abbreviated}</Link> : "" : "",
+            degree: entity.degree ? <Link to={{pathname: `/${DepartmentType.DEGREES}/${entity.degree.id}`}}>
+                {entity.degree.abbreviated}</Link> : "",
+            rank: entity.rank ? <Link to={{pathname: `/${DepartmentType.RANKS}/${entity.rank.id}`}}>
+                {entity.rank.abbreviated}</Link> : "",
+            rate: entity.workload ? entity.workload.rate : "",
+            position: entity.workload ?
+                <Link to={{pathname: `/${DepartmentType.POSITIONS}/${entity.workload.position.id}`}}>
+                    {entity.workload.position.abbreviated}</Link> : ""
         }
     }, []);
 
@@ -90,6 +92,16 @@ const FacultyMembersDataContainer: FC = () => {
                         title: "Rank",
                         dataIndex: "rank",
                         key: "rank"
+                    },
+                    {
+                        title: "Rate",
+                        dataIndex: "rate",
+                        key: "rate"
+                    },
+                    {
+                        title: "Position",
+                        dataIndex: "position",
+                        key: "position"
                     }
                 ]}
                 onChangePagination={handleChangePagination}

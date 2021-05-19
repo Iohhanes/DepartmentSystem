@@ -8,9 +8,10 @@ interface NumberFormComponentProps {
     name: string;
     label?: string;
     rules?: Rule[];
-    defaultValue?: number;
     min?: number;
     max?: number;
+    strictMode?: boolean;
+    step?: string
 }
 
 const NumberFormComponent: FC<NumberFormComponentProps> = ({
@@ -19,9 +20,10 @@ const NumberFormComponent: FC<NumberFormComponentProps> = ({
                                                                name,
                                                                label,
                                                                rules,
-                                                               defaultValue,
                                                                min,
-                                                               max
+                                                               max,
+                                                               strictMode,
+                                                               step
                                                            }) => {
     return (
         <Form.Item
@@ -34,7 +36,9 @@ const NumberFormComponent: FC<NumberFormComponentProps> = ({
             <InputNumber
                 className={inputClassName ? inputClassName : ""}
                 min={min}
-                max={max}/>
+                max={max}
+                step={step}
+                stringMode={strictMode}/>
         </Form.Item>
     )
 }

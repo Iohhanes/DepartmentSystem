@@ -28,6 +28,6 @@ public class FacultyMember extends Person {
     @JoinColumn(name = "rank_id")
     private Rank rank;
 
-    @OneToOne(mappedBy = "facultyMember")
+    @OneToOne(mappedBy = "facultyMember", cascade = CascadeType.PERSIST)
     private Workload workload;
 }

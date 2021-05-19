@@ -71,7 +71,7 @@ const CurriculumsDataContainer: FC = () => {
             yearOfEntry: entity.yearOfEntry,
             speciality: <Link to={{pathname: `/${DepartmentType.SPECIALITIES}/${entity.speciality.id}`}}>
                 {entity.speciality.code}</Link>,
-            content: <Button type="primary" onClick={() => handleDownloadContent(entity.id)}>
+            content: entity.hasContent && <Button type="primary" onClick={() => handleDownloadContent(entity.id)}>
                 Content
             </Button>
         }

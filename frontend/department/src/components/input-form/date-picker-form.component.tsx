@@ -8,7 +8,6 @@ interface DatePickerFormComponentProps {
     name: string;
     label?: string;
     rules?: Rule[];
-    defaultValue?: Date;
 }
 
 const DatePickerFormComponent: FC<DatePickerFormComponentProps> = ({
@@ -16,8 +15,7 @@ const DatePickerFormComponent: FC<DatePickerFormComponentProps> = ({
                                                                        datePickerClassName,
                                                                        name,
                                                                        label,
-                                                                       rules,
-                                                                       defaultValue
+                                                                       rules
                                                                    }) => {
     return (
         <Form.Item

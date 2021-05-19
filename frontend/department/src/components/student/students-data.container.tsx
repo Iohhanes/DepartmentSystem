@@ -56,8 +56,8 @@ const StudentsDataContainer: FC = () => {
         return {
             fullName: entity.fullName,
             birthDate: <DatePicker value={moment(entity.birthDate)} disabled format="DD/MM/YYYY"/>,
-            group: <Link to={{pathname: `/${DepartmentType.GROUPS}/${entity.group.id}`}}>
-                {entity.group.number}</Link>
+            group: entity.group ? <Link to={{pathname: `/${DepartmentType.GROUPS}/${entity.group.id}`}}>
+                {entity.group.number}</Link> : ""
         }
     }, []);
 
