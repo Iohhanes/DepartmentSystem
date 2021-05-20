@@ -49,7 +49,7 @@ public class MasterCandidatesController {
 
     @PostMapping("/add")
     public void add(@RequestBody EditPGStudentRequest pgStudentRequest) {
-        pgStudentService.add(pgStudentRequest);
+        pgStudentService.add(pgStudentRequest, true);
     }
 
     @PostMapping("/{id}/edit")

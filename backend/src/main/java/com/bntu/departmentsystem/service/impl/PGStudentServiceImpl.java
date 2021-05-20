@@ -56,7 +56,7 @@ public class PGStudentServiceImpl implements PGStudentService {
     }
 
     @Override
-    public void add(EditPGStudentRequest pgStudentRequest) {
+    public void add(EditPGStudentRequest pgStudentRequest, boolean master) {
         pgStudentRepository.save(PGStudent.builder()
                 .lastName(pgStudentRequest.getLastName())
                 .firstName(pgStudentRequest.getFirstName())
@@ -71,9 +71,9 @@ public class PGStudentServiceImpl implements PGStudentService {
                         pgStudentRequest.getFirstName(),
                         pgStudentRequest.getMiddleName()))
                 .startDate(DateUtils.format(pgStudentRequest.getStartDate()))
-                .endDate(DateUtils.format(pgStudentRequest.getBirthDate()))
+                .endDate(DateUtils.format(pgStudentRequest.getEndDate()))
                 .comment(pgStudentRequest.getComment())
-                .master(pgStudentRequest.isMaster())
+                .master(master)
                 .facultyMember(pgStudentRequest.getFacultyMemberId() != null ?
                         facultyMemberRepository.findById(pgStudentRequest.getFacultyMemberId()).orElse(null) : null)
                 .build());
@@ -89,13 +89,13 @@ public class PGStudentServiceImpl implements PGStudentService {
         PGStudent pgStudent = pgStudentRepository.findById(id).orElse(null);
         if (pgStudent != null) {
             PersonDataUtils.editPerson(pgStudent, pgStudentRequest);
-            Optional.ofNullable(pgStudentRequest.getStartDate()).ifPresent(startDate -> pgStudent
-                    .setStartDate(DateUtils.format(pgStudentRequest.getStartDate())));
-            Optional.ofNullable(pgStudentRequest.getEndDate()).ifPresent(endDate -> pgStudent
-                    .setEndDate(DateUtils.format(pgStudentRequest.getEndDate())));
-            Optional.ofNullable(pgStudentRequest.getComment()).ifPresent(pgStudentRequest::setComment);
-            Optional.ofNullable(pgStudentRequest.getFacultyMemberId()).ifPresent(facultyMemberId -> pgStudent
-                    .setFacultyMember(facultyMemberRepository.findById(facultyMemberId).orElse(null)));
+            pgStudent.setStartDate(pgStudentRequest.getStartDate() == null ?
+                    null : DateUtils.format(pgStudentRequest.getStartDate()));
+            pgStudent.setEndDate(pgStudentRequest.getEndDate() == null ?
+                    null : DateUtils.format(pgStudentRequest.getEndDate()));
+            pgStudent.setComment(pgStudentRequest.getComment());
+            pgStudent.setFacultyMember(pgStudentRequest.getFacultyMemberId() == null ?
+                    null : facultyMemberRepository.findById(pgStudentRequest.getFacultyMemberId()).orElse(null));
             pgStudentRepository.save(pgStudent);
         }
     }

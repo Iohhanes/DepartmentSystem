@@ -12,6 +12,8 @@ import java.util.List;
 public interface FacultyMemberService {
     List<FacultyMember> getAll(Integer page, Integer count);
 
+    List<FacultyMember> getAll();
+
     FacultyMember getById(Long id);
 
     void add(EditFacultyMemberRequest facultyMemberRequest);

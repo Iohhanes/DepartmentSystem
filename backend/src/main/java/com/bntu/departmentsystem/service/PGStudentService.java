@@ -14,7 +14,7 @@ public interface PGStudentService {
 
     PGStudent getById(Long id, boolean master);
 
-    void add(EditPGStudentRequest pgStudentRequest);
+    void add(EditPGStudentRequest pgStudentRequest, boolean master);
 
     void addAll(List<PGStudent> students);
 

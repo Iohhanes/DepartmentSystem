@@ -28,6 +28,9 @@ import SpecialityAddContainer from "../components/speciality/speciality-add.cont
 import SpecialityEditContainer from "../components/speciality/speciality-edit.container";
 import SubjectEditContainer from "../components/subject/subject-edit.container";
 import SubjectAddContainer from "../components/subject/subject-add.container";
+import MasterCandidatesContainer from "../components/master-candidate/master-candidates.container";
+import MasterCandidateEditContainer from "../components/master-candidate/master-candidate-edit.container";
+import MasterCandidateAddContainer from "../components/master-candidate/master-candidate-add.container";
 
 const MainRouterComponent: FC = () => {
     return (
@@ -70,6 +73,10 @@ const MainRouterComponent: FC = () => {
                 <Route exact path={`/${DepartmentType.FACULTY_MEMBERS}`} component={FacultyMembersContainer}/>
                 <Route path={`/${DepartmentType.FACULTY_MEMBERS}/:id`} component={FacultyMemberEditContainer}/>
                 <Route exact path={`/${DepartmentType.FACULTY_MEMBERS}-new`} component={FacultyMemberAddContainer}/>
+
+                <Route exact path={`/${DepartmentType.MASTER_CANDIDATES}`} component={MasterCandidatesContainer}/>
+                <Route path={`/${DepartmentType.MASTER_CANDIDATES}/:id`} component={MasterCandidateEditContainer}/>
+                <Route exact path={`/${DepartmentType.MASTER_CANDIDATES}-new`} component={MasterCandidateAddContainer}/>
             </Switch>
         </>
     );

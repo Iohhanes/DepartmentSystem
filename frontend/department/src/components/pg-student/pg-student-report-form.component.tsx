@@ -1,22 +1,22 @@
 import React, {FC} from "react";
 import {Button, Form} from "antd";
-import {Group} from "../../model/group/group.model";
 import DatePickerFormComponent from "../input-form/date-picker-form.component";
+import {FacultyMember} from "../../model/faculty-member/faculty-member.model";
 import SelectFormComponent from "../input-form/select-form.component";
 
-interface StudentReportFormComponentProps {
+interface PgStudentReportFormComponentProps {
     onSubmit: (data: any) => void;
-    groups: Group[]
+    facultyMembers: FacultyMember[];
 }
 
-const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
-                                                                             onSubmit,
-                                                                             groups
-                                                                         }) => {
+const PgStudentReportFormComponent: FC<PgStudentReportFormComponentProps> = ({
+                                                                                 onSubmit,
+                                                                                 facultyMembers
+                                                                             }) => {
 
     return (
         <Form
-            name="student-report"
+            name="pg-student-report"
             onFinish={onSubmit}>
             <DatePickerFormComponent
                 label="Sign date"
@@ -28,16 +28,16 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                     },
                 ]}/>
             <SelectFormComponent
-                label="Group"
-                name="group"
-                placeholder="Select group"
-                options={groups?.map(group => {
-                    return {label: group.number, value: group.id}
+                label="Faculty member"
+                name="facultyMember"
+                placeholder="Select faculty member"
+                options={facultyMembers?.map(facultyMember => {
+                    return {label: facultyMember.fullName, value: facultyMember.id}
                 })}
                 rules={[
                     {
                         required: true,
-                        message: 'Please select group'
+                        message: 'Please select faculty member'
                     },
                 ]}
             />
@@ -50,4 +50,4 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
     );
 };
 
-export default React.memo(StudentReportFormComponent);
+export default React.memo(PgStudentReportFormComponent);

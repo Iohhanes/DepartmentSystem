@@ -50,6 +50,12 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
+    public List<FacultyMember> getAll() {
+        return facultyMemberRepository.findAll();
+    }
+
+    @Override
     public long count() {
         return facultyMemberRepository.count();
     }

@@ -16,6 +16,5 @@ public class EditPGStudentRequest extends EditPersonRequest {
     private Date startDate;
     private Date endDate;
     private String comment;
-    private boolean master;
     private Long facultyMemberId;
 }

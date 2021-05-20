@@ -32,6 +32,11 @@ public class FacultyMembersController {
         return facultyMemberService.getAll(page, count);
     }
 
+    @GetMapping
+    public List<FacultyMember> getAll() {
+        return facultyMemberService.getAll();
+    }
+
     @GetMapping("/count")
     public Long getTotalCount() {
         return facultyMemberService.count();

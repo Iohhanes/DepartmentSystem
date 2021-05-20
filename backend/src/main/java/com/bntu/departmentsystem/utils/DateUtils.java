@@ -18,11 +18,11 @@ public class DateUtils {
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public static LocalDate format(Date date) {
-        return LocalDate.parse(DATE_FORMATTER.format(date), DATE_TIME_FORMATTER);
+        return date == null ? null : LocalDate.parse(DATE_FORMATTER.format(date), DATE_TIME_FORMATTER);
     }
 
     public static String format(LocalDate date) {
-        return date.format(DATE_TIME_FORMATTER);
+        return date == null ? null : date.format(DATE_TIME_FORMATTER);
     }
 
     public static Date format(String dateString) {
