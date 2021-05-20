@@ -31,6 +31,9 @@ import SubjectAddContainer from "../components/subject/subject-add.container";
 import MasterCandidatesContainer from "../components/master-candidate/master-candidates.container";
 import MasterCandidateEditContainer from "../components/master-candidate/master-candidate-edit.container";
 import MasterCandidateAddContainer from "../components/master-candidate/master-candidate-add.container";
+import GraduateStudentsContainer from "../components/graduate-student/graduate-students.container";
+import GraduateStudentEditContainer from "../components/graduate-student/graduate-student-edit.container";
+import GraduateStudentAddContainer from "../components/graduate-student/graduate-student-add.container";
 
 const MainRouterComponent: FC = () => {
     return (
@@ -77,6 +80,10 @@ const MainRouterComponent: FC = () => {
                 <Route exact path={`/${DepartmentType.MASTER_CANDIDATES}`} component={MasterCandidatesContainer}/>
                 <Route path={`/${DepartmentType.MASTER_CANDIDATES}/:id`} component={MasterCandidateEditContainer}/>
                 <Route exact path={`/${DepartmentType.MASTER_CANDIDATES}-new`} component={MasterCandidateAddContainer}/>
+
+                <Route exact path={`/${DepartmentType.GRADUATE_STUDENTS}`} component={GraduateStudentsContainer}/>
+                <Route path={`/${DepartmentType.GRADUATE_STUDENTS}/:id`} component={GraduateStudentEditContainer}/>
+                <Route exact path={`/${DepartmentType.GRADUATE_STUDENTS}-new`} component={GraduateStudentAddContainer}/>
             </Switch>
         </>
     );
