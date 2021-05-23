@@ -62,7 +62,8 @@ export const loadCurriculum = createAsyncThunk("loadCurriculum", async (id: stri
 
 export const deleteCurriculums = createAsyncThunk("deleteCurriculums", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<Curriculum[]>("/curriculums/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/curriculums/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -89,13 +90,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(editCurriculum.fulfilled, addCurriculum.fulfilled), () => {
+        builder.addCase(addCurriculum.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/curriculums";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadCurriculums.fulfilled, deleteCurriculums.fulfilled), (state, action) => {
+        builder.addCase(editCurriculum.fulfilled, () => {
+                window.location.pathname = "/curriculums";
+            }
+        );
+        builder.addCase(deleteCurriculums.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadCurriculums.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

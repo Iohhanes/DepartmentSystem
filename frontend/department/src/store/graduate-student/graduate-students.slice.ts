@@ -54,7 +54,8 @@ export const loadGraduateStudent = createAsyncThunk("loadGraduateStudent", async
 
 export const deleteGraduateStudents = createAsyncThunk("deleteGraduateStudents", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<PGStudent[]>("/graduate-students/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/graduate-students/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const uploadGraduateStudentData = createAsyncThunk("uploadGraduateStudentData", async (requestData: UploadDataRequest) => {
@@ -65,7 +66,8 @@ export const uploadGraduateStudentData = createAsyncThunk("uploadGraduateStudent
             'Content-Type': 'multipart/form-data'
         }
     });
-    return data;
+    const countResponse = await axios.get<number>("/graduate-students/count");
+    return {data: data, count: countResponse.data};
 })
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -83,7 +85,8 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(uploadGraduateStudentData.fulfilled, (state, action) => {
-            state.data = action.payload;
+            state.data = action.payload.data;
+            state.totalCount = action.payload.count;
             state.loading = false;
             state.uploadStatus = UploadStatus.SUCCESS
         })
@@ -105,13 +108,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(addGraduateStudent.fulfilled, editGraduateStudent.fulfilled), () => {
+        builder.addCase(addGraduateStudent.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/graduate-students";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadGraduateStudents.fulfilled, deleteGraduateStudents.fulfilled), (state, action) => {
+        builder.addCase(editGraduateStudent.fulfilled, () => {
+                window.location.pathname = "/graduate-students";
+            }
+        );
+        builder.addCase(deleteGraduateStudents.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadGraduateStudents.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

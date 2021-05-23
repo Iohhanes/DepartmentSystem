@@ -43,7 +43,8 @@ export const loadGroup = createAsyncThunk("loadGroup", async (id: string) => {
 
 export const deleteGroups = createAsyncThunk("deleteGroups", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<Group[]>("/groups/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/groups/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -66,13 +67,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(addGroup.fulfilled, editGroup.fulfilled), () => {
+        builder.addCase(addGroup.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/groups";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadGroups.fulfilled, deleteGroups.fulfilled), (state, action) => {
+        builder.addCase(editGroup.fulfilled, () => {
+                window.location.pathname = "/groups";
+            }
+        );
+        builder.addCase(deleteGroups.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadGroups.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

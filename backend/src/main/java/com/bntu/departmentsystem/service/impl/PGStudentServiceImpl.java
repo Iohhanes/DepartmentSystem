@@ -15,7 +15,7 @@ import com.bntu.departmentsystem.utils.PersonDataUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class PGStudentServiceImpl implements PGStudentService {
     private static final String PG_STUDENTS_TEMPLATE_NAME = "pg_students.docx";
 
@@ -46,6 +46,7 @@ public class PGStudentServiceImpl implements PGStudentService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count(boolean master) {
         return pgStudentRepository.countByMaster(master);
     }
@@ -115,22 +116,15 @@ public class PGStudentServiceImpl implements PGStudentService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
-    public List<PGStudent> findByFacultyMember(Long facultyMemberId, boolean master) {
-        FacultyMember facultyMember = facultyMemberId != null ?
-                facultyMemberRepository.findById(facultyMemberId).orElse(null) :
-                null;
-        return facultyMember != null ?
-                pgStudentRepository.findAllByMasterAndFacultyMember(master, facultyMember) :
-                Collections.emptyList();
-    }
-
-    @Override
-    public List<PGStudent> uploadData(MultipartFile excelFile) throws InvalidUploadFileException {
+    public List<PGStudent> uploadData(MultipartFile excelFile, boolean master) throws InvalidUploadFileException {
         try {
             if (!excelFile.isEmpty()) {
                 List<ExcelPGStudent> excelPGStudents = excelParseService.parse(excelFile, ExcelPGStudent.class);
-                return excelPGStudentMapper.from(excelPGStudents);
+                List<PGStudent> pgStudents = excelPGStudentMapper.from(excelPGStudents);
+                pgStudents.forEach(pgStudent -> {
+                    pgStudent.setMaster(master);
+                });
+                return pgStudents;
             } else {
                 return Collections.emptyList();
             }
@@ -152,13 +146,18 @@ public class PGStudentServiceImpl implements PGStudentService {
         List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{
                 put("fullName", pgStudents.stream().map(Person::getFullName).collect(Collectors.toList()));
-                put("birthDate", pgStudents.stream().map(student -> student.getBirthDate().toString())
+                put("birthDate", pgStudents.stream().map(student -> DateUtils.format(student.getBirthDate()))
                         .collect(Collectors.toList()));
-                put("startDate", pgStudents.stream().map(student -> student.getStartDate().toString())
+                put("startDate", pgStudents.stream().map(student -> Optional.ofNullable(student.getStartDate())
+                        .map(DateUtils::format)
+                        .orElse(""))
                         .collect(Collectors.toList()));
-                put("endDate", pgStudents.stream().map(student -> student.getEndDate().toString())
+                put("endDate", pgStudents.stream().map(student -> Optional.ofNullable(student.getEndDate())
+                        .map(DateUtils::format)
+                        .orElse(""))
                         .collect(Collectors.toList()));
-                put("comment", pgStudents.stream().map(student -> Optional.ofNullable(student.getComment()).orElse(""))
+                put("comment", pgStudents.stream().map(student -> Optional.ofNullable(student.getComment())
+                        .orElse(""))
                         .collect(Collectors.toList()));
             }});
         }};

@@ -33,6 +33,7 @@ public class DegreeServiceImpl implements DegreeService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return degreeRepository.count();
     }

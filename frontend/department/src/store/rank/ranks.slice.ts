@@ -40,7 +40,8 @@ export const loadRank = createAsyncThunk("loadRank", async (id: string) => {
 
 export const deleteRanks = createAsyncThunk("deleteRanks", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<ProgressInfo[]>("/ranks/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/ranks/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -63,13 +64,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(editRank.fulfilled, addRank.fulfilled), () => {
+        builder.addCase(addRank.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/ranks";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadRanks.fulfilled, deleteRanks.fulfilled), (state, action) => {
+        builder.addCase(editRank.fulfilled, () => {
+                window.location.pathname = "/ranks";
+            }
+        );
+        builder.addCase(deleteRanks.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadRanks.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

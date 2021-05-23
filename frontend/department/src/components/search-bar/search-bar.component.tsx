@@ -1,4 +1,4 @@
-import React, {PropsWithChildren, ReactElement, useCallback, useState} from "react";
+import React, {PropsWithChildren, ReactElement, useCallback, useEffect, useState} from "react";
 import {AutoComplete} from "antd";
 import {Suggestion} from "../../model/suggestion.model";
 import {search} from "../../utils/search-utils";
@@ -6,6 +6,7 @@ import {debounce} from "lodash";
 import {Entity} from "../../model/entity.model";
 import {DEBOUNCE_WAIT} from "../../utils/constants.utils";
 import {useHistory} from "react-router";
+import {selectDataFromFirstPage} from "../../utils/select-data.utils";
 
 
 interface SearchBarComponentProps<T extends Entity> {
@@ -24,10 +25,20 @@ const SearchBarComponent = <T extends Entity>({
     const [options, setOptions] = useState<Suggestion[]>([]);
     const [value, setValue] = useState("");
 
+    useEffect(() => {
+        selectDataFromFirstPage<T>(prefix).then((newOptions) => {
+            setOptions(newOptions.map(newOption => onConvert(newOption)))
+        });
+    }, [setOptions, onConvert, prefix])
+
     const handleSearch = useCallback((value: string) => {
         const updateResults = () => {
-            if (value) {
+            if (value?.length) {
                 search<T>(prefix, value).then((newOptions) => {
+                    setOptions(newOptions.map(newOption => onConvert(newOption)))
+                });
+            } else {
+                selectDataFromFirstPage<T>(prefix).then((newOptions) => {
                     setOptions(newOptions.map(newOption => onConvert(newOption)))
                 });
             }

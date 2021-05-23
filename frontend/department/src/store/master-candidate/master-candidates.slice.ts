@@ -54,7 +54,8 @@ export const loadMasterCandidate = createAsyncThunk("loadMasterCandidate", async
 
 export const deleteMasterCandidates = createAsyncThunk("deleteMasterCandidates", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<PGStudent[]>("/master-candidates/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/master-candidates/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const uploadMasterCandidateData = createAsyncThunk("uploadMasterCandidateData", async (requestData: UploadDataRequest) => {
@@ -65,7 +66,8 @@ export const uploadMasterCandidateData = createAsyncThunk("uploadMasterCandidate
             'Content-Type': 'multipart/form-data'
         }
     });
-    return data;
+    const countResponse = await axios.get<number>("/master-candidates/count");
+    return {data: data, count: countResponse.data};
 })
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -83,7 +85,8 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(uploadMasterCandidateData.fulfilled, (state, action) => {
-            state.data = action.payload;
+            state.data = action.payload.data;
+            state.totalCount = action.payload.count
             state.loading = false;
             state.uploadStatus = UploadStatus.SUCCESS
         })
@@ -105,13 +108,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(addMasterCandidate.fulfilled, editMasterCandidate.fulfilled), () => {
+        builder.addCase(addMasterCandidate.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/master-candidates";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadMasterCandidates.fulfilled, deleteMasterCandidates.fulfilled), (state, action) => {
+        builder.addCase(editMasterCandidate.fulfilled, () => {
+                window.location.pathname = "/master-candidates";
+            }
+        );
+        builder.addCase(deleteMasterCandidates.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadMasterCandidates.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

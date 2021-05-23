@@ -17,7 +17,7 @@ import com.bntu.departmentsystem.utils.PersonDataUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class FacultyMemberServiceImpl implements FacultyMemberService {
     private static final String FACULTY_MEMBERS_TEMPLATE_NAME = "faculty_members.docx";
 
@@ -56,6 +56,7 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return facultyMemberRepository.count();
     }

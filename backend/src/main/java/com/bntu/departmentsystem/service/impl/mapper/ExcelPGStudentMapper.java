@@ -22,7 +22,7 @@ public class ExcelPGStudentMapper extends ExcelEntityMapper<ExcelPGStudent, PGSt
     @Override
     public PGStudent from(ExcelPGStudent excelPGStudent) throws InvalidUploadFileException {
         if (notValidPGStudent(excelPGStudent)) {
-            throw new InvalidUploadFileException();
+            throw new InvalidUploadFileException("Not valid excel data");
         }
         return PGStudent.builder()
                 .lastName(excelPGStudent.getLastName())
@@ -49,9 +49,9 @@ public class ExcelPGStudentMapper extends ExcelEntityMapper<ExcelPGStudent, PGSt
         return excelPGStudent == null ||
                 !StringUtils.hasLength(excelPGStudent.getLastName()) ||
                 !StringUtils.hasLength(excelPGStudent.getFirstName()) ||
-                excelPGStudent.getBirthDate() == null ||
-                excelPGStudent.getStartDate() == null ||
-                excelPGStudent.getEndDate() == null ||
+                DateUtils.format(excelPGStudent.getBirthDate()) == null ||
+                (excelPGStudent.getStartDate() != null && DateUtils.format(excelPGStudent.getStartDate()) == null) ||
+                (excelPGStudent.getEndDate() != null && DateUtils.format(excelPGStudent.getEndDate()) == null) ||
                 (excelPGStudent.getPhone() != null && !excelPGStudent.getPhone().matches(PHONE_PATTERN));
     }
 }

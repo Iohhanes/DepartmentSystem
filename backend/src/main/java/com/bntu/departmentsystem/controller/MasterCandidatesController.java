@@ -66,7 +66,7 @@ public class MasterCandidatesController {
     @PostMapping("/upload")
     public ResponseEntity<PGStudent[]> uploadData(@RequestParam("file") MultipartFile file) {
         try {
-            List<PGStudent> pgStudents = pgStudentService.uploadData(file);
+            List<PGStudent> pgStudents = pgStudentService.uploadData(file, true);
             pgStudentService.addAll(pgStudents);
             return new ResponseEntity<>(pgStudentService.getAll(FIRST_PAGE_INDEX, DEFAULT_PAGE_SIZE, true)
                     .toArray(new PGStudent[0]), HttpStatus.OK);

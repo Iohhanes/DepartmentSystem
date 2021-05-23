@@ -33,6 +33,7 @@ public class SpecialityServiceImpl implements SpecialityService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return specialityRepository.count();
     }

@@ -114,7 +114,7 @@ const FacultyMemberFormComponent: FC<FacultyMemberFormComponentProps> = ({
                 <NumberFormComponent
                     label="Rate"
                     name="rate"
-                    min={0}
+                    min={0.1}
                     max={1}
                     strictMode={true}
                     step="0.1"

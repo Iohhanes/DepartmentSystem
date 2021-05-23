@@ -56,6 +56,7 @@ const MasterCandidateEditFormContainer: FC = () => {
             indicator={<LoadingOutlined style={{fontSize: 24}} spin/>} spinning={loading}>
             {!loading && <PgStudentFormComponent
                 onSubmit={handleSubmit}
+                type={DepartmentType.MASTER_CANDIDATES}
                 current={currentMasterCandidate}
                 facultyMembers={facultyMembers}
             />}

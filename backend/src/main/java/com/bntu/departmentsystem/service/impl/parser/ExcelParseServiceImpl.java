@@ -5,7 +5,7 @@ import com.poiji.bind.Poiji;
 import com.poiji.exception.PoijiExcelType;
 import com.poiji.option.PoijiOptions;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ExcelParseServiceImpl<T> implements ExcelParseService<T> {
     private static final int NOT_FOUND_NO_EMPTY_CELL_INDEX = -1;
 

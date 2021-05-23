@@ -1,7 +1,7 @@
 package com.bntu.departmentsystem.service.impl.report;
 
 import com.bntu.departmentsystem.service.report.WordReportService;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-@Slf4j
+@Log4j2
 public class WordReportServiceImpl implements WordReportService {
     private static final String MARKUP_START = "${";
     private static final String MARKUP_END = "}";

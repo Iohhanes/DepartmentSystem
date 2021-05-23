@@ -15,12 +15,14 @@ import MemoFormComponent from "../input-form/memo-form.component";
 interface PgStudentFormComponentProps {
     current?: PGStudent
     onSubmit: (data: any) => void;
+    type: DepartmentType;
     facultyMembers?: FacultyMember[]
 }
 
 const PgStudentFormComponent: FC<PgStudentFormComponentProps> = ({
                                                                      current,
                                                                      onSubmit,
+                                                                     type,
                                                                      facultyMembers
                                                                  }) => {
 
@@ -117,7 +119,7 @@ const PgStudentFormComponent: FC<PgStudentFormComponentProps> = ({
                 <Button type="primary">
                     <>
                         {"Cancel"}
-                        <Link to={{pathname: `/${DepartmentType.FACULTY_MEMBERS}`}}/>
+                        <Link to={{pathname: `/${type}`}}/>
                     </>
                 </Button>
             </div>

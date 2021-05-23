@@ -2,11 +2,13 @@ package com.bntu.departmentsystem.service.impl;
 
 import com.bntu.departmentsystem.model.dto.facultymember.EditWorkloadRequest;
 import com.bntu.departmentsystem.model.entity.FacultyMember;
+import com.bntu.departmentsystem.model.entity.Position;
 import com.bntu.departmentsystem.model.entity.Workload;
 import com.bntu.departmentsystem.model.excel.ExcelFacultyMember;
 import com.bntu.departmentsystem.repository.PositionRepository;
 import com.bntu.departmentsystem.repository.WorkloadRepository;
 import com.bntu.departmentsystem.service.WorkloadService;
+import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -25,14 +27,6 @@ public class WorkloadServiceImpl implements WorkloadService {
     private final WorkloadRepository workloadRepository;
 
     @Override
-    public Workload getByFacultyMember(FacultyMember facultyMember) {
-        if (facultyMember != null) {
-            return workloadRepository.findByFacultyMember(facultyMember);
-        }
-        return null;
-    }
-
-    @Override
     public Workload add(EditWorkloadRequest workloadRequest) {
         if (workloadRequest != null) {
             return Workload.builder()
@@ -49,20 +43,21 @@ public class WorkloadServiceImpl implements WorkloadService {
     }
 
     @Override
-    public Workload add(ExcelFacultyMember excelFacultyMember) {
-        if (excelFacultyMember.getRate() != null ||
-                excelFacultyMember.getPositionTitle() != null) {
-            return Workload.builder()
-                    .rate(excelFacultyMember.getRate())
-                    .hourly(excelFacultyMember.getHourly())
-                    .support(excelFacultyMember.getSupport())
-                    .position(excelFacultyMember.getPositionTitle() != null ?
-                            positionRepository.findByTitle(excelFacultyMember.getPositionTitle()) : null)
-                    .positionPT(excelFacultyMember.getPositionPTTitle() != null ?
-                            positionRepository.findByTitle(excelFacultyMember.getPositionPTTitle()) : null)
-                    .build();
+    public Workload add(ExcelFacultyMember excelFacultyMember) throws InvalidUploadFileException {
+        Position position = positionRepository.findByTitle(excelFacultyMember.getPositionTitle());
+        if (position == null) {
+            throw new InvalidUploadFileException("Invalid position name");
         }
-        return null;
+        return Workload.builder()
+                .rate(excelFacultyMember.getRate().doubleValue())
+                .hourly(excelFacultyMember.getHourly() != null && excelFacultyMember.getHourly() == 0 ?
+                        null : excelFacultyMember.getHourly())
+                .support(excelFacultyMember.getSupport() != null && excelFacultyMember.getSupport() == 0 ?
+                        null : excelFacultyMember.getSupport())
+                .position(position)
+                .positionPT(excelFacultyMember.getPositionPTTitle() != null ?
+                        positionRepository.findByTitle(excelFacultyMember.getPositionPTTitle()) : null)
+                .build();
     }
 
     @Override

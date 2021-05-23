@@ -17,7 +17,7 @@ import com.bntu.departmentsystem.utils.PersonDataUtils;
 import com.bntu.departmentsystem.utils.PersonNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class StudentServiceImpl implements StudentService {
     private static final String STUDENTS_TEMPLATE_NAME = "students.docx";
 
@@ -48,6 +48,7 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return studentRepository.count();
     }
@@ -140,7 +141,7 @@ public class StudentServiceImpl implements StudentService {
         List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{
                 put("fullName", students.stream().map(Person::getFullName).collect(Collectors.toList()));
-                put("birthDate", students.stream().map(student -> student.getBirthDate().toString())
+                put("birthDate", students.stream().map(student -> DateUtils.format(student.getBirthDate()))
                         .collect(Collectors.toList()));
             }});
         }};

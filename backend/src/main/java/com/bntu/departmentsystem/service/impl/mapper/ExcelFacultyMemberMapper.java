@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+
 import static com.bntu.departmentsystem.constants.ParsingConstants.PHONE_PATTERN;
 
 @Service
@@ -27,7 +29,7 @@ public class ExcelFacultyMemberMapper extends ExcelEntityMapper<ExcelFacultyMemb
     @Override
     public FacultyMember from(ExcelFacultyMember excelFacultyMember) throws InvalidUploadFileException {
         if (notValidFacultyMember(excelFacultyMember)) {
-            throw new InvalidUploadFileException();
+            throw new InvalidUploadFileException("Not valid excel data");
         }
         FacultyMember facultyMember = FacultyMember.builder()
                 .lastName(excelFacultyMember.getLastName())
@@ -50,6 +52,7 @@ public class ExcelFacultyMemberMapper extends ExcelEntityMapper<ExcelFacultyMemb
         Workload workload = workloadService.add(excelFacultyMember);
         if (workload != null) {
             facultyMember.setWorkload(workload);
+            workload.setFacultyMember(facultyMember);
         }
         return facultyMember;
     }
@@ -58,9 +61,15 @@ public class ExcelFacultyMemberMapper extends ExcelEntityMapper<ExcelFacultyMemb
         return excelFacultyMember == null ||
                 !StringUtils.hasLength(excelFacultyMember.getLastName()) ||
                 !StringUtils.hasLength(excelFacultyMember.getFirstName()) ||
-                excelFacultyMember.getBirthDate() == null ||
+                DateUtils.format(excelFacultyMember.getBirthDate()) == null ||
                 (excelFacultyMember.getPhone() != null && !excelFacultyMember.getPhone().matches(PHONE_PATTERN)) ||
-                excelFacultyMember.getRate() == null ||
+                excelFacultyMember.getRate() == null || notValidRate(excelFacultyMember) ||
                 excelFacultyMember.getPositionTitle() == null;
+    }
+
+    private boolean notValidRate(ExcelFacultyMember excelFacultyMember) {
+        BigDecimal rate = excelFacultyMember.getRate();
+        rate = rate.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return BigDecimal.ZERO.compareTo(rate) >= 0 || BigDecimal.ONE.compareTo(rate) < 0;
     }
 }

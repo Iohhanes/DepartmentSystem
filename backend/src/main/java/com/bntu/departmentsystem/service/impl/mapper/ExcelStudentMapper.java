@@ -22,7 +22,7 @@ public class ExcelStudentMapper extends ExcelEntityMapper<ExcelStudent, Student>
     @Override
     public Student from(ExcelStudent excelStudent) throws InvalidUploadFileException {
         if (notValidStudent(excelStudent)) {
-            throw new InvalidUploadFileException();
+            throw new InvalidUploadFileException("Not valid excel data");
         }
         return Student.builder()
                 .lastName(excelStudent.getLastName())
@@ -46,7 +46,7 @@ public class ExcelStudentMapper extends ExcelEntityMapper<ExcelStudent, Student>
         return excelStudent == null ||
                 !StringUtils.hasLength(excelStudent.getLastName()) ||
                 !StringUtils.hasLength(excelStudent.getFirstName()) ||
-                excelStudent.getBirthDate() == null ||
+                DateUtils.format(excelStudent.getBirthDate()) == null ||
                 (excelStudent.getPhone() != null && !excelStudent.getPhone().matches(PHONE_PATTERN));
     }
 }

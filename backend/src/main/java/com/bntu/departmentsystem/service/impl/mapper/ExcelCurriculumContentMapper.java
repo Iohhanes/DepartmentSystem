@@ -20,7 +20,7 @@ public class ExcelCurriculumContentMapper extends ExcelEntityMapper<ExcelCurricu
         String subjectTitle = excelCurriculumContent == null ? null : excelCurriculumContent.getSubjectTitle();
         Subject subject = subjectTitle == null ? null : subjectRepository.findByTitle(subjectTitle);
         if (subject == null || notValidCurriculumContent(excelCurriculumContent)) {
-            throw new InvalidUploadFileException();
+            throw new InvalidUploadFileException("Not valid excel data");
         }
         return CurriculumContent.builder()
                 .creditTermNumber(excelCurriculumContent.getCreditTermNumber())
@@ -34,8 +34,8 @@ public class ExcelCurriculumContentMapper extends ExcelEntityMapper<ExcelCurricu
 
     private boolean notValidCurriculumContent(ExcelCurriculumContent excelCurriculumContent) {
         return excelCurriculumContent == null ||
-                excelCurriculumContent.getCreditTermNumber() == null ||
-                excelCurriculumContent.getExamTermNumber() == null ||
+                excelCurriculumContent.getCreditTermNumber() == null || excelCurriculumContent.getCreditTermNumber() == 0 ||
+                excelCurriculumContent.getExamTermNumber() == null || excelCurriculumContent.getExamTermNumber() == 0 ||
                 excelCurriculumContent.getAuditHours() == null ||
                 excelCurriculumContent.getLectureHours() == null ||
                 excelCurriculumContent.getLabWorkHours() == null;

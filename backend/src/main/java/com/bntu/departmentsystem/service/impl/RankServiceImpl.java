@@ -33,6 +33,7 @@ public class RankServiceImpl implements RankService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return rankRepository.count();
     }

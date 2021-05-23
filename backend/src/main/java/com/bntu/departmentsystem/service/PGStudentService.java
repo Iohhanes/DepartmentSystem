@@ -24,9 +24,7 @@ public interface PGStudentService {
 
     List<PGStudent> findByFullName(String query, boolean master);
 
-    List<PGStudent> findByFacultyMember(Long facultyMemberId, boolean master);
-
-    List<PGStudent> uploadData(MultipartFile excelFile) throws InvalidUploadFileException;
+    List<PGStudent> uploadData(MultipartFile excelFile, boolean master) throws InvalidUploadFileException;
 
     ByteArrayOutputStream generateReport(PGStudentReportRequest reportRequest, boolean master);
 

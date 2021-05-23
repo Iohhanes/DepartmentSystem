@@ -53,7 +53,8 @@ export const loadFacultyMember = createAsyncThunk("loadFacultyMember", async (id
 
 export const deleteFacultyMembers = createAsyncThunk("deleteFacultyMembers", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<FacultyMember[]>("/faculty-members/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/faculty-members/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const uploadFacultyMemberData = createAsyncThunk("uploadFacultyMemberData", async (requestData: UploadDataRequest) => {
@@ -64,7 +65,8 @@ export const uploadFacultyMemberData = createAsyncThunk("uploadFacultyMemberData
             'Content-Type': 'multipart/form-data'
         }
     });
-    return data;
+    const countResponse = await axios.get<number>("/faculty-members/count");
+    return {data: data, count: countResponse.data};
 })
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -82,7 +84,8 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(uploadFacultyMemberData.fulfilled, (state, action) => {
-            state.data = action.payload;
+            state.data = action.payload.data;
+            state.totalCount = action.payload.count;
             state.loading = false;
             state.uploadStatus = UploadStatus.SUCCESS
         })
@@ -104,13 +107,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(addFacultyMember.fulfilled, editFacultyMember.fulfilled), () => {
+        builder.addCase(addFacultyMember.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/faculty-members";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadFacultyMembers.fulfilled, deleteFacultyMembers.fulfilled), (state, action) => {
+        builder.addCase(editFacultyMember.fulfilled, () => {
+                window.location.pathname = "/faculty-members";
+            }
+        );
+        builder.addCase(deleteFacultyMembers.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadFacultyMembers.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

@@ -51,7 +51,8 @@ export const loadStudent = createAsyncThunk("loadStudent", async (id: string) =>
 
 export const deleteStudents = createAsyncThunk("deleteStudents", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<Student[]>("/students/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/students/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const uploadStudentData = createAsyncThunk("uploadStudentData", async (requestData: UploadDataRequest) => {
@@ -62,7 +63,8 @@ export const uploadStudentData = createAsyncThunk("uploadStudentData", async (re
             'Content-Type': 'multipart/form-data'
         }
     });
-    return data;
+    const countResponse = await axios.get<number>("/students/count");
+    return {data: data, count: countResponse.data};
 })
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -80,7 +82,8 @@ const slice = createSlice({
     },
     extraReducers: builder => {
         builder.addCase(uploadStudentData.fulfilled, (state, action) => {
-            state.data = action.payload;
+            state.data = action.payload.data;
+            state.totalCount = action.payload.count;
             state.loading = false;
             state.uploadStatus = UploadStatus.SUCCESS
         })
@@ -102,13 +105,20 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(addStudent.fulfilled, editStudent.fulfilled), () => {
+        builder.addCase(addStudent.fulfilled, (state => {
+            ++state.totalCount;
+            window.location.pathname = "/students";
+        }))
+        builder.addCase(editStudent.fulfilled, () => {
                 window.location.pathname = "/students";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadStudents.fulfilled, deleteStudents.fulfilled), (state, action) => {
+        builder.addCase(deleteStudents.fulfilled, (state, action) => {
+            state.data = action.payload.data;
+            state.totalCount = action.payload.count;
+            state.loading = false;
+        });
+        builder.addCase(loadStudents.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

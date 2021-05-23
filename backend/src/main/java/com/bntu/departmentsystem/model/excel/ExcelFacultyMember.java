@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,8 +37,8 @@ public class ExcelFacultyMember {
     @ExcelCellName("Rank")
     private String rankTitle;
 
-    @ExcelCellName("Hours")
-    private Double rate;
+    @ExcelCellName("Rate")
+    private BigDecimal rate;
 
     @ExcelCellName("Hourly")
     private Integer hourly;

@@ -40,7 +40,8 @@ export const loadDegree = createAsyncThunk("loadDegree", async (id: string) => {
 
 export const deleteDegrees = createAsyncThunk("deleteDegrees", async (requestData: DeleteEntitiesRequest) => {
     const {data} = await axios.post<ProgressInfo[]>("/degrees/delete", requestData);
-    return data;
+    const countResponse = await axios.get<number>("/degrees/count");
+    return {data: data, count: countResponse.data};
 });
 
 export const loadCount = createAsyncThunk("loadTotalCount", async () => {
@@ -63,13 +64,22 @@ const slice = createSlice({
         builder.addCase(loadCount.rejected, (state) => {
             state.totalCount = DEFAULT_PAGE_SIZE;
         });
-        builder.addMatcher(
-            isAnyOf(editDegree.fulfilled, addDegree.fulfilled), () => {
+        builder.addCase(addDegree.fulfilled, (state) => {
+                ++state.totalCount;
                 window.location.pathname = "/degrees";
             }
         );
-        builder.addMatcher(
-            isAnyOf(loadDegrees.fulfilled, deleteDegrees.fulfilled), (state, action) => {
+        builder.addCase(editDegree.fulfilled, () => {
+                window.location.pathname = "/degrees";
+            }
+        );
+        builder.addCase(deleteDegrees.fulfilled, (state, action) => {
+                state.data = action.payload.data;
+                state.totalCount = action.payload.count;
+                state.loading = false;
+            }
+        );
+        builder.addCase(loadDegrees.fulfilled, (state, action) => {
                 state.data = action.payload;
                 state.loading = false;
             }

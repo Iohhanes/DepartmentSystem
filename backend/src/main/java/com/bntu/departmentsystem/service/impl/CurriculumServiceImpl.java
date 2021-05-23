@@ -11,7 +11,7 @@ import com.bntu.departmentsystem.service.parser.ExcelParseService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
+@Log4j2
 public class CurriculumServiceImpl implements CurriculumService {
     private static final String CURRICULUM_CONTENTS_TEMPLATE_NAME = "curriculum_contents.docx";
 
@@ -49,6 +49,7 @@ public class CurriculumServiceImpl implements CurriculumService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return curriculumRepository.count();
     }

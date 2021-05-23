@@ -33,6 +33,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return subjectRepository.count();
     }

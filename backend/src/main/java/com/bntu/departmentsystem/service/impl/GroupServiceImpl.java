@@ -35,6 +35,7 @@ public class GroupServiceImpl implements GroupService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public long count() {
         return groupRepository.count();
     }
