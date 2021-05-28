@@ -148,7 +148,7 @@ public class CurriculumServiceImpl implements CurriculumService {
                 return excelCurriculumContentMapper.from(excelCurriculumContents);
             } catch (Exception exception) {
                 log.warn("Cannot parse excel file: {}", exception.getMessage());
-                throw new InvalidUploadFileException(exception.getMessage());
+                throw new InvalidUploadFileException(exception);
             }
         } else {
             return null;

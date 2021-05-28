@@ -1,19 +1,24 @@
-import {createAsyncThunk, createSlice, isAnyOf} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, isAnyOf, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
 import axios from "../../utils/department-api"
 import {PageRequest} from "../../model/page-request.model";
 import {DataState} from "../../model/data-state.model";
 import {DeleteEntitiesRequest} from "../../model/delete-entities-request.model";
-import {Subject, SubjectData} from "../../model/subject/subject.model";
+import {Subject} from "../../model/subject/subject.model";
 import {DEFAULT_PAGE_SIZE} from "../../utils/constants.utils";
+import {AddSubjectRequest} from "../../model/subject/add-subject-request.model";
+import {EditSubjectRequest} from "../../model/subject/edit-subject-request.model";
+import {UploadStatus} from "../../model/upload-status.model";
 
 interface SubjectsState extends DataState<Subject> {
+    uploadStatus: UploadStatus;
 }
 
 const initialState: SubjectsState = {
     loadingOnAdd: false,
     loading: false,
     loadingOnEdit: false,
+    uploadStatus: UploadStatus.NO_UPLOADING,
     totalCount: 0
 };
 
@@ -22,12 +27,30 @@ export const loadSubjects = createAsyncThunk("loadSubjects", async (requestData:
     return data;
 });
 
-export const addSubject = createAsyncThunk("addSubject", async (requestData: SubjectData) => {
-    await axios.post("/subjects/add", requestData);
+export const addSubject = createAsyncThunk("addSubject", async (requestData: AddSubjectRequest) => {
+    let formData = new FormData();
+    if (requestData.content) {
+        formData.append("content", requestData.content);
+    }
+    formData.append("title", requestData.title);
+    await axios.post("/subjects/add", formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 });
 
-export const editSubject = createAsyncThunk("editSubject", async (requestData: Subject) => {
-    await axios.post(`/subjects/${requestData.id}/edit`, {title: requestData.title});
+export const editSubject = createAsyncThunk("editSubject", async (requestData: EditSubjectRequest) => {
+    let formData = new FormData();
+    if (requestData.content) {
+        formData.append("content", requestData.content);
+    }
+    formData.append("title", requestData.title);
+    await axios.post(`/subjects/${requestData.id}/edit`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 });
 
 export const loadSubject = createAsyncThunk("loadSubject", async (id: string) => {
@@ -49,7 +72,11 @@ export const loadCount = createAsyncThunk("loadTotalCount", async () => {
 const slice = createSlice({
     name: "subjects",
     initialState,
-    reducers: {},
+    reducers: {
+        setUploadStatus: (state, action: PayloadAction<UploadStatus>) => {
+            state.uploadStatus = action.payload
+        }
+    },
     extraReducers: builder => {
         builder.addCase(loadSubject.fulfilled, (state, action) => {
             state.current = action.payload;
@@ -100,12 +127,14 @@ const slice = createSlice({
     }
 });
 
+export const {setUploadStatus} = slice.actions;
 
 export const selectSubjects = (state: RootState) => state.subjects.data;
 export const selectLoading = (state: RootState) => state.subjects.loading;
 export const selectCurrentSubject = (state: RootState) => state.subjects.current;
 export const selectLoadingOnEdit = (state: RootState) => state.subjects.loadingOnEdit;
 export const selectLoadingOnAdd = (state: RootState) => state.subjects.loadingOnAdd;
+export const selectUploadStatus = (state: RootState) => state.subjects.uploadStatus;
 export const selectTotalCount = (state: RootState) => state.subjects.totalCount;
 
 export const subjectsReducer = slice.reducer;

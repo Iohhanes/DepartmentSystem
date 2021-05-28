@@ -20,6 +20,7 @@ import java.util.Optional;
 public class SpecialityServiceImpl implements SpecialityService {
     private final SpecialityRepository specialityRepository;
 
+
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public List<Speciality> getAll(Integer page, Integer count) {

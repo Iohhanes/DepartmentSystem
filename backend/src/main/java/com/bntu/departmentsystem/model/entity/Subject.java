@@ -21,4 +21,11 @@ public class Subject {
 
     @Length(max = 100)
     private String title;
+
+    @Column(nullable = false, name = "content_exist", columnDefinition = "BIT", length = 1)
+    private boolean contentExist;
+
+    @Column(name = "content_name")
+    @Length(max = 100)
+    private String contentName;
 }

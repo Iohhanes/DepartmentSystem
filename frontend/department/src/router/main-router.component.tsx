@@ -39,7 +39,7 @@ const MainRouterComponent: FC = () => {
     return (
         <>
             <Switch>
-                <Route exact path='/' component={StudentsContainer}/>
+                <Route exact path='/' component={SubjectsContainer}/>
 
                 <Route exact path={`/${DepartmentType.STUDENTS}`} component={StudentsContainer}/>
                 <Route path={`/${DepartmentType.STUDENTS}/:id`} component={StudentEditContainer}/>

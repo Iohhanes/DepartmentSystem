@@ -1,8 +1,10 @@
 package com.bntu.departmentsystem.service;
 
-import com.bntu.departmentsystem.model.dto.subject.EditSubjectRequest;
 import com.bntu.departmentsystem.model.entity.Subject;
+import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public interface SubjectService {
@@ -12,13 +14,15 @@ public interface SubjectService {
 
     Subject getById(Long id);
 
-    void add(EditSubjectRequest subjectRequest);
+    void add(MultipartFile content, String title) throws InvalidUploadFileException;
 
-    void edit(Long id, EditSubjectRequest subjectRequest);
+    void edit(Long id, MultipartFile content, String title) throws InvalidUploadFileException;
 
     void deleteAll(List<Long> ids);
 
     List<Subject> findByTitle(String query);
+
+    ByteArrayOutputStream downloadContent(Long id);
 
     long count();
 }

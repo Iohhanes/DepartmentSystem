@@ -138,7 +138,7 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
             }
         } catch (Exception exception) {
             log.warn("Cannot parse excel file: {}", exception.getMessage());
-            throw new InvalidUploadFileException(exception.getMessage());
+            throw new InvalidUploadFileException(exception);
         }
     }
 

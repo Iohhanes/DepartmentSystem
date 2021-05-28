@@ -11,6 +11,8 @@ import {
     selectTotalCount
 } from "../../store/subject/subjects.slice";
 import {Subject} from "../../model/subject/subject.model";
+import {Button, message} from "antd";
+import {downloadDocument} from "../../utils/report.utils";
 
 const SubjectsDataContainer: FC = () => {
 
@@ -48,11 +50,30 @@ const SubjectsDataContainer: FC = () => {
         }));
     }, [dispatch]);
 
+    const handleDownloadError = () => {
+        message.error("Content download error", 1);
+    }
+
+    const handleDownloadContent = useCallback((id: string, fileName: string) => {
+
+        downloadDocument(
+            `/${DepartmentType.SUBJECTS}/${id}/content`,
+            fileName,
+            {},
+            handleDownloadError
+        );
+    }, []);
+
     const handleDisplay = useCallback((entity: Subject) => {
         return {
             title: entity.title,
+            content: entity.contentExist &&
+                <Button type="primary"
+                        onClick={() => handleDownloadContent(entity.id, entity.contentName ? entity.contentName : "content.docx")}>
+                    Content
+                </Button>
         }
-    }, []);
+    }, [handleDownloadContent]);
 
     return (
         <>
@@ -65,6 +86,11 @@ const SubjectsDataContainer: FC = () => {
                         title: "Title",
                         dataIndex: "title",
                         key: "title"
+                    },
+                    {
+                        title: "Content",
+                        dataIndex: "content",
+                        key: "content"
                     }
                 ]}
                 onChangePagination={handleChangePagination}

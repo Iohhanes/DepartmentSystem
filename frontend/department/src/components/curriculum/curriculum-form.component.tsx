@@ -9,6 +9,7 @@ import UploadDataComponent from "../upload-data/upload-data.component";
 import {RcFile} from "antd/es/upload";
 import {UploadStatus} from "../../model/upload-status.model";
 import {DepartmentType} from "../../model/department-type.model";
+import {XLSX_FILE_EXTENSION, XLSX_FILE_TYPE} from "../../utils/constants.utils";
 
 interface CurriculumFormComponentProps {
     current?: Curriculum;
@@ -62,7 +63,11 @@ const CurriculumFormComponent: FC<CurriculumFormComponentProps> = ({
                    banner
                    onClose={onCloseShowingUploadStatus}/>}
             <div className="curriculum-form__content">
-                <UploadDataComponent onSetMainFile={onSetMainFile}/>
+                <UploadDataComponent
+                    onSetMainFile={onSetMainFile}
+                    fileType={XLSX_FILE_TYPE}
+                    fileExtension={XLSX_FILE_EXTENSION}
+                />
             </div>
             <div className="entity-form__buttons">
                 <Form.Item>

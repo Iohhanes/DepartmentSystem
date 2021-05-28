@@ -1,16 +1,19 @@
 package com.bntu.departmentsystem.service.impl;
 
-import com.bntu.departmentsystem.model.dto.subject.EditSubjectRequest;
 import com.bntu.departmentsystem.model.entity.Subject;
 import com.bntu.departmentsystem.repository.SubjectRepository;
 import com.bntu.departmentsystem.service.SubjectService;
+import com.bntu.departmentsystem.service.storage.WordFileStoreService;
+import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +21,10 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class SubjectServiceImpl implements SubjectService {
+    private static final String FILE_PREFIX = "subject";
+
     private final SubjectRepository subjectRepository;
+    private final WordFileStoreService wordFileStoreService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
@@ -44,17 +50,26 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void add(EditSubjectRequest subjectRequest) {
-        subjectRepository.save(Subject.builder()
-                .title(subjectRequest.getTitle())
+    public void add(MultipartFile content, String title) throws InvalidUploadFileException {
+        Subject subject = subjectRepository.save(Subject.builder()
+                .title(title)
+                .contentName(content.getOriginalFilename())
                 .build());
+        subject.setContentExist(wordFileStoreService.uploadFile(formContentName(subject.getId()), content));
+        subjectRepository.save(subject);
     }
 
     @Override
-    public void edit(Long id, EditSubjectRequest subjectRequest) {
+    public void edit(Long id, MultipartFile content, String title) throws InvalidUploadFileException {
         Subject subject = subjectRepository.findById(id).orElse(null);
         if (subject != null) {
             Optional.ofNullable(subject.getTitle()).ifPresent(subject::setTitle);
+            if (content != null) {
+                subject.setContentExist(wordFileStoreService.uploadFile(formContentName(subject.getId()), content));
+                if (subject.isContentExist()) {
+                    subject.setContentName(content.getOriginalFilename());
+                }
+            }
             subjectRepository.save(subject);
         }
     }
@@ -62,6 +77,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void deleteAll(List<Long> ids) {
+        ids.forEach(id -> wordFileStoreService.deleteFile(formContentName(id)));
         subjectRepository.deleteByIdIn(ids);
     }
 
@@ -71,5 +87,14 @@ public class SubjectServiceImpl implements SubjectService {
         return (query != null && !query.isEmpty()) ?
                 subjectRepository.findByTitleIsContaining(query) :
                 Collections.emptyList();
+    }
+
+    @Override
+    public ByteArrayOutputStream downloadContent(Long id) {
+        return wordFileStoreService.findFile(formContentName(id));
+    }
+
+    private String formContentName(Long id) {
+        return FILE_PREFIX + id;
     }
 }
