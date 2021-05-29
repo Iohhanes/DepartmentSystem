@@ -4,62 +4,66 @@ import {FolderOutlined} from "@ant-design/icons";
 import {Link} from "react-router-dom";
 import {DepartmentType} from "../../model/department-type.model";
 import SubMenu from "antd/es/menu/SubMenu";
+import {useTranslation} from "react-i18next";
 
 interface NavigationComponentProps {
     currentOption: DepartmentType;
 }
 
 const NavigationComponent: FC<NavigationComponentProps> = ({currentOption}) => {
+
+    const {t} = useTranslation();
+
     return (
         <div className="navigation">
             <Menu defaultSelectedKeys={[currentOption]} mode="horizontal">
-                <SubMenu title="Academic work" icon={<FolderOutlined/>}>
+                <SubMenu title={t("navigation.academicWork.title")} icon={<FolderOutlined/>}>
                     <Menu.Item key={DepartmentType.SUBJECTS}>
-                        Subjects
+                        {t("navigation.academicWork.subjects")}
                         {<Link to={{pathname: `/${DepartmentType.SUBJECTS}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.SPECIALITIES}>
-                        Specialities
+                        {t("navigation.academicWork.specialities")}
                         {<Link to={{pathname: `/${DepartmentType.SPECIALITIES}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.CURRICULUMS}>
-                        Curriculums
+                        {t("navigation.academicWork.curriculums")}
                         {<Link to={{pathname: `/${DepartmentType.CURRICULUMS}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.FACULTY_MEMBERS}>
-                        Faculty Members
+                        {t("navigation.academicWork.facultyMembers")}
                         {<Link to={{pathname: `/${DepartmentType.FACULTY_MEMBERS}`}}/>}
                     </Menu.Item>
                 </SubMenu>
-                <SubMenu title="Accounting of students" icon={<FolderOutlined/>}>
+                <SubMenu title={t("navigation.accountingOfStudents.title")} icon={<FolderOutlined/>}>
                     <Menu.Item key={DepartmentType.STUDENTS}>
-                        Students
+                        {t("navigation.accountingOfStudents.students")}
                         {<Link to={{pathname: `/${DepartmentType.STUDENTS}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.GROUPS}>
-                        Groups
+                        {t("navigation.accountingOfStudents.groups")}
                         {<Link to={{pathname: `/${DepartmentType.GROUPS}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.MASTER_CANDIDATES}>
-                        Master Candidates
+                        {t("navigation.accountingOfStudents.masterCandidates")}
                         {<Link to={{pathname: `/${DepartmentType.MASTER_CANDIDATES}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.GRADUATE_STUDENTS}>
-                        Graduate Students
+                        {t("navigation.accountingOfStudents.graduateStudents")}
                         {<Link to={{pathname: `/${DepartmentType.GRADUATE_STUDENTS}`}}/>}
                     </Menu.Item>
                 </SubMenu>
-                <SubMenu title="Utils" icon={<FolderOutlined/>}>
+                <SubMenu title={t("navigation.utils.title")} icon={<FolderOutlined/>}>
                     <Menu.Item key={DepartmentType.DEGREES}>
-                        Degrees
+                        {t("navigation.utils.degrees")}
                         {<Link to={{pathname: `/${DepartmentType.DEGREES}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.RANKS}>
-                        Ranks
+                        {t("navigation.utils.ranks")}
                         {<Link to={{pathname: `/${DepartmentType.RANKS}`}}/>}
                     </Menu.Item>
                     <Menu.Item key={DepartmentType.POSITIONS}>
-                        Positions
+                        {t("navigation.utils.positions")}
                         {<Link to={{pathname: `/${DepartmentType.POSITIONS}`}}/>}
                     </Menu.Item>
                 </SubMenu>

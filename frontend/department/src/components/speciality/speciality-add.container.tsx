@@ -7,7 +7,7 @@ const SpecialityAddContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.SPECIALITIES}/>
             <SpecialityAddFormContainer/>
         </>
     )

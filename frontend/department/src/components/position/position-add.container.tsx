@@ -7,7 +7,7 @@ const PositionAddContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.POSITIONS}/>
             <PositionAddFormContainer/>
         </>
     )

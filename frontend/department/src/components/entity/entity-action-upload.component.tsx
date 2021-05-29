@@ -4,7 +4,7 @@ import {Alert, Button, Modal, Spin} from "antd";
 import UploadDataComponent from "../upload-data/upload-data.component";
 import {UploadStatus} from "../../model/upload-status.model";
 import {LoadingOutlined} from "@ant-design/icons";
-import {XLSX_FILE_EXTENSION, XLSX_FILE_TYPE} from "../../utils/constants.utils";
+import {FileExtension, MimeType} from "../../model/file-type.model";
 
 interface EntityActionUploadComponentProps {
     onUpload: (file: RcFile) => void;
@@ -66,8 +66,8 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                         <div className="entity-action-upload__footer">
                             <UploadDataComponent
                                 onSetMainFile={handleSetMainFile}
-                                fileType={XLSX_FILE_TYPE}
-                                fileExtension={XLSX_FILE_EXTENSION}/>
+                                fileTypes={[MimeType.XLSX]}
+                                fileExtensions={[FileExtension.XLSX]}/>
                             <Button type="primary" onClick={handleSubmit}
                                     className="entity-action-upload__footer__submit-button">
                                 Submit

@@ -4,6 +4,7 @@ import {Provider} from 'react-redux';
 import DepartmentApp from './department-app';
 import store from "./store/store";
 import "./styles/styles.less"
+import './i18n';
 
 ReactDOM.render(
     <React.StrictMode>

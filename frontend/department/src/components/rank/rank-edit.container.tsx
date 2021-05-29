@@ -7,7 +7,7 @@ const RankEditContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.RANKS}/>
             <RankEditFormContainer/>
         </>
     )

@@ -7,7 +7,7 @@ const PositionEditContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.POSITIONS}/>
             <PositionEditFormContainer/>
         </>
     )

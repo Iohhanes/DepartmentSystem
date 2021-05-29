@@ -1,0 +1,124 @@
+{
+  "ru": {
+    "translation": {
+      "navigation": {
+        "academicWork": {
+          "title": "Учебная работа",
+          "subjects": "Дисциплины",
+          "specialities": "Специальности",
+          "curriculums": "Учебные планы",
+          "facultyMembers": "Преподаватели"
+        },
+        "accountingOfStudents": {
+          "title": "Учёт студентов",
+          "students": "Студенты",
+          "groups": "Группы",
+          "masterCandidates": "Магистранты",
+          "graduateStudents": "Аспиранты"
+        },
+        "utils": {
+          "title": "Допольнительно",
+          "degrees": "Степени",
+          "ranks": "Уровни",
+          "positions": "Должности"
+        }
+      },
+      "entityTable": {
+        "btn": {
+          "moreInfo": "Редактировать",
+          "delete": "Удалить",
+          "add": "Добавить"
+        }
+      },
+      "inputForms": {
+        "btn": {
+          "submit": "Подтвердить",
+          "cancel": "Отмена"
+        }
+      },
+      "entities": {
+        "subject": {
+          "fields": {
+            "title": "Название",
+            "content": "Программа"
+          },
+          "validations": {
+            "titleRequired": "Введите название",
+            "titleMaxLength": "Максимум 20 символов",
+            "downloadContentError": "Ошибка скачивания файла программы",
+            "uploadContentError": "Ошибка загрузки файла программы"
+          },
+          "searchBarPlaceholder": "Введите название"
+        },
+        "speciality": {
+          "fields": {
+            "title": "Название",
+            "code": "Код"
+          },
+          "validations": {
+            "titleRequired": "Введите название",
+            "titleMaxLength": "Максимум 100 символов",
+            "codeRequired": "Введите код специальности",
+            "codeMaxLength": "Максимум 50 символов"
+          },
+          "searchBarPlaceholder": "Введите код специальности"
+        },
+        "curriculum": {
+          "fields": {
+            "yearOfEntry": "Год начала действия",
+            "speciality": "Название",
+            "content": "Содержимое"
+          },
+          "validations": {
+            "yearOfEntryRequired": "Введите год начала действия",
+            "specialityRequired": "Выберете специальность",
+            "downloadContentError": "Ошибка скачивания файла c содержимым",
+            "uploadContentError": "Ошибка загрузки файла с содержиымым"
+          }
+        },
+        "person": {
+          "fields": {
+            "lastName": "Фамилия",
+            "firstName": "Имя",
+            "middleName": "Отчество",
+            "fullName": "Полное имя",
+            "birthDate": "Дата рождения",
+            "phone": "Телефон",
+            "email": "Электронная почта"
+          },
+          "validations": {
+            "lastNameRequired": "Введите фамилию",
+            "firstNameRequired": "Выберете имя",
+            "lastNameMaxLength": "Максимум 20 символов",
+            "firstNameMaxLength": "Максимум 20 символов",
+            "middleNameMaxLength": "Максимум 20 символов",
+            "birthDateRequired": "Выберете год рождения",
+            "emailInvalid": "Введите правильную электронную почту",
+            "downloadReportError": "Ошибка скачивания файла отчёта",
+            "uploadDataError": "Ошибка загрузки файла с данными"
+          }
+        },
+        "facultyMember": {
+          "fields": {
+            "degree": "Год начала действия",
+            "rank": "Название",
+            "content": "Содержимое"
+          },
+          "validations": {
+            "yearOfEntryRequired": "Введите год начала действия",
+            "specialityRequired": "Выберете специальность",
+            "downloadContentError": "Ошибка скачивания файла программы",
+            "uploadContentError": "Ошибка загрузки файла программы"
+          }
+        }
+      },
+      "uploadComponent": {
+        "validations": {
+          "size": " должен быть меньше 5MB",
+          "type": " должен иметь одно из представленных расширений: "
+        },
+        "title": "Выберете файл"
+      }
+    }
+  }
+}

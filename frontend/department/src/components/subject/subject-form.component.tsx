@@ -7,7 +7,8 @@ import {DepartmentType} from "../../model/department-type.model";
 import {UploadStatus} from "../../model/upload-status.model";
 import {RcFile} from "antd/es/upload";
 import UploadDataComponent from "../upload-data/upload-data.component";
-import {DOCX_FILE_EXTENSION, DOCX_FILE_TYPE} from "../../utils/constants.utils";
+import {FileExtension, MimeType} from "../../model/file-type.model";
+import {useTranslation} from "react-i18next";
 
 interface SubjectFormComponentProps {
     current?: Subject;
@@ -25,6 +26,8 @@ const SubjectFormComponent: FC<SubjectFormComponentProps> = ({
                                                                  onCloseShowingUploadStatus
                                                              }) => {
 
+    const {t} = useTranslation();
+
     return (
         <Form
             className="subject-form"
@@ -34,39 +37,40 @@ const SubjectFormComponent: FC<SubjectFormComponentProps> = ({
                 title: current.title
             }}>
             <TextFormComponent
-                label="Title"
+                label={t("entities.subject.fields.title")}
                 name="title"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input title'
+                        message: t("entities.subject.validations.titleRequired")
                     },
                     {
                         max: 100,
-                        message: 'Max 100 chars',
+                        message: t("entities.subject.validations.titleMaxLength"),
                     }
                 ]}/>
             {uploadStatus === UploadStatus.ERROR &&
             <Alert type="error"
-                   message="Invalid file content"
+                   message={t("entities.subject.validations.uploadContentError")}
                    closable
                    banner
                    onClose={onCloseShowingUploadStatus}/>}
             <div className="subject-form__content">
                 <UploadDataComponent
                     onSetMainFile={onSetMainFile}
-                    fileType={DOCX_FILE_TYPE}
-                    fileExtension={DOCX_FILE_EXTENSION}/>
+                    fileTypes={[MimeType.XLSX, MimeType.XLS, MimeType.DOCX, MimeType.DOC, MimeType.PDF]}
+                    fileExtensions={[FileExtension.XLSX, FileExtension.XLS, FileExtension.DOCX, FileExtension.DOC, FileExtension.PDF]}
+                />
             </div>
             <div className="entity-form__buttons">
                 <Form.Item>
                     <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
-                        Save
+                        {t("inputForms.btn.submit")}
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
-                        {"Cancel"}
+                        {t("inputForms.btn.cancel")}
                         <Link to={{pathname: `/${DepartmentType.SUBJECTS}`}}/>
                     </>
                 </Button>

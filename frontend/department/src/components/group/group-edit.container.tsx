@@ -7,7 +7,7 @@ const GroupEditContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.GROUPS}/>
             <GroupEditFormContainer/>
         </>
     )

@@ -13,6 +13,7 @@ import {
 import {Subject} from "../../model/subject/subject.model";
 import {Button, message} from "antd";
 import {downloadDocument} from "../../utils/report.utils";
+import {useTranslation} from "react-i18next";
 
 const SubjectsDataContainer: FC = () => {
 
@@ -20,6 +21,8 @@ const SubjectsDataContainer: FC = () => {
     const subjects = useSelector(selectSubjects);
     const loading = useSelector(selectLoading);
     const totalCount = useSelector(selectTotalCount);
+
+    const {t} = useTranslation();
 
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -50,9 +53,9 @@ const SubjectsDataContainer: FC = () => {
         }));
     }, [dispatch]);
 
-    const handleDownloadError = () => {
-        message.error("Content download error", 1);
-    }
+    const handleDownloadError = useCallback(() => {
+        message.error(t("entities.subject.validations.downloadContentError"), 1);
+    }, [t]);
 
     const handleDownloadContent = useCallback((id: string, fileName: string) => {
 
@@ -62,7 +65,7 @@ const SubjectsDataContainer: FC = () => {
             {},
             handleDownloadError
         );
-    }, []);
+    }, [handleDownloadError]);
 
     const handleDisplay = useCallback((entity: Subject) => {
         return {
@@ -70,10 +73,10 @@ const SubjectsDataContainer: FC = () => {
             content: entity.contentExist &&
                 <Button type="primary"
                         onClick={() => handleDownloadContent(entity.id, entity.contentName ? entity.contentName : "content.docx")}>
-                    Content
+                    {t("entities.subject.fields.content")}
                 </Button>
         }
-    }, [handleDownloadContent]);
+    }, [handleDownloadContent, t]);
 
     return (
         <>
@@ -83,12 +86,12 @@ const SubjectsDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Title",
+                        title: t("entities.subject.fields.title"),
                         dataIndex: "title",
                         key: "title"
                     },
                     {
-                        title: "Content",
+                        title: t("entities.subject.fields.content"),
                         dataIndex: "content",
                         key: "content"
                     }

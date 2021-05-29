@@ -15,6 +15,7 @@ import {
 import {Curriculum} from "../../model/curriculum/curriculum.model";
 import {Button, message} from "antd";
 import {downloadDocument} from "../../utils/report.utils";
+import {useTranslation} from "react-i18next";
 
 const CurriculumsDataContainer: FC = () => {
 
@@ -22,6 +23,8 @@ const CurriculumsDataContainer: FC = () => {
     const curriculums = useSelector(selectCurriculums);
     const loading = useSelector(selectLoading);
     const totalCount = useSelector(selectTotalCount);
+
+    const {t} = useTranslation();
 
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -52,30 +55,32 @@ const CurriculumsDataContainer: FC = () => {
         }));
     }, [dispatch]);
 
-    const handleDownloadError = () => {
-        message.error("Content download error", 1);
-    }
+    const handleDownloadError = useCallback(() => {
+        message.error(t("entities.curriculum.validations.downloadContentError"), 1);
+    }, [t]);
 
-    const handleDownloadContent = useCallback((id: string) => {
+    const handleDownloadContent = useCallback((id: string, fileName: string) => {
 
         downloadDocument(
             `/${DepartmentType.CURRICULUMS}/${id}/content`,
-            "content.docx",
+            fileName,
             {},
             handleDownloadError
         );
-    }, []);
+    }, [handleDownloadError]);
 
     const handleDisplay = useCallback((entity: Curriculum) => {
         return {
             yearOfEntry: entity.yearOfEntry,
             speciality: <Link to={{pathname: `/${DepartmentType.SPECIALITIES}/${entity.speciality.id}`}}>
                 {entity.speciality.code}</Link>,
-            content: entity.hasContent && <Button type="primary" onClick={() => handleDownloadContent(entity.id)}>
-                Content
-            </Button>
+            content: entity.contentExist &&
+                <Button type="primary"
+                        onClick={() => handleDownloadContent(entity.id, entity.contentName ? entity.contentName : "content.docx")}>
+                    {t("entities.curriculum.fields.content")}
+                </Button>
         }
-    }, [handleDownloadContent]);
+    }, [handleDownloadContent, t]);
 
     return (
         <>
@@ -85,17 +90,17 @@ const CurriculumsDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Year of entry",
+                        title: t("entities.curriculum.fields.yearOfEntry"),
                         dataIndex: "yearOfEntry",
                         key: "yearOfEntry"
                     },
                     {
-                        title: "Speciality",
+                        title: t("entities.curriculum.fields.speciality"),
                         dataIndex: "speciality",
                         key: "speciality"
                     },
                     {
-                        title: "Content",
+                        title: t("entities.curriculum.fields.content"),
                         dataIndex: "content",
                         key: "content"
                     }

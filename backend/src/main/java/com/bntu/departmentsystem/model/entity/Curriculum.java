@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 
@@ -25,5 +26,10 @@ public class Curriculum {
     @JoinColumn(name = "speciality_id")
     private Speciality speciality;
 
-    private boolean hasContent;
+    @Column(nullable = false, name = "content_exist", columnDefinition = "BIT", length = 1)
+    private boolean contentExist;
+
+    @Column(name = "content_name")
+    @Length(max = 100)
+    private String contentName;
 }

@@ -17,11 +17,6 @@ const PhoneFormComponent: FC<PhoneFormComponentProps> = ({
             labelCol={{span: 24}}
             className={formClassName ? formClassName : ""}
             name="phone"
-            rules={[
-                {
-                    message: 'Please input valid phone'
-                },
-            ]}
         >
             <MaskedInput
                 mask="+375(11)1111111"

@@ -5,6 +5,7 @@ import {Entity} from "../../model/entity.model";
 import {DepartmentType} from "../../model/department-type.model";
 import {ColumnsType} from "antd/es/table";
 import {LoadingOutlined} from "@ant-design/icons";
+import {useTranslation} from "react-i18next";
 
 interface EntityTableComponentProps<T extends Entity> {
     type: DepartmentType;
@@ -34,6 +35,8 @@ const EntityTableComponent = <T extends Entity>({
                                                     loading,
                                                 }: PropsWithChildren<EntityTableComponentProps<T>>): ReactElement<any, any> | null => {
 
+    const {t} = useTranslation();
+
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
 
     const handleCheck = (selectedRowKeys: Key[]) => {
@@ -48,11 +51,11 @@ const EntityTableComponent = <T extends Entity>({
                     <div className="entity-table__buttons">
                         <Button className="entity-table__buttons__delete" type="primary"
                                 onClick={() => onDelete(selectedRowKeys)}>
-                            Delete
+                            {t("entityTable.btn.delete")}
                         </Button>
                         <Button type="primary">
                             <>
-                                {"Add"}
+                                {t("entityTable.btn.add")}
                                 <Link to={{pathname: `/${type}-new`}}/>
                             </>
                         </Button>
@@ -65,7 +68,7 @@ const EntityTableComponent = <T extends Entity>({
                                 ...onDisplay(entity),
                                 moreInfoButton: <Button type="primary">
                                     <>
-                                        {"More info"}
+                                        {t("entityTable.btn.moreInfo")}
                                         <Link to={{pathname: `/${type}/${entity.id}`}}/>
                                     </>
                                 </Button>
@@ -88,11 +91,7 @@ const EntityTableComponent = <T extends Entity>({
                         size={"middle"}
                         rowSelection={{
                             selectedRowKeys,
-                            onChange: handleCheck,
-                            selections: [
-                                Table.SELECTION_ALL,
-                                Table.SELECTION_INVERT,
-                                Table.SELECTION_NONE]
+                            onChange: handleCheck
                         }}
                     />
                 </div>}

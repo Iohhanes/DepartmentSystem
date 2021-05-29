@@ -11,6 +11,7 @@ import {
     selectSpecialities, selectTotalCount
 } from "../../store/speciality/specialities.slice";
 import {Speciality} from "../../model/speciality/speciality.model";
+import {useTranslation} from "react-i18next";
 
 const SpecialitiesDataContainer: FC = () => {
 
@@ -18,6 +19,8 @@ const SpecialitiesDataContainer: FC = () => {
     const specialities = useSelector(selectSpecialities);
     const loading = useSelector(selectLoading);
     const totalCount = useSelector(selectTotalCount);
+
+    const {t} = useTranslation();
 
     const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -63,12 +66,12 @@ const SpecialitiesDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Code",
+                        title: t("entities.speciality.fields.code"),
                         dataIndex: "code",
                         key: "code"
                     },
                     {
-                        title: "Title",
+                        title: t("entities.speciality.fields.title"),
                         dataIndex: "title",
                         key: "title"
                     }

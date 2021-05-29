@@ -7,7 +7,7 @@ const GroupAddContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.GROUPS}/>
             <GroupAddFormContainer/>
         </>
     )

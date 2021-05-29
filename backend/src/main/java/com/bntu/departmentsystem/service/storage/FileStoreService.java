@@ -5,7 +5,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 
-public interface WordFileStoreService {
+public interface FileStoreService {
     boolean uploadFile(String fileName, MultipartFile file) throws InvalidUploadFileException;
 
     ByteArrayOutputStream findFile(String fileName);

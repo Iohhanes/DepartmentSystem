@@ -1,14 +1,10 @@
 package com.bntu.departmentsystem.service.impl;
 
 import com.bntu.departmentsystem.model.entity.*;
-import com.bntu.departmentsystem.model.excel.ExcelCurriculumContent;
 import com.bntu.departmentsystem.repository.CurriculumRepository;
 import com.bntu.departmentsystem.repository.SpecialityRepository;
-import com.bntu.departmentsystem.service.CurriculumContentService;
 import com.bntu.departmentsystem.service.CurriculumService;
-import com.bntu.departmentsystem.service.impl.mapper.ExcelCurriculumContentMapper;
-import com.bntu.departmentsystem.service.parser.ExcelParseService;
-import com.bntu.departmentsystem.service.report.WordReportService;
+import com.bntu.departmentsystem.service.storage.FileStoreService;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -17,35 +13,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Log4j2
 public class CurriculumServiceImpl implements CurriculumService {
-    private static final String CURRICULUM_CONTENTS_TEMPLATE_NAME = "curriculum_contents.docx";
+    private static final String FILE_PREFIX = "curriculum";
 
     private final CurriculumRepository curriculumRepository;
-    private final CurriculumContentService curriculumContentService;
     private final SpecialityRepository specialityRepository;
-    private final ExcelParseService<ExcelCurriculumContent> excelParseService;
-    private final ExcelCurriculumContentMapper excelCurriculumContentMapper;
-    private final WordReportService wordReportService;
+    private final FileStoreService fileStoreService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
     public List<Curriculum> getAll(Integer page, Integer count) {
-        List<Curriculum> curriculums = curriculumRepository.findAll(PageRequest.of(page, count)).getContent();
-        curriculums.forEach(curriculum -> {
-            List<CurriculumContent> curriculumContents = curriculumContentService.getAllByCurriculum(curriculum);
-            curriculum.setHasContent(!CollectionUtils.isEmpty(curriculumContents));
-        });
-        return curriculums;
+        return curriculumRepository.findAll(PageRequest.of(page, count)).getContent();
     }
 
     @Override
@@ -61,16 +47,13 @@ public class CurriculumServiceImpl implements CurriculumService {
 
     @Override
     public void add(Integer yearOfEntry, Long specialityId, MultipartFile content) throws InvalidUploadFileException {
-        List<CurriculumContent> curriculumContents = parseContent(content);
-        Curriculum currentCurriculum = curriculumRepository.save(Curriculum.builder()
+        Curriculum curriculum = curriculumRepository.save(Curriculum.builder()
                 .yearOfEntry(yearOfEntry)
                 .speciality(specialityId != null ?
                         specialityRepository.findById(specialityId).orElse(null) : null)
                 .build());
-        if (!CollectionUtils.isEmpty(curriculumContents)) {
-            curriculumContents.forEach(curriculumContent -> curriculumContent.setCurriculum(currentCurriculum));
-            curriculumContentService.addAll(curriculumContents);
-        }
+        curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum.getId()), content));
+        curriculumRepository.save(curriculum);
     }
 
     @Override
@@ -80,78 +63,29 @@ public class CurriculumServiceImpl implements CurriculumService {
             Optional.ofNullable(yearOfEntry).ifPresent(curriculum::setYearOfEntry);
             Optional.ofNullable(specialityId).ifPresent(speciality -> curriculum
                     .setSpeciality(specialityRepository.findById(speciality).orElse(null)));
-            List<CurriculumContent> curriculumContents = parseContent(content);
-            curriculumRepository.save(curriculum);
-            if (!CollectionUtils.isEmpty(curriculumContents)) {
-                curriculumContentService.deleteAll(curriculum);
-                curriculumContents.forEach(curriculumContent -> curriculumContent.setCurriculum(curriculum));
-                curriculumContentService.addAll(curriculumContents);
+            if (content != null) {
+                curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum.getId()), content));
+                if (curriculum.isContentExist()) {
+                    curriculum.setContentName(content.getOriginalFilename());
+                }
             }
+            curriculumRepository.save(curriculum);
         }
     }
 
     @Override
     @Transactional
     public void deleteAll(List<Long> ids) {
-        ids.forEach(id -> {
-            curriculumRepository.findById(id).ifPresent(curriculumContentService::deleteAll);
-        });
+        ids.forEach(id -> fileStoreService.deleteFile(formContentName(id)));
         curriculumRepository.deleteByIdIn(ids);
     }
 
     @Override
     public ByteArrayOutputStream downloadContent(Long id) {
-        if (id != null) {
-            Curriculum curriculum = curriculumRepository.findById(id).orElse(null);
-            List<CurriculumContent> curriculumContents = curriculumContentService.getAllByCurriculum(curriculum);
-            Map<String, String> singleData = new HashMap<String, String>() {{
-                put("speciality", curriculum == null ? "" : curriculum.getSpeciality().getTitle());
-                put("yearOfEntry", curriculum == null ? "" : curriculum.getYearOfEntry().toString());
-            }};
-            List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
-                add(new HashMap<String, List<String>>() {{
-                    put("subject", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getSubject().getTitle())
-                            .collect(Collectors.toList()));
-                    put("examTerm", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getExamTermNumber().toString())
-                            .collect(Collectors.toList()));
-                    put("creditTerm", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getCreditTermNumber().toString())
-                            .collect(Collectors.toList()));
-                    put("audit", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getAuditHours().toString())
-                            .collect(Collectors.toList()));
-                    put("lecture", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getLectureHours().toString())
-                            .collect(Collectors.toList()));
-                    put("labWork", curriculumContents
-                            .stream()
-                            .map(curriculumContent -> curriculumContent.getLabWorkHours().toString())
-                            .collect(Collectors.toList()));
-                }});
-            }};
-            return wordReportService.generateReport(CURRICULUM_CONTENTS_TEMPLATE_NAME, singleData, tableData);
-        }
-        return null;
+        return fileStoreService.findFile(formContentName(id));
     }
 
-    private List<CurriculumContent> parseContent(MultipartFile content) throws InvalidUploadFileException {
-        if (content != null && !content.isEmpty()) {
-            try {
-                List<ExcelCurriculumContent> excelCurriculumContents = excelParseService.parse(content, ExcelCurriculumContent.class);
-                return excelCurriculumContentMapper.from(excelCurriculumContents);
-            } catch (Exception exception) {
-                log.warn("Cannot parse excel file: {}", exception.getMessage());
-                throw new InvalidUploadFileException(exception);
-            }
-        } else {
-            return null;
-        }
+    private String formContentName(Long id) {
+        return FILE_PREFIX + id;
     }
 }

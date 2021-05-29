@@ -3,7 +3,7 @@ package com.bntu.departmentsystem.service.impl;
 import com.bntu.departmentsystem.model.entity.Subject;
 import com.bntu.departmentsystem.repository.SubjectRepository;
 import com.bntu.departmentsystem.service.SubjectService;
-import com.bntu.departmentsystem.service.storage.WordFileStoreService;
+import com.bntu.departmentsystem.service.storage.FileStoreService;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +24,7 @@ public class SubjectServiceImpl implements SubjectService {
     private static final String FILE_PREFIX = "subject";
 
     private final SubjectRepository subjectRepository;
-    private final WordFileStoreService wordFileStoreService;
+    private final FileStoreService fileStoreService;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW, isolation = Isolation.READ_COMMITTED)
@@ -55,7 +55,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .title(title)
                 .contentName(content.getOriginalFilename())
                 .build());
-        subject.setContentExist(wordFileStoreService.uploadFile(formContentName(subject.getId()), content));
+        subject.setContentExist(fileStoreService.uploadFile(formContentName(subject.getId()), content));
         subjectRepository.save(subject);
     }
 
@@ -65,7 +65,7 @@ public class SubjectServiceImpl implements SubjectService {
         if (subject != null) {
             Optional.ofNullable(subject.getTitle()).ifPresent(subject::setTitle);
             if (content != null) {
-                subject.setContentExist(wordFileStoreService.uploadFile(formContentName(subject.getId()), content));
+                subject.setContentExist(fileStoreService.uploadFile(formContentName(subject.getId()), content));
                 if (subject.isContentExist()) {
                     subject.setContentName(content.getOriginalFilename());
                 }
@@ -77,7 +77,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     @Transactional
     public void deleteAll(List<Long> ids) {
-        ids.forEach(id -> wordFileStoreService.deleteFile(formContentName(id)));
+        ids.forEach(id -> fileStoreService.deleteFile(formContentName(id)));
         subjectRepository.deleteByIdIn(ids);
     }
 
@@ -91,7 +91,7 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public ByteArrayOutputStream downloadContent(Long id) {
-        return wordFileStoreService.findFile(formContentName(id));
+        return fileStoreService.findFile(formContentName(id));
     }
 
     private String formContentName(Long id) {

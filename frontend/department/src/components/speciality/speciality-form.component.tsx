@@ -4,6 +4,7 @@ import TextFormComponent from "../input-form/text-form.component";
 import {Link} from "react-router-dom";
 import {Speciality} from "../../model/speciality/speciality.model";
 import {DepartmentType} from "../../model/department-type.model";
+import {useTranslation} from "react-i18next";
 
 interface SpecialityFormComponentProps {
     current?: Speciality;
@@ -14,6 +15,7 @@ const SpecialityFormComponent: FC<SpecialityFormComponentProps> = ({
                                                                        current,
                                                                        onSubmit
                                                                    }) => {
+    const {t} = useTranslation();
 
     return (
         <Form
@@ -25,40 +27,40 @@ const SpecialityFormComponent: FC<SpecialityFormComponentProps> = ({
                 title: current.title
             }}>
             <TextFormComponent
-                label="Code"
+                label={t("entities.speciality.fields.code")}
                 name="code"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input code'
+                        message: t("entities.speciality.fields.codeRequired")
                     },
                     {
                         max: 50,
-                        message: 'Max 50 chars',
+                        message: t("entities.speciality.fields.codeMaxLength")
                     }
                 ]}/>
             <TextFormComponent
-                label="Title"
+                label={t("entities.speciality.fields.title")}
                 name="title"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input title'
+                        message: t("entities.speciality.fields.titleRequired")
                     },
                     {
                         max: 100,
-                        message: 'Max 100 chars',
+                        message: t("entities.speciality.fields.titleMaxLength")
                     }
                 ]}/>
             <div className="entity-form__buttons">
                 <Form.Item>
                     <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
-                        Save
+                        {t("inputForms.btn.submit")}
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
-                        {"Cancel"}
+                        {t("inputForms.btn.cancel")}
                         <Link to={{pathname: `/${DepartmentType.SPECIALITIES}`}}/>
                     </>
                 </Button>

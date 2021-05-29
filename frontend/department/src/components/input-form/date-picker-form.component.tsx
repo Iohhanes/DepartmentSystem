@@ -27,6 +27,7 @@ const DatePickerFormComponent: FC<DatePickerFormComponentProps> = ({
         >
             <DatePicker
                 className={datePickerClassName ? datePickerClassName : ""}
+                placeholder={""}
                 format="DD/MM/YYYY"/>
         </Form.Item>
     )

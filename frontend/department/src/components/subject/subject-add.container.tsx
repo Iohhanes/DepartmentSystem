@@ -7,7 +7,7 @@ const SubjectAddContainer: FC = () => {
     return (
         <>
             <NavigationComponent
-                currentOption={DepartmentType.DEGREES}/>
+                currentOption={DepartmentType.SUBJECTS}/>
             <SubjectAddFormContainer/>
         </>
     )

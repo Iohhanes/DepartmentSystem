@@ -9,7 +9,8 @@ import UploadDataComponent from "../upload-data/upload-data.component";
 import {RcFile} from "antd/es/upload";
 import {UploadStatus} from "../../model/upload-status.model";
 import {DepartmentType} from "../../model/department-type.model";
-import {XLSX_FILE_EXTENSION, XLSX_FILE_TYPE} from "../../utils/constants.utils";
+import {FileExtension, MimeType} from "../../model/file-type.model";
+import {useTranslation} from "react-i18next";
 
 interface CurriculumFormComponentProps {
     current?: Curriculum;
@@ -28,6 +29,9 @@ const CurriculumFormComponent: FC<CurriculumFormComponentProps> = ({
                                                                        onSetMainFile,
                                                                        onCloseShowingUploadStatus
                                                                    }) => {
+
+    const {t} = useTranslation();
+
     return (
         <Form
             className="curriculum-form"
@@ -38,46 +42,46 @@ const CurriculumFormComponent: FC<CurriculumFormComponentProps> = ({
                 speciality: current.speciality.id
             }}>
             <NumberFormComponent
-                label="Year of entry"
+                label={t("entities.curriculum.fields.yearOfEntry")}
                 name="yearOfEntry"
                 min={1999}
                 rules={[{
                     required: true,
-                    message: 'Please input year of entry'
+                    message: t("entities.curriculum.validations.yearOfEntryRequired")
                 }]}/>
             <SelectFormComponent
-                label="Speciality"
+                label={t("entities.curriculum.fields.speciality")}
                 name="speciality"
-                placeholder="Select speciality"
+                placeholder={t("entities.curriculum.validations.specialityRequired")}
                 options={specialities?.map(speciality => {
                     return {label: speciality.code, value: speciality.id}
                 })}
                 rules={[{
                     required: true,
-                    message: 'Please select speciality'
+                    message: t("entities.curriculum.validations.specialityRequired")
                 }]}/>
             {uploadStatus === UploadStatus.ERROR &&
             <Alert type="error"
-                   message="Invalid file content"
+                   message={t("entities.curriculum.validations.uploadContentError")}
                    closable
                    banner
                    onClose={onCloseShowingUploadStatus}/>}
             <div className="curriculum-form__content">
                 <UploadDataComponent
                     onSetMainFile={onSetMainFile}
-                    fileType={XLSX_FILE_TYPE}
-                    fileExtension={XLSX_FILE_EXTENSION}
+                    fileTypes={[MimeType.XLSX, MimeType.XLS, MimeType.DOCX, MimeType.DOC, MimeType.PDF]}
+                    fileExtensions={[FileExtension.XLSX, FileExtension.XLS, FileExtension.DOCX, FileExtension.DOC, FileExtension.PDF]}
                 />
             </div>
             <div className="entity-form__buttons">
                 <Form.Item>
                     <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
-                        Save
+                        {t("inputForms.btn.submit")}
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
-                        {"Cancel"}
+                        {t("inputForms.btn.cancel")}
                         <Link to={{pathname: `/${DepartmentType.CURRICULUMS}`}}/>
                     </>
                 </Button>
