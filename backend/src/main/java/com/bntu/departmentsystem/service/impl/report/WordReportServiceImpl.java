@@ -17,6 +17,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Log4j2
 public class WordReportServiceImpl implements WordReportService {
+    private static final String MARKUP_START_FOR_REPLACE = "\\$\\{";
     private static final String MARKUP_START = "${";
     private static final String MARKUP_END = "}";
     private static final String TABLE_MARKUP_CHARACTER = "!";
@@ -49,12 +50,14 @@ public class WordReportServiceImpl implements WordReportService {
             String text = paragraph.getText();
             if (checkSingleValueText(text)) {
                 List<XWPFRun> runs = paragraph.getRuns();
-                for (XWPFRun run : runs) {
-                    String value = getReplacedSingleValue(run.toString(), singleData);
-                    if (value != null) {
-                        run.setText(value, 0);
+                int runsSize = runs.size();
+                if (runsSize > 1) {
+                    for (int i = 1; i < runsSize; i++) {
+                        paragraph.removeRun(0);
                     }
                 }
+                String result = getReplacedSingleValue(text, singleData);
+                runs.get(0).setText(result, 0);
             }
         }
     }
@@ -91,14 +94,14 @@ public class WordReportServiceImpl implements WordReportService {
         return text.contains(MARKUP_START) && !text.contains(MARKUP_START + TABLE_MARKUP_CHARACTER);
     }
 
-    private String getReplacedSingleValue(String value, Map<String, String> singleData) {
+    private String getReplacedSingleValue(String text, Map<String, String> singleData) {
         for (Map.Entry<String, String> entry : singleData.entrySet()) {
             String wordKey = MARKUP_START + entry.getKey() + MARKUP_END;
-            if (value.contains(wordKey)) {
-                return entry.getValue();
+            if (text.contains(wordKey)) {
+                return text.replaceFirst(MARKUP_START_FOR_REPLACE + entry.getKey() + MARKUP_END, entry.getValue());
             }
         }
-        return null;
+        return text;
     }
 
     private void insertNewRows(XWPFTable table, Map<String, List<String>> tableData) {
