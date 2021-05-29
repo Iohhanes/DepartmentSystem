@@ -41,7 +41,7 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
                 });
         } else {
             downloadDocument(
-                `/${type}/report/pdf`,
+                `/${type}/report/word`,
                 fileReportName,
                 {
                     facultyMemberId: data.facultyMember,

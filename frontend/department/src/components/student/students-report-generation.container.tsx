@@ -33,7 +33,7 @@ const StudentsReportGenerationContainer: FC = () => {
                 });
         } else {
             downloadDocument(
-                `/${DepartmentType.FACULTY_MEMBERS}/report/word`,
+                `/${DepartmentType.STUDENTS}/report/word`,
                 "students_report.docx",
                 {
                     groupId: data.group,
