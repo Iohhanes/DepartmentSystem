@@ -1,7 +1,7 @@
 import React, {FC, useCallback, useEffect, useState} from "react";
 import EntityActionReportGenerationComponent from "../entity/entity-action-report-generation.component";
 import {DepartmentType} from "../../model/department-type.model";
-import {downloadDocument} from "../../utils/report.utils";
+import {downloadDocument, printDocument} from "../../utils/files.utils";
 import {PgStudentReportRequest} from "../../model/pg-student/pg-student-report-request.model";
 import PgStudentReportFormComponent from "./pg-student-report-form.component";
 import {selectAllData} from "../../utils/select-data.utils";
@@ -19,6 +19,7 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
 
     const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([]);
     const [downloadError, setDownloadError] = useState(false);
+    const [printAction, setPrintAction] = useState(false);
 
     useEffect(() => {
         selectAllData<FacultyMember>(DepartmentType.FACULTY_MEMBERS)
@@ -28,21 +29,41 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
 
     const handleSubmit = useCallback((data) => {
         setDownloadError(false);
-        downloadDocument(
-            `/${type}/report`,
-            fileReportName,
-            {
-                facultyMemberId: data.facultyMember,
-                signDate: data.signDate
-            } as PgStudentReportRequest,
-            () => {
-                setDownloadError(true)
-            });
-    }, [type, fileReportName]);
+        if (printAction) {
+            printDocument(
+                `/${type}/report/pdf`,
+                {
+                    facultyMemberId: data.facultyMember,
+                    signDate: data.signDate
+                } as PgStudentReportRequest,
+                () => {
+                    setDownloadError(true)
+                });
+        } else {
+            downloadDocument(
+                `/${type}/report/pdf`,
+                fileReportName,
+                {
+                    facultyMemberId: data.facultyMember,
+                    signDate: data.signDate
+                } as PgStudentReportRequest,
+                () => {
+                    setDownloadError(true)
+                });
+        }
+    }, [type, fileReportName, printAction]);
 
     const handleCloseShowingDownloadError = useCallback(() => {
         setDownloadError(false);
     }, []);
+
+    const handleDownloadBtnClick = useCallback(() => {
+        setPrintAction(false);
+    }, [setPrintAction]);
+
+    const handlePrintBtnClick = useCallback(() => {
+        setPrintAction(true);
+    }, [setPrintAction]);
 
     return (
         <>
@@ -51,7 +72,9 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
                 reportForm={<PgStudentReportFormComponent
                     facultyMembers={facultyMembers}
-                    onSubmit={handleSubmit}/>}
+                    onSubmit={handleSubmit}
+                    onDownloadBtnClick={handleDownloadBtnClick}
+                    onPrintBtnClick={handlePrintBtnClick}/>}
             />
         </>
     )

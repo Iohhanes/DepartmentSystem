@@ -23,7 +23,7 @@ import static com.bntu.departmentsystem.constants.PaginationConstants.FIRST_PAGE
 @RequiredArgsConstructor
 @RequestMapping("/api/students")
 public class StudentsController {
-    private static final String REPORT_FILE_NAME = "students_report.docx";
+    private static final String REPORT_FILE_NAME = "students_report";
 
     private final StudentService studentService;
 
@@ -80,9 +80,15 @@ public class StudentsController {
         }
     }
 
-    @PostMapping("/report")
-    public ResponseEntity<byte[]> downloadReport(@RequestBody StudentReportRequest reportRequest) {
-        ByteArrayOutputStream outputStream = studentService.generateReport(reportRequest);
-        return HTTPUtils.formResponseWithFile(outputStream, REPORT_FILE_NAME);
+    @PostMapping("/report/pdf")
+    public ResponseEntity<byte[]> downloadPdfReport(@RequestBody StudentReportRequest reportRequest) {
+        ByteArrayOutputStream outputStream = studentService.generatePdfReport(reportRequest);
+        return HTTPUtils.formResponseWithFile(outputStream, REPORT_FILE_NAME + ".pdf");
+    }
+
+    @PostMapping("/report/word")
+    public ResponseEntity<byte[]> downloadWordReport(@RequestBody StudentReportRequest reportRequest) {
+        ByteArrayOutputStream outputStream = studentService.generateWordReport(reportRequest);
+        return HTTPUtils.formResponseWithFile(outputStream, REPORT_FILE_NAME + ".docx");
     }
 }

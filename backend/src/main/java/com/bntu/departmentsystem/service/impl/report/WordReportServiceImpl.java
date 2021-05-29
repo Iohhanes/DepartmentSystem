@@ -1,6 +1,7 @@
 package com.bntu.departmentsystem.service.impl.report;
 
 import com.bntu.departmentsystem.service.report.WordReportService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.poi.xwpf.usermodel.*;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 @Log4j2
 public class WordReportServiceImpl implements WordReportService {
     private static final String MARKUP_START = "${";
@@ -33,6 +35,7 @@ public class WordReportServiceImpl implements WordReportService {
             }
             ByteArrayOutputStream documentBytes = new ByteArrayOutputStream();
             document.write(documentBytes);
+
             return documentBytes;
         } catch (IOException exception) {
             log.warn("Cannot read template: {}", exception.getMessage());

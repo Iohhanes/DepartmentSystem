@@ -9,6 +9,7 @@ import com.bntu.departmentsystem.repository.PGStudentRepository;
 import com.bntu.departmentsystem.service.PGStudentService;
 import com.bntu.departmentsystem.service.impl.mapper.ExcelPGStudentMapper;
 import com.bntu.departmentsystem.service.parser.ExcelParseService;
+import com.bntu.departmentsystem.service.report.PdfReportService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonDataUtils;
@@ -37,6 +38,7 @@ public class PGStudentServiceImpl implements PGStudentService {
     private final FacultyMemberRepository facultyMemberRepository;
     private final ExcelParseService<ExcelPGStudent> excelParseService;
     private final ExcelPGStudentMapper excelPGStudentMapper;
+    private final PdfReportService pdfReportService;
     private final WordReportService wordReportService;
 
     @Override
@@ -135,15 +137,32 @@ public class PGStudentServiceImpl implements PGStudentService {
     }
 
     @Override
-    public ByteArrayOutputStream generateReport(PGStudentReportRequest reportRequest, boolean master) {
+    public ByteArrayOutputStream generateWordReport(PGStudentReportRequest reportRequest, boolean master) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest, master);
+        return wordReportService.generateReport(PG_STUDENTS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    @Override
+    public ByteArrayOutputStream generatePdfReport(PGStudentReportRequest reportRequest, boolean master) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest, master);
+        return pdfReportService.generateReport(PG_STUDENTS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    private Map<String, String> formReportSingleData(PGStudentReportRequest reportRequest) {
         FacultyMember facultyMember = facultyMemberRepository.findById(reportRequest.getFacultyMemberId()).orElse(null);
-        List<PGStudent> pgStudents = facultyMember == null ? Collections.emptyList() :
-                pgStudentRepository.findAllByMasterAndFacultyMember(master, facultyMember);
-        Map<String, String> singleData = new HashMap<String, String>() {{
+        return new HashMap<String, String>() {{
             put("facultyMember", facultyMember == null ? "" : facultyMember.getFullName());
             put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate())));
         }};
-        List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
+    }
+
+    private List<Map<String, List<String>>> formReportTableData(PGStudentReportRequest reportRequest, boolean master) {
+        FacultyMember facultyMember = facultyMemberRepository.findById(reportRequest.getFacultyMemberId()).orElse(null);
+        List<PGStudent> pgStudents = facultyMember == null ? Collections.emptyList() :
+                pgStudentRepository.findAllByMasterAndFacultyMember(master, facultyMember);
+        return new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{
                 put("fullName", pgStudents.stream().map(Person::getFullName).collect(Collectors.toList()));
                 put("birthDate", pgStudents.stream().map(student -> DateUtils.format(student.getBirthDate()))
@@ -161,6 +180,5 @@ public class PGStudentServiceImpl implements PGStudentService {
                         .collect(Collectors.toList()));
             }});
         }};
-        return wordReportService.generateReport(PG_STUDENTS_TEMPLATE_NAME, singleData, tableData);
     }
 }

@@ -4,13 +4,14 @@ import {DepartmentType} from "../../model/department-type.model";
 import {StudentReportRequest} from "../../model/student/student-report-request.model";
 import {selectAllData} from "../../utils/select-data.utils";
 import {Group} from "../../model/group/group.model";
-import {downloadDocument} from "../../utils/report.utils";
+import {downloadDocument, printDocument} from "../../utils/files.utils";
 import StudentReportFormComponent from "./student-report-form.component";
 
 const StudentsReportGenerationContainer: FC = () => {
 
     const [groups, setGroups] = useState<Group[]>([]);
     const [downloadError, setDownloadError] = useState(false);
+    const [printAction, setPrintAction] = useState(false);
 
     useEffect(() => {
         selectAllData<Group>(DepartmentType.GROUPS)
@@ -20,21 +21,41 @@ const StudentsReportGenerationContainer: FC = () => {
 
     const handleSubmit = useCallback((data) => {
         setDownloadError(false);
-        downloadDocument(
-            `/${DepartmentType.STUDENTS}/report`,
-            "students_report.docx",
-            {
-                groupId: data.group,
-                signDate: data.signDate
-            } as StudentReportRequest,
-            () => {
-                setDownloadError(true)
-            });
-    }, []);
+        if (printAction) {
+            printDocument(
+                `/${DepartmentType.STUDENTS}/report/pdf`,
+                {
+                    groupId: data.group,
+                    signDate: data.signDate
+                } as StudentReportRequest,
+                () => {
+                    setDownloadError(true)
+                });
+        } else {
+            downloadDocument(
+                `/${DepartmentType.FACULTY_MEMBERS}/report/word`,
+                "students_report.docx",
+                {
+                    groupId: data.group,
+                    signDate: data.signDate
+                } as StudentReportRequest,
+                () => {
+                    setDownloadError(true)
+                });
+        }
+    }, [printAction]);
 
     const handleCloseShowingDownloadError = useCallback(() => {
         setDownloadError(false);
     }, []);
+
+    const handleDownloadBtnClick = useCallback(() => {
+        setPrintAction(false);
+    }, [setPrintAction]);
+
+    const handlePrintBtnClick = useCallback(() => {
+        setPrintAction(true);
+    }, [setPrintAction]);
 
     return (
         <>
@@ -43,7 +64,10 @@ const StudentsReportGenerationContainer: FC = () => {
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
                 reportForm={<StudentReportFormComponent
                     groups={groups}
-                    onSubmit={handleSubmit}/>}
+                    onSubmit={handleSubmit}
+                    onDownloadBtnClick={handleDownloadBtnClick}
+                    onPrintBtnClick={handlePrintBtnClick}
+                />}
             />
         </>
     )

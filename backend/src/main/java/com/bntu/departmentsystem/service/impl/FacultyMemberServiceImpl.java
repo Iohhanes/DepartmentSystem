@@ -11,6 +11,7 @@ import com.bntu.departmentsystem.service.FacultyMemberService;
 import com.bntu.departmentsystem.service.WorkloadService;
 import com.bntu.departmentsystem.service.impl.mapper.ExcelFacultyMemberMapper;
 import com.bntu.departmentsystem.service.parser.ExcelParseService;
+import com.bntu.departmentsystem.service.report.PdfReportService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonDataUtils;
@@ -41,6 +42,7 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
     private final WorkloadService workloadService;
     private final ExcelParseService<ExcelFacultyMember> excelParseService;
     private final ExcelFacultyMemberMapper excelFacultyMemberMapper;
+    private final PdfReportService pdfReportService;
     private final WordReportService wordReportService;
 
     @Override
@@ -143,13 +145,29 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
     }
 
     @Override
-    public ByteArrayOutputStream generateReport(FacultyMemberReportRequest reportRequest) {
-        List<FacultyMember> facultyMembers = facultyMemberRepository.findAll();
-        Map<String, String> singleData = new HashMap<String, String>() {{
+    public ByteArrayOutputStream generateWordReport(FacultyMemberReportRequest reportRequest) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest);
+        return wordReportService.generateReport(FACULTY_MEMBERS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    @Override
+    public ByteArrayOutputStream generatePdfReport(FacultyMemberReportRequest reportRequest) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest);
+        return pdfReportService.generateReport(FACULTY_MEMBERS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    private Map<String, String> formReportSingleData(FacultyMemberReportRequest reportRequest) {
+        return new HashMap<String, String>() {{
             put("educationYear", reportRequest.getEducationYear() == null ? "" : reportRequest.getEducationYear().toString());
             put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate())));
         }};
-        List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
+    }
+
+    private List<Map<String, List<String>>> formReportTableData(FacultyMemberReportRequest reportRequest) {
+        List<FacultyMember> facultyMembers = facultyMemberRepository.findAll();
+        return new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{
                 put("fullName", facultyMembers
                         .stream()
@@ -204,6 +222,5 @@ public class FacultyMemberServiceImpl implements FacultyMemberService {
                         .collect(Collectors.toList()));
             }});
         }};
-        return wordReportService.generateReport(FACULTY_MEMBERS_TEMPLATE_NAME, singleData, tableData);
     }
 }

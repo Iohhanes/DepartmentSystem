@@ -26,7 +26,9 @@ public interface PGStudentService {
 
     List<PGStudent> uploadData(MultipartFile excelFile, boolean master) throws InvalidUploadFileException;
 
-    ByteArrayOutputStream generateReport(PGStudentReportRequest reportRequest, boolean master);
+    ByteArrayOutputStream generateWordReport(PGStudentReportRequest reportRequest, boolean master);
+
+    ByteArrayOutputStream generatePdfReport(PGStudentReportRequest reportRequest, boolean master);
 
     long count(boolean master);
 }

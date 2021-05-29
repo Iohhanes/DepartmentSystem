@@ -11,6 +11,7 @@ import com.bntu.departmentsystem.repository.StudentRepository;
 import com.bntu.departmentsystem.service.StudentService;
 import com.bntu.departmentsystem.service.impl.mapper.ExcelStudentMapper;
 import com.bntu.departmentsystem.service.parser.ExcelParseService;
+import com.bntu.departmentsystem.service.report.PdfReportService;
 import com.bntu.departmentsystem.service.report.WordReportService;
 import com.bntu.departmentsystem.utils.DateUtils;
 import com.bntu.departmentsystem.utils.PersonDataUtils;
@@ -39,6 +40,7 @@ public class StudentServiceImpl implements StudentService {
     private final GroupRepository groupRepository;
     private final ExcelStudentMapper excelStudentMapper;
     private final ExcelParseService<ExcelStudent> excelParseService;
+    private final PdfReportService pdfReportService;
     private final WordReportService wordReportService;
 
     @Override
@@ -131,20 +133,36 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public ByteArrayOutputStream generateReport(StudentReportRequest reportRequest) {
+    public ByteArrayOutputStream generateWordReport(StudentReportRequest reportRequest) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest);
+        return wordReportService.generateReport(STUDENTS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    @Override
+    public ByteArrayOutputStream generatePdfReport(StudentReportRequest reportRequest) {
+        Map<String, String> singleData = formReportSingleData(reportRequest);
+        List<Map<String, List<String>>> tableData = formReportTableData(reportRequest);
+        return pdfReportService.generateReport(STUDENTS_TEMPLATE_NAME, singleData, tableData);
+    }
+
+    private Map<String, String> formReportSingleData(StudentReportRequest reportRequest) {
         Group group = groupRepository.findById(reportRequest.getGroupId()).orElse(null);
-        List<Student> students = group == null ? Collections.emptyList() : studentRepository.findByGroup(group);
-        Map<String, String> singleData = new HashMap<String, String>() {{
+        return new HashMap<String, String>() {{
             put("group", group == null ? "" : group.getNumber());
             put("signDate", DateUtils.format(DateUtils.format(reportRequest.getSignDate())));
         }};
-        List<Map<String, List<String>>> tableData = new ArrayList<Map<String, List<String>>>() {{
+    }
+
+    private List<Map<String, List<String>>> formReportTableData(StudentReportRequest reportRequest) {
+        Group group = groupRepository.findById(reportRequest.getGroupId()).orElse(null);
+        List<Student> students = group == null ? Collections.emptyList() : studentRepository.findByGroup(group);
+        return new ArrayList<Map<String, List<String>>>() {{
             add(new HashMap<String, List<String>>() {{
                 put("fullName", students.stream().map(Person::getFullName).collect(Collectors.toList()));
                 put("birthDate", students.stream().map(student -> DateUtils.format(student.getBirthDate()))
                         .collect(Collectors.toList()));
             }});
         }};
-        return wordReportService.generateReport(STUDENTS_TEMPLATE_NAME, singleData, tableData);
     }
 }

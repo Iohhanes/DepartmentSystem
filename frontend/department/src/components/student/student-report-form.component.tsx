@@ -7,12 +7,16 @@ import {useTranslation} from "react-i18next";
 
 interface StudentReportFormComponentProps {
     onSubmit: (data: any) => void;
-    groups: Group[]
+    groups: Group[];
+    onDownloadBtnClick: () => void;
+    onPrintBtnClick: () => void;
 }
 
 const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                                                                              onSubmit,
-                                                                             groups
+                                                                             groups,
+                                                                             onDownloadBtnClick,
+                                                                             onPrintBtnClick
                                                                          }) => {
 
     const {t} = useTranslation();
@@ -45,8 +49,13 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                 ]}
             />
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" onClick={onDownloadBtnClick}>
                     {t("entities.person.btnDownload")}
+                </Button>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" onClick={onPrintBtnClick}>
+                    {t("entities.person.btnPrint")}
                 </Button>
             </Form.Item>
         </Form>

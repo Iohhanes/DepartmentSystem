@@ -12,7 +12,7 @@ import {
 } from "../../store/subject/subjects.slice";
 import {Subject} from "../../model/subject/subject.model";
 import {Button, message} from "antd";
-import {downloadDocument} from "../../utils/report.utils";
+import {downloadDocument} from "../../utils/files.utils";
 import {useTranslation} from "react-i18next";
 
 const SubjectsDataContainer: FC = () => {

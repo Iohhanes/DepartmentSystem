@@ -28,7 +28,9 @@ public interface FacultyMemberService {
 
     List<FacultyMember> uploadData(MultipartFile excelFile) throws InvalidUploadFileException;
 
-    ByteArrayOutputStream generateReport(FacultyMemberReportRequest reportRequest);
+    ByteArrayOutputStream generateWordReport(FacultyMemberReportRequest reportRequest);
+
+    ByteArrayOutputStream generatePdfReport(FacultyMemberReportRequest reportRequest);
 
     long count();
 }

@@ -98,7 +98,8 @@
             "generationReportError": "Ошибка генерации файла отчёта"
           },
           "searchBarPlaceholder": "Введите имя",
-          "btnDownload": "Скачать"
+          "btnDownload": "Скачать",
+          "btnPrint": "Печать"
         },
         "facultyMember": {
           "fields": {

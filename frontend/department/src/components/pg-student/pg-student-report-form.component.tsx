@@ -8,11 +8,15 @@ import {useTranslation} from "react-i18next";
 interface PgStudentReportFormComponentProps {
     onSubmit: (data: any) => void;
     facultyMembers: FacultyMember[];
+    onDownloadBtnClick: () => void;
+    onPrintBtnClick: () => void;
 }
 
 const PgStudentReportFormComponent: FC<PgStudentReportFormComponentProps> = ({
                                                                                  onSubmit,
-                                                                                 facultyMembers
+                                                                                 facultyMembers,
+                                                                                 onDownloadBtnClick,
+                                                                                 onPrintBtnClick
                                                                              }) => {
 
     const {t} = useTranslation();
@@ -45,8 +49,13 @@ const PgStudentReportFormComponent: FC<PgStudentReportFormComponentProps> = ({
                 ]}
             />
             <Form.Item>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" htmlType="submit" onClick={onDownloadBtnClick}>
                     {t("entities.person.btnDownload")}
+                </Button>
+            </Form.Item>
+            <Form.Item>
+                <Button type="primary" htmlType="submit" onClick={onPrintBtnClick}>
+                    {t("entities.person.btnPrint")}
                 </Button>
             </Form.Item>
         </Form>
