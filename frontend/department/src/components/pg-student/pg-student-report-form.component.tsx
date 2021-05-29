@@ -3,6 +3,7 @@ import {Button, Form} from "antd";
 import DatePickerFormComponent from "../input-form/date-picker-form.component";
 import {FacultyMember} from "../../model/faculty-member/faculty-member.model";
 import SelectFormComponent from "../input-form/select-form.component";
+import {useTranslation} from "react-i18next";
 
 interface PgStudentReportFormComponentProps {
     onSubmit: (data: any) => void;
@@ -14,36 +15,38 @@ const PgStudentReportFormComponent: FC<PgStudentReportFormComponentProps> = ({
                                                                                  facultyMembers
                                                                              }) => {
 
+    const {t} = useTranslation();
+
     return (
         <Form
             name="pg-student-report"
             onFinish={onSubmit}>
             <DatePickerFormComponent
-                label="Sign date"
+                label={t("entities.pgStudent.fields.signDate")}
                 name="signDate"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input sign date'
+                        message: t("entities.pgStudent.validations.signDateRequired")
                     },
                 ]}/>
             <SelectFormComponent
-                label="Faculty member"
+                label={t("entities.pgStudent.fields.facultyMember")}
                 name="facultyMember"
-                placeholder="Select faculty member"
+                placeholder={t("entities.pgStudent.selectFacultyMemberPlaceholder")}
                 options={facultyMembers?.map(facultyMember => {
                     return {label: facultyMember.fullName, value: facultyMember.id}
                 })}
                 rules={[
                     {
                         required: true,
-                        message: 'Please select faculty member'
+                        message: t("entities.pgStudent.selectFacultyMemberPlaceholder")
                     },
                 ]}
             />
             <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Download
+                    {t("entities.person.btnDownload")}
                 </Button>
             </Form.Item>
         </Form>

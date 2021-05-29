@@ -10,6 +10,7 @@ import {Student} from "../../model/student/student.model";
 import {Link} from "react-router-dom";
 import moment from "moment";
 import {DepartmentType} from "../../model/department-type.model";
+import {useTranslation} from "react-i18next";
 
 interface StudentFormComponentProps {
     current?: Student;
@@ -22,6 +23,8 @@ const StudentFormComponent: FC<StudentFormComponentProps> = ({
                                                                  onSubmit,
                                                                  groups
                                                              }) => {
+
+    const {t} = useTranslation();
 
     return (
         <Form
@@ -38,55 +41,55 @@ const StudentFormComponent: FC<StudentFormComponentProps> = ({
                 group: current.group?.id,
             }}>
             <TextFormComponent
-                label="Last name"
+                label={t("entities.person.fields.lastName")}
                 name="lastName"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input last name'
+                        message: t("entities.person.validations.lastNameRequired")
                     },
                     {
                         max: 20,
-                        message: 'Max 20 chars',
+                        message: t("entities.person.validations.lastNameMaxLength")
                     }
                 ]}/>
             <TextFormComponent
-                label="First name"
+                label={t("entities.person.fields.firstName")}
                 name="firstName"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input first name'
+                        message: t("entities.person.validations.firstNameRequired")
                     },
                     {
                         max: 20,
-                        message: 'Max 20 chars',
+                        message: t("entities.person.validations.firstNameMaxLength")
                     },
                 ]}/>
             <TextFormComponent
-                label="Middle name"
+                label={t("entities.person.fields.middleName")}
                 name="middleName"
                 rules={[
                     {
                         max: 20,
-                        message: 'Max 20 chars',
+                        message: t("entities.person.validations.middleNameMaxLength")
                     },
                 ]}/>
             <DatePickerFormComponent
-                label="Birth date"
+                label={t("entities.person.fields.birthDate")}
                 name="birthDate"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input birth date'
+                        message: t("entities.person.validations.birthDateRequired")
                     },
                 ]}/>
             <PhoneInputComponent/>
             <EmailFormComponent/>
             <SelectFormComponent
-                label="Group"
+                label={t("entities.student.fields.group")}
                 name="group"
-                placeholder="Select group"
+                placeholder={t("entities.student.selectGroupPlaceholder")}
                 options={groups?.map(group => {
                     return {label: group.number, value: group.id}
                 })}
@@ -94,12 +97,12 @@ const StudentFormComponent: FC<StudentFormComponentProps> = ({
             <div className="entity-form__buttons">
                 <Form.Item>
                     <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
-                        Save
+                        {t("inputForms.btn.submit")}
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
-                        {"Cancel"}
+                        {t("inputForms.btn.cancel")}
                         <Link to={{pathname: `/${DepartmentType.STUDENTS}`}}/>
                     </>
                 </Button>

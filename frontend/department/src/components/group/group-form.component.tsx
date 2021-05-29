@@ -8,6 +8,7 @@ import {Speciality} from "../../model/speciality/speciality.model";
 import NumberFormComponent from "../input-form/number-form.component";
 import {Student} from "../../model/student/student.model";
 import {DepartmentType} from "../../model/department-type.model";
+import {useTranslation} from "react-i18next";
 
 interface GroupFormComponentProps {
     current?: Group;
@@ -23,6 +24,8 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
                                                              students
                                                          }) => {
 
+    const {t} = useTranslation();
+
     return (
         <Form
             className="group-form"
@@ -34,41 +37,41 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
                 speciality: current.speciality.id
             }}>
             <TextFormComponent
-                label="Number"
+                label={t("entities.group.fields.number")}
                 name="number"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input number'
+                        message: t("entities.group.validations.numberRequired")
                     },
                     {
                         max: 20,
-                        message: 'Max 20 chars',
+                        message: t("entities.group.validations.numberMaxLength")
                     }
                 ]}/>
             <NumberFormComponent
-                label="Year of entry"
+                label={t("entities.group.fields.yearOfEntry")}
                 name="yearOfEntry"
                 min={1999}
                 rules={[
                     {
                         required: true,
-                        message: 'Please input year of entry'
+                        message: t("entities.group.validations.yearOfEntryRequired")
                     }
                 ]}/>
             <SelectFormComponent
-                label="Speciality"
+                label={t("entities.group.fields.speciality")}
                 name="speciality"
-                placeholder="Select speciality"
+                placeholder={t("entities.group.validations.specialityRequired")}
                 options={specialities?.map(speciality => {
                     return {label: speciality.code, value: speciality.id}
                 })}
                 rules={[{
                     required: true,
-                    message: 'Please select speciality'
+                    message: t("entities.group.validations.specialityRequired")
                 }]}/>
             {students && <div>
-                {"Students"}
+                {t("entities.group.fields.students")}
                 <Table
                     className="group-form__students"
                     dataSource={students?.map(entity => {
@@ -92,12 +95,12 @@ const GroupFormComponent: FC<GroupFormComponentProps> = ({
             <div className="entity-form__buttons">
                 <Form.Item>
                     <Button className="entity-form__buttons__save" type="primary" htmlType="submit">
-                        Save
+                        {t("inputForms.btn.submit")}
                     </Button>
                 </Form.Item>
                 <Button type="primary">
                     <>
-                        {"Cancel"}
+                        {t("inputForms.btn.cancel")}
                         <Link to={{pathname: `/${DepartmentType.GROUPS}`}}/>
                     </>
                 </Button>

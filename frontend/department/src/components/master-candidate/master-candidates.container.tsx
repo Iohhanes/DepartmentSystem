@@ -6,14 +6,18 @@ import MasterCandidatesDataContainer from "./master-candidates-data.container";
 import PgStudentsReportGenerationComponent from "../pg-student/pg-students-report-generation.component";
 import MasterCandidatesUploadDataContainer from "./master-candidates-upload-data.container";
 import {PGStudent} from "../../model/pg-student/pg-student.model";
+import {useTranslation} from "react-i18next";
 
 const MasterCandidatesContainer: FC = () => {
+
+    const {t} = useTranslation();
+
     return (
         <>
             <NavigationComponent
                 currentOption={DepartmentType.MASTER_CANDIDATES}/>
             <SearchBarComponent<PGStudent>
-                placeholder="Input name"
+                placeholder={t("entities.person.searchBarPlaceholder")}
                 prefix={DepartmentType.MASTER_CANDIDATES}
                 onConvert={(entity: PGStudent) => {
                     return {

@@ -14,8 +14,11 @@ import {
     selectTotalCount
 } from "../../store/faculty-member/faculty-members.slice";
 import {FacultyMember} from "../../model/faculty-member/faculty-member.model";
+import {useTranslation} from "react-i18next";
 
 const FacultyMembersDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const facultyMembers = useSelector(selectFacultyMembers);
@@ -74,32 +77,32 @@ const FacultyMembersDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Full name",
+                        title: t("entities.person.fields.fullName"),
                         dataIndex: "fullName",
                         key: "fullName"
                     },
                     {
-                        title: "Birth date",
+                        title: t("entities.person.fields.birthDate"),
                         dataIndex: "birthDate",
                         key: "birthDate"
                     },
                     {
-                        title: "Degree",
+                        title: t("entities.facultyMember.fields.degree"),
                         dataIndex: "degree",
                         key: "degree"
                     },
                     {
-                        title: "Rank",
+                        title: t("entities.facultyMember.fields.rank"),
                         dataIndex: "rank",
                         key: "rank"
                     },
                     {
-                        title: "Rate",
+                        title: t("entities.facultyMember.fields.rate"),
                         dataIndex: "rate",
                         key: "rate"
                     },
                     {
-                        title: "Position",
+                        title: t("entities.facultyMember.fields.position"),
                         dataIndex: "position",
                         key: "position"
                     }

@@ -1,5 +1,6 @@
 import React, {FC, ReactNode, useCallback, useState} from "react";
 import {Alert, Button, Modal} from "antd";
+import {useTranslation} from "react-i18next";
 
 interface EntityActionReportGenerationComponentProps {
     downloadError: boolean;
@@ -12,6 +13,8 @@ const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComp
                                                                                                    onCloseShowingDownloadError,
                                                                                                    reportForm
                                                                                                }) => {
+    const {t} = useTranslation();
+
     const [visible, setVisible] = useState(false);
 
     const handleOpenReportGenerationModal = useCallback(() => {
@@ -27,10 +30,10 @@ const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComp
         <>
             <Button className="entity-action-report-generation__button-report" type="primary"
                     onClick={handleOpenReportGenerationModal}>
-                Report
+                {t("entityActionReportGeneration.title")}
             </Button>
             <Modal
-                title="Report"
+                title={t("entityActionReportGeneration.title")}
                 visible={visible}
                 footer={null}
                 closable
@@ -39,7 +42,7 @@ const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComp
                 <>
                     {downloadError &&
                     <Alert type="error"
-                           message="Report generation error"
+                           message={t("entities.person.validations.generationReportError")}
                            closable
                            banner
                            onClose={onCloseShowingDownloadError}/>}

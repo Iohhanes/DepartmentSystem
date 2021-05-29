@@ -12,8 +12,11 @@ import {
     selectPositions,
     selectTotalCount
 } from "../../store/position/positions.slice";
+import {useTranslation} from "react-i18next";
 
 const PositionsDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const positions = useSelector(selectPositions);
@@ -64,12 +67,12 @@ const PositionsDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Title",
+                        title: t("entities.progressInfo.fields.title"),
                         dataIndex: "title",
                         key: "title"
                     },
                     {
-                        title: "Abbreviated",
+                        title: t("entities.progressInfo.fields.abbreviated"),
                         dataIndex: "abbreviated",
                         key: "abbreviated"
                     }

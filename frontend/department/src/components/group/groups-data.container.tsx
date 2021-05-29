@@ -13,8 +13,11 @@ import {
     selectTotalCount
 } from "../../store/group/groups.slice";
 import {Group} from "../../model/group/group.model";
+import {useTranslation} from "react-i18next";
 
 const GroupsDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const groups = useSelector(selectGroups);
@@ -67,20 +70,20 @@ const GroupsDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Number",
+                        title: t("entities.group.fields.number"),
                         dataIndex: "number",
                         key: "number"
                     },
                     {
-                        title: "Year of entry",
+                        title: t("entities.group.fields.yearOfEntry"),
                         dataIndex: "yearOfEntry",
                         key: "yearOfEntry"
                     },
                     {
-                        title: "Speciality",
+                        title: t("entities.group.fields.speciality"),
                         dataIndex: "speciality",
                         key: "speciality"
-                    }
+                    },
                 ]}
                 onChangePagination={handleChangePagination}
                 defaultPageSize={DEFAULT_PAGE_SIZE}

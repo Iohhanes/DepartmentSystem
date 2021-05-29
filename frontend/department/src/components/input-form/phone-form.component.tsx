@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {MaskedInput} from "antd-mask-input";
 import {Form} from "antd";
+import {useTranslation} from "react-i18next";
 
 interface PhoneFormComponentProps {
     formClassName?: string;
@@ -11,9 +12,11 @@ const PhoneFormComponent: FC<PhoneFormComponentProps> = ({
                                                              formClassName,
                                                              inputClassName
                                                          }) => {
+    const {t} = useTranslation();
+
     return (
         <Form.Item
-            label="Phone"
+            label={t("entities.person.fields.phone")}
             labelCol={{span: 24}}
             className={formClassName ? formClassName : ""}
             name="phone"

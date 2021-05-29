@@ -15,8 +15,11 @@ import {
 import {Link} from "react-router-dom";
 import {DatePicker} from "antd";
 import moment from "moment";
+import {useTranslation} from "react-i18next";
 
 const StudentsDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
@@ -69,17 +72,17 @@ const StudentsDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Full name",
+                        title: t("entities.person.fields.fullName"),
                         dataIndex: "fullName",
                         key: "fullName"
                     },
                     {
-                        title: "Birth date",
+                        title: t("entities.person.fields.birthDate"),
                         dataIndex: "birthDate",
                         key: "birthDate"
                     },
                     {
-                        title: "Group",
+                        title: t("entities.student.fields.group"),
                         dataIndex: "group",
                         key: "group"
                     }

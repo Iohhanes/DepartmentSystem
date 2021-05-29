@@ -12,8 +12,11 @@ import {
     selectTotalCount
 } from "../../store/degree/degrees.slice";
 import {ProgressInfo} from "../../model/progress-info/progress-info.model";
+import {useTranslation} from "react-i18next";
 
 const DegreesDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const degrees = useSelector(selectDegrees);
@@ -64,12 +67,12 @@ const DegreesDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Title",
+                        title: t("entities.progressInfo.fields.title"),
                         dataIndex: "title",
                         key: "title"
                     },
                     {
-                        title: "Abbreviated",
+                        title: t("entities.progressInfo.fields.abbreviated"),
                         dataIndex: "abbreviated",
                         key: "abbreviated"
                     }

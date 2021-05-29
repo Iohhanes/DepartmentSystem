@@ -12,8 +12,11 @@ import {
     selectRanks,
     selectTotalCount
 } from "../../store/rank/ranks.slice";
+import {useTranslation} from "react-i18next";
 
 const RanksDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const ranks = useSelector(selectRanks);
@@ -64,12 +67,12 @@ const RanksDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Title",
+                        title: t("entities.progressInfo.fields.title"),
                         dataIndex: "title",
                         key: "title"
                     },
                     {
-                        title: "Abbreviated",
+                        title: t("entities.progressInfo.fields.abbreviated"),
                         dataIndex: "abbreviated",
                         key: "abbreviated"
                     }

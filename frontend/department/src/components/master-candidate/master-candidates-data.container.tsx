@@ -13,8 +13,11 @@ import {
     selectMasterCandidates, selectTotalCount
 } from "../../store/master-candidate/master-candidates.slice";
 import {PGStudent} from "../../model/pg-student/pg-student.model";
+import {useTranslation} from "react-i18next";
 
 const MasterCandidatesDataContainer: FC = () => {
+
+    const {t} = useTranslation();
 
     const dispatch = useDispatch();
     const masterCandidates = useSelector(selectMasterCandidates);
@@ -71,27 +74,27 @@ const MasterCandidatesDataContainer: FC = () => {
                 onDisplay={handleDisplay}
                 columns={[
                     {
-                        title: "Full name",
+                        title: t("entities.person.fields.fullName"),
                         dataIndex: "fullName",
                         key: "fullName"
                     },
                     {
-                        title: "Birth date",
+                        title: t("entities.person.fields.birthDate"),
                         dataIndex: "birthDate",
                         key: "birthDate"
                     },
                     {
-                        title: "Start date",
+                        title: t("entities.pgStudent.fields.startDate"),
                         dataIndex: "startDate",
                         key: "startDate"
                     },
                     {
-                        title: "End date",
+                        title: t("entities.pgStudent.fields.endDate"),
                         dataIndex: "endDate",
                         key: "endDate"
                     },
                     {
-                        title: "Faculty member",
+                        title: t("entities.pgStudent.fields.facultyMember"),
                         dataIndex: "facultyMember",
                         key: "facultyMember"
                     }

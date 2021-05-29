@@ -3,6 +3,7 @@ import {Button, Form} from "antd";
 import {Group} from "../../model/group/group.model";
 import DatePickerFormComponent from "../input-form/date-picker-form.component";
 import SelectFormComponent from "../input-form/select-form.component";
+import {useTranslation} from "react-i18next";
 
 interface StudentReportFormComponentProps {
     onSubmit: (data: any) => void;
@@ -14,36 +15,38 @@ const StudentReportFormComponent: FC<StudentReportFormComponentProps> = ({
                                                                              groups
                                                                          }) => {
 
+    const {t} = useTranslation();
+
     return (
         <Form
             name="student-report"
             onFinish={onSubmit}>
             <DatePickerFormComponent
-                label="Sign date"
+                label={t("entities.student.fields.signDate")}
                 name="signDate"
                 rules={[
                     {
                         required: true,
-                        message: 'Please input sign date'
+                        message: t("entities.student.validations.signDateRequired")
                     },
                 ]}/>
             <SelectFormComponent
-                label="Group"
+                label={t("entities.student.fields.group")}
                 name="group"
-                placeholder="Select group"
+                placeholder={t("entities.student.selectGroupPlaceholder")}
                 options={groups?.map(group => {
                     return {label: group.number, value: group.id}
                 })}
                 rules={[
                     {
                         required: true,
-                        message: 'Please select group'
+                        message: t("entities.student.selectGroupPlaceholder")
                     },
                 ]}
             />
             <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Download
+                    {t("entities.person.btnDownload")}
                 </Button>
             </Form.Item>
         </Form>

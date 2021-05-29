@@ -17,9 +17,9 @@
           "graduateStudents": "Аспиранты"
         },
         "utils": {
-          "title": "Допольнительно",
+          "title": "Дополнительно",
           "degrees": "Степени",
-          "ranks": "Уровни",
+          "ranks": "Учебные звания",
           "positions": "Должности"
         }
       },
@@ -66,7 +66,7 @@
         "curriculum": {
           "fields": {
             "yearOfEntry": "Год начала действия",
-            "speciality": "Название",
+            "speciality": "Специальность",
             "content": "Содержимое"
           },
           "validations": {
@@ -94,22 +94,85 @@
             "middleNameMaxLength": "Максимум 20 символов",
             "birthDateRequired": "Выберете год рождения",
             "emailInvalid": "Введите правильную электронную почту",
-            "downloadReportError": "Ошибка скачивания файла отчёта",
-            "uploadDataError": "Ошибка загрузки файла с данными"
-          }
+            "emailMaxLength": "Максимум 50 символов",
+            "generationReportError": "Ошибка генерации файла отчёта"
+          },
+          "searchBarPlaceholder": "Введите имя",
+          "btnDownload": "Скачать"
         },
         "facultyMember": {
           "fields": {
-            "degree": "Год начала действия",
-            "rank": "Название",
-            "content": "Содержимое"
+            "degree": "Степень",
+            "rank": "Учебное звание",
+            "rate": "Ставка",
+            "support": "Часы на поддержку",
+            "hourly": "Почасовая занятость",
+            "position": "Должность",
+            "positionPT": "Дополнительная должность",
+            "signDate": "Дата подписи",
+            "educationYear": "Год обучения"
           },
           "validations": {
-            "yearOfEntryRequired": "Введите год начала действия",
-            "specialityRequired": "Выберете специальность",
-            "downloadContentError": "Ошибка скачивания файла программы",
-            "uploadContentError": "Ошибка загрузки файла программы"
-          }
+            "rateRequired": "Введите ставку",
+            "positionRequired": "Выберете должность",
+            "signDateRequired": "Введите дату подписи",
+            "educationYearRequired": "Введите год обучения"
+          },
+          "selectPositionPTPlaceholder": "Выберете дополнительную должность",
+          "selectDegreePlaceholder": "Выберете степень",
+          "selectRankPlaceholder": "Выберете учебное звание"
+        },
+        "student": {
+          "fields": {
+            "group": "Группа",
+            "signDate": "Дата подписи"
+          },
+          "validations": {
+            "signDateRequired": "Введите дату подписи"
+          },
+          "selectGroupPlaceholder": "Выберете группу"
+        },
+        "pgStudent": {
+          "fields": {
+            "group": "Группа",
+            "startDate": "Дата приёма",
+            "endDate": "Дата окончания",
+            "facultyMember": "Преподаватель",
+            "comment": "Комментарий",
+            "signDate": "Дата подписи"
+          },
+          "validations": {
+            "signDateRequired": "Введите дату подписи"
+          },
+          "selectFacultyMemberPlaceholder": "Выберете преподавателя"
+        },
+        "group": {
+          "fields": {
+            "number": "Номер группы",
+            "yearOfEntry": "Год поступления",
+            "speciality": "Специальность",
+            "students": "Студенты"
+          },
+          "validations": {
+            "numberRequired": "Введите номер группы",
+            "numberMaxLength": "Максимум 20 символов",
+            "yearOfEntryRequired": "Введите год поступления",
+            "specialityRequired": "Выберете специальность"
+          },
+          "searchBarPlaceholder": "Введите номер группы"
+        },
+        "progressInfo": {
+          "fields": {
+            "title": "Название",
+            "abbreviated": "Сокращённое название"
+          },
+          "validations": {
+            "titleRequired": "Введите название",
+            "titleMaxLength": "Максимум 150 символов",
+            "abbreviatedRequired": "Введите сокращённое название",
+            "abbreviatedMaxLength": "Максимум 20 символов"
+          },
+          "searchBarPlaceholder": "Введите название"
         }
       },
       "uploadComponent": {
@@ -118,6 +181,15 @@
           "type": " должен иметь одно из представленных расширений: "
         },
         "title": "Выберете файл"
+      },
+      "entityActionUpload": {
+        "title": "Загрузить данные",
+        "uploadDataSuccess": "Файл успешно загружен",
+        "uploadDataError": "Некорректное содержимое файла",
+        "btnSubmit": "Подтвердить"
+      },
+      "entityActionReportGeneration": {
+        "title": "Отчёт"
       }
     }
   }

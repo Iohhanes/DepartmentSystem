@@ -5,6 +5,7 @@ import UploadDataComponent from "../upload-data/upload-data.component";
 import {UploadStatus} from "../../model/upload-status.model";
 import {LoadingOutlined} from "@ant-design/icons";
 import {FileExtension, MimeType} from "../../model/file-type.model";
+import {useTranslation} from "react-i18next";
 
 interface EntityActionUploadComponentProps {
     onUpload: (file: RcFile) => void;
@@ -17,6 +18,9 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                                                                                uploadStatus,
                                                                                onCloseShowingUploadStatus
                                                                            }) => {
+
+    const {t} = useTranslation();
+
     const [visible, setVisible] = useState(false);
     const [mainFile, setMainFile] = useState<RcFile>()
 
@@ -46,10 +50,10 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
     return (
         <>
             <Button className="entity-action-upload__button-upload" type="primary" onClick={handleOpenUploadModal}>
-                Upload data
+                {t("entityActionUpload.title")}
             </Button>
             <Modal
-                title="Upload data"
+                title={t("entityActionUpload.title")}
                 visible={visible}
                 footer={null}
                 closable
@@ -59,7 +63,7 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                     {!loading && <>
                         {uploadStatus !== UploadStatus.NO_UPLOADING &&
                         <Alert type={uploadStatus === UploadStatus.ERROR ? "error" : "success"}
-                               message={uploadStatus === UploadStatus.ERROR ? "Invalid file content" : "File uploaded successfully"}
+                               message={uploadStatus === UploadStatus.ERROR ? t("entityActionUpload.uploadDataError") : t("entityActionUpload.uploadDataSuccess")}
                                closable
                                banner
                                onClose={onCloseShowingUploadStatus}/>}
@@ -70,7 +74,7 @@ const EntityActionUploadComponent: FC<EntityActionUploadComponentProps> = ({
                                 fileExtensions={[FileExtension.XLSX]}/>
                             <Button type="primary" onClick={handleSubmit}
                                     className="entity-action-upload__footer__submit-button">
-                                Submit
+                                {t("entityActionUpload.btnSubmit")}
                             </Button>
                         </div>
                     </>}
