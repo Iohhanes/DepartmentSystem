@@ -34,7 +34,8 @@
         "btn": {
           "submit": "Подтвердить",
           "cancel": "Отмена"
-        }
+        },
+        "selectNotFoundOptions": "Ничего не найдено"
       },
       "entities": {
         "subject": {
@@ -191,6 +192,9 @@
       },
       "entityActionReportGeneration": {
         "title": "Отчёт"
+      },
+      "searchBarComponent": {
+        "notFoundDataMessage": "Ничего не найдено"
       }
     }
   }

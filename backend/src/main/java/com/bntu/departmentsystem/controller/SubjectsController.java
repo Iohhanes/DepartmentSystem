@@ -43,7 +43,8 @@ public class SubjectsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestParam("content") MultipartFile content, @RequestParam("title") String title) {
+    public ResponseEntity add(@RequestParam(value = "content", required = false) MultipartFile content,
+                              @RequestParam("title") String title) {
         try {
             subjectService.add(content, title);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -54,7 +55,7 @@ public class SubjectsController {
 
     @PostMapping("/{id}/edit")
     public ResponseEntity edit(@PathVariable Long id,
-                               @RequestParam("content") MultipartFile content,
+                               @RequestParam(value = "content", required = false) MultipartFile content,
                                @RequestParam("title") String title) {
         try {
             subjectService.edit(id, content, title);

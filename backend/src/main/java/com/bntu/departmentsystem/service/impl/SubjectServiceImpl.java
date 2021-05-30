@@ -4,6 +4,7 @@ import com.bntu.departmentsystem.model.entity.Subject;
 import com.bntu.departmentsystem.repository.SubjectRepository;
 import com.bntu.departmentsystem.service.SubjectService;
 import com.bntu.departmentsystem.service.storage.FileStoreService;
+import com.bntu.departmentsystem.utils.FileNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -55,7 +56,7 @@ public class SubjectServiceImpl implements SubjectService {
                 .title(title)
                 .contentName(content.getOriginalFilename())
                 .build());
-        subject.setContentExist(fileStoreService.uploadFile(formContentName(subject.getId()), content));
+        subject.setContentExist(fileStoreService.uploadFile(formContentName(subject), content));
         subjectRepository.save(subject);
     }
 
@@ -65,10 +66,8 @@ public class SubjectServiceImpl implements SubjectService {
         if (subject != null) {
             Optional.ofNullable(subject.getTitle()).ifPresent(subject::setTitle);
             if (content != null) {
-                subject.setContentExist(fileStoreService.uploadFile(formContentName(subject.getId()), content));
-                if (subject.isContentExist()) {
-                    subject.setContentName(content.getOriginalFilename());
-                }
+                subject.setContentName(content.getOriginalFilename());
+                subject.setContentExist(fileStoreService.uploadFile(formContentName(subject, content.getOriginalFilename()), content));
             }
             subjectRepository.save(subject);
         }
@@ -94,7 +93,19 @@ public class SubjectServiceImpl implements SubjectService {
         return fileStoreService.findFile(formContentName(id));
     }
 
+    private String formContentName(Subject subject) {
+        return formContentName(subject, subject.getContentName());
+    }
+
     private String formContentName(Long id) {
-        return FILE_PREFIX + id;
+        Subject subject = id == null ? null : subjectRepository.findById(id).orElse(null);
+        return formContentName(subject);
+    }
+
+    private String formContentName(Subject subject, String contentName) {
+        if (subject != null) {
+            return FILE_PREFIX + subject.getId() + FileNameUtils.getExtensionByFileName(contentName);
+        }
+        return null;
     }
 }

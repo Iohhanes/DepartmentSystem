@@ -5,6 +5,7 @@ import com.bntu.departmentsystem.repository.CurriculumRepository;
 import com.bntu.departmentsystem.repository.SpecialityRepository;
 import com.bntu.departmentsystem.service.CurriculumService;
 import com.bntu.departmentsystem.service.storage.FileStoreService;
+import com.bntu.departmentsystem.utils.FileNameUtils;
 import com.bntu.departmentsystem.utils.exception.InvalidUploadFileException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -52,7 +53,7 @@ public class CurriculumServiceImpl implements CurriculumService {
                 .speciality(specialityId != null ?
                         specialityRepository.findById(specialityId).orElse(null) : null)
                 .build());
-        curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum.getId()), content));
+        curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum), content));
         curriculumRepository.save(curriculum);
     }
 
@@ -64,10 +65,8 @@ public class CurriculumServiceImpl implements CurriculumService {
             Optional.ofNullable(specialityId).ifPresent(speciality -> curriculum
                     .setSpeciality(specialityRepository.findById(speciality).orElse(null)));
             if (content != null) {
-                curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum.getId()), content));
-                if (curriculum.isContentExist()) {
-                    curriculum.setContentName(content.getOriginalFilename());
-                }
+                curriculum.setContentName(content.getOriginalFilename());
+                curriculum.setContentExist(fileStoreService.uploadFile(formContentName(curriculum, content.getOriginalFilename()), content));
             }
             curriculumRepository.save(curriculum);
         }
@@ -85,7 +84,19 @@ public class CurriculumServiceImpl implements CurriculumService {
         return fileStoreService.findFile(formContentName(id));
     }
 
+    private String formContentName(Curriculum curriculum) {
+        return formContentName(curriculum, curriculum.getContentName());
+    }
+
     private String formContentName(Long id) {
-        return FILE_PREFIX + id;
+        Curriculum curriculum = id == null ? null : curriculumRepository.findById(id).orElse(null);
+        return formContentName(curriculum);
+    }
+
+    private String formContentName(Curriculum curriculum, String contentName) {
+        if (curriculum != null) {
+            return FILE_PREFIX + curriculum.getId() + FileNameUtils.getExtensionByFileName(contentName);
+        }
+        return null;
     }
 }

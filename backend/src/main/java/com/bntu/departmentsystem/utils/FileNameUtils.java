@@ -1,5 +1,6 @@
 package com.bntu.departmentsystem.utils;
 
+import com.bntu.departmentsystem.model.MimeType;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -7,11 +8,15 @@ import lombok.NoArgsConstructor;
 public class FileNameUtils {
 
     public static String getExtensionByFileName(String fileName) {
-        String fileNameExtension = null;
-        int index = fileName.lastIndexOf(".");
-        if (index > 0) {
-            fileNameExtension = fileName.substring(index);
+        if (fileName != null) {
+            String fileNameExtension = null;
+            int index = fileName.lastIndexOf(".");
+            if (index > 0) {
+                fileNameExtension = fileName.substring(index);
+            }
+            return fileNameExtension;
+        } else {
+            return MimeType.DOCX.getExtension();
         }
-        return fileNameExtension;
     }
 }

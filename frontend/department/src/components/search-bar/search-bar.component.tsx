@@ -7,6 +7,7 @@ import {Entity} from "../../model/entity.model";
 import {DEBOUNCE_WAIT} from "../../utils/constants.utils";
 import {useHistory} from "react-router";
 import {selectDataFromFirstPage} from "../../utils/select-data.utils";
+import {useTranslation} from "react-i18next";
 
 
 interface SearchBarComponentProps<T extends Entity> {
@@ -20,6 +21,9 @@ const SearchBarComponent = <T extends Entity>({
                                                   placeholder,
                                                   onConvert
                                               }: PropsWithChildren<SearchBarComponentProps<T>>): ReactElement<any, any> | null => {
+
+    const {t} = useTranslation();
+
     const history = useHistory();
 
     const [options, setOptions] = useState<Suggestion[]>([]);
@@ -66,7 +70,7 @@ const SearchBarComponent = <T extends Entity>({
                 onSearch={handleSearch}
                 onChange={handleChange}
                 placeholder={placeholder}
-                notFoundContent="Not found"
+                notFoundContent={t("searchBarComponent.notFoundDataMessage")}
             />
         </div>
     )

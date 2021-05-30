@@ -39,7 +39,7 @@ public class CurriculumsController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity add(@RequestParam("content") MultipartFile content,
+    public ResponseEntity add(@RequestParam(value = "content", required = false) MultipartFile content,
                               @RequestParam("yearOfEntry") Integer yearOfEntry,
                               @RequestParam("specialityId") Long specialityId) {
         try {
@@ -52,7 +52,7 @@ public class CurriculumsController {
 
     @PostMapping("/{id}/edit")
     public ResponseEntity edit(@PathVariable Long id,
-                               @RequestParam("content") MultipartFile content,
+                               @RequestParam(value = "content", required = false) MultipartFile content,
                                @RequestParam("yearOfEntry") Integer yearOfEntry,
                                @RequestParam("specialityId") Long specialityId) {
         try {

@@ -19,10 +19,9 @@ public class FileStoreServiceImpl implements FileStoreService {
 
     @Override
     public boolean uploadFile(String fileName, MultipartFile file) throws InvalidUploadFileException {
-        if (file != null && !file.isEmpty()) {
-            String filenameWithFormat = fileName + FileNameUtils.getExtensionByFileName(fileName);
+        if (file != null && !file.isEmpty() && fileName != null) {
             try {
-                file.transferTo(new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + filenameWithFormat));
+                file.transferTo(new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + fileName));
                 return true;
             } catch (IOException exception) {
                 log.warn("Failed upload file: {}", exception.getMessage());
@@ -34,16 +33,17 @@ public class FileStoreServiceImpl implements FileStoreService {
 
     @Override
     public ByteArrayOutputStream findFile(String fileName) {
-        try {
-            File file = new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + fileName +
-                    FileNameUtils.getExtensionByFileName(fileName));
-            if (file.exists()) {
-                ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
-                fileOutputStream.write(Files.readAllBytes(file.toPath()));
-                return fileOutputStream;
+        if (fileName != null) {
+            try {
+                File file = new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + fileName);
+                if (file.exists()) {
+                    ByteArrayOutputStream fileOutputStream = new ByteArrayOutputStream();
+                    fileOutputStream.write(Files.readAllBytes(file.toPath()));
+                    return fileOutputStream;
+                }
+            } catch (IOException exception) {
+                log.warn("File not found: {}", exception.getMessage());
             }
-        } catch (IOException exception) {
-            log.warn("File not found: {}", exception.getMessage());
         }
         return null;
     }
@@ -51,8 +51,7 @@ public class FileStoreServiceImpl implements FileStoreService {
     @Override
     public void deleteFile(String fileName) {
         if (fileName != null) {
-            File file = new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + fileName +
-                    FileNameUtils.getExtensionByFileName(fileName));
+            File file = new File(System.getProperty(FILES_STORE_PATH_PROPERTY) + fileName);
             if (file.exists()) {
                 boolean resultDeleting = file.delete();
                 log.debug("Result of deleting a file from the server :{}", resultDeleting ? "yes" : "no");

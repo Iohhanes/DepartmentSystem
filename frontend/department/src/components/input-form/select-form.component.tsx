@@ -1,6 +1,7 @@
 import React, {FC} from "react";
 import {Form, Select} from "antd";
 import {Rule} from "rc-field-form/lib/interface";
+import {useTranslation} from "react-i18next";
 
 interface SelectFormComponentProps {
     options?: { label: string, value: string }[]
@@ -23,6 +24,9 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                                                                rules,
                                                                disabled
                                                            }) => {
+
+    const {t} = useTranslation();
+
     return (
         <Form.Item
             className={formClassName ? formClassName : ""}
@@ -36,6 +40,7 @@ const SelectFormComponent: FC<SelectFormComponentProps> = ({
                 placeholder={placeholder}
                 showSearch
                 allowClear
+                notFoundContent={t("inputForms.selectNotFoundOptions")}
                 disabled={disabled}>
                 {options?.map(option => <Select.Option
                     value={option.value}
