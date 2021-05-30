@@ -19,6 +19,7 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
 
     const [facultyMembers, setFacultyMembers] = useState<FacultyMember[]>([]);
     const [downloadError, setDownloadError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [printAction, setPrintAction] = useState(false);
 
     useEffect(() => {
@@ -37,7 +38,10 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
                     signDate: data.signDate
                 } as PgStudentReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         } else {
             downloadDocument(
@@ -48,13 +52,17 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
                     signDate: data.signDate
                 } as PgStudentReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         }
     }, [type, fileReportName, printAction]);
 
     const handleCloseShowingDownloadError = useCallback(() => {
         setDownloadError(false);
+        setLoading(false);
     }, []);
 
     const handleDownloadBtnClick = useCallback(() => {
@@ -70,6 +78,7 @@ const PgStudentsReportGenerationComponent: FC<PgStudentsReportGenerationComponen
             <EntityActionReportGenerationComponent
                 downloadError={downloadError}
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
+                loading={loading}
                 reportForm={<PgStudentReportFormComponent
                     facultyMembers={facultyMembers}
                     onSubmit={handleSubmit}

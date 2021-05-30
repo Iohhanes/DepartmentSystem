@@ -8,10 +8,12 @@ import FacultyMemberReportFormComponent from "./faculty-member-report-form.compo
 const FacultyMembersReportGenerationContainer: FC = () => {
 
     const [downloadError, setDownloadError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [printAction, setPrintAction] = useState(false);
 
     const handleSubmit = useCallback((data) => {
         setDownloadError(false);
+        setLoading(true);
         if (printAction) {
             printDocument(
                 `/${DepartmentType.FACULTY_MEMBERS}/report/pdf`,
@@ -20,7 +22,10 @@ const FacultyMembersReportGenerationContainer: FC = () => {
                     signDate: data.signDate
                 } as FacultyMemberReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         } else {
             downloadDocument(
@@ -31,13 +36,17 @@ const FacultyMembersReportGenerationContainer: FC = () => {
                     signDate: data.signDate
                 } as FacultyMemberReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         }
     }, [printAction]);
 
     const handleCloseShowingDownloadError = useCallback(() => {
         setDownloadError(false);
+        setLoading(false);
     }, []);
 
     const handleDownloadBtnClick = useCallback(() => {
@@ -53,6 +62,7 @@ const FacultyMembersReportGenerationContainer: FC = () => {
             <EntityActionReportGenerationComponent
                 downloadError={downloadError}
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
+                loading={loading}
                 reportForm={<FacultyMemberReportFormComponent
                     onSubmit={handleSubmit}
                     onDownloadBtnClick={handleDownloadBtnClick}

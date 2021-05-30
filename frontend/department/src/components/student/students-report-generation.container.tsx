@@ -11,6 +11,7 @@ const StudentsReportGenerationContainer: FC = () => {
 
     const [groups, setGroups] = useState<Group[]>([]);
     const [downloadError, setDownloadError] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [printAction, setPrintAction] = useState(false);
 
     useEffect(() => {
@@ -29,7 +30,10 @@ const StudentsReportGenerationContainer: FC = () => {
                     signDate: data.signDate
                 } as StudentReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         } else {
             downloadDocument(
@@ -40,13 +44,17 @@ const StudentsReportGenerationContainer: FC = () => {
                     signDate: data.signDate
                 } as StudentReportRequest,
                 () => {
-                    setDownloadError(true)
+                    setLoading(false);
+                },
+                () => {
+                    setDownloadError(true);
                 });
         }
     }, [printAction]);
 
     const handleCloseShowingDownloadError = useCallback(() => {
         setDownloadError(false);
+        setLoading(false);
     }, []);
 
     const handleDownloadBtnClick = useCallback(() => {
@@ -62,6 +70,7 @@ const StudentsReportGenerationContainer: FC = () => {
             <EntityActionReportGenerationComponent
                 downloadError={downloadError}
                 onCloseShowingDownloadError={handleCloseShowingDownloadError}
+                loading={loading}
                 reportForm={<StudentReportFormComponent
                     groups={groups}
                     onSubmit={handleSubmit}

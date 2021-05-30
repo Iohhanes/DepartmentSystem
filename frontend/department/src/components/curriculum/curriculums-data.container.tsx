@@ -65,6 +65,8 @@ const CurriculumsDataContainer: FC = () => {
             `/${DepartmentType.CURRICULUMS}/${id}/content`,
             fileName,
             {},
+            () => {
+            },
             handleDownloadError
         );
     }, [handleDownloadError]);

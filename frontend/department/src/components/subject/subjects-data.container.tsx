@@ -63,6 +63,8 @@ const SubjectsDataContainer: FC = () => {
             `/${DepartmentType.SUBJECTS}/${id}/content`,
             fileName,
             {},
+            () => {
+            },
             handleDownloadError
         );
     }, [handleDownloadError]);

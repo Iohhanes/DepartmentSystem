@@ -1,17 +1,20 @@
 import React, {FC, ReactNode, useCallback, useState} from "react";
-import {Alert, Button, Modal} from "antd";
+import {Alert, Button, Modal, Spin} from "antd";
 import {useTranslation} from "react-i18next";
+import {LoadingOutlined} from "@ant-design/icons";
 
 interface EntityActionReportGenerationComponentProps {
     downloadError: boolean;
     onCloseShowingDownloadError: () => void;
     reportForm: ReactNode;
+    loading: boolean;
 }
 
 const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComponentProps> = ({
                                                                                                    downloadError,
                                                                                                    onCloseShowingDownloadError,
-                                                                                                   reportForm
+                                                                                                   reportForm,
+                                                                                                   loading
                                                                                                }) => {
     const {t} = useTranslation();
 
@@ -46,7 +49,9 @@ const EntityActionReportGenerationComponent: FC<EntityActionReportGenerationComp
                            closable
                            banner
                            onClose={onCloseShowingDownloadError}/>}
-                    {reportForm}
+                    {<Spin indicator={<LoadingOutlined style={{fontSize: 24}} spin/>} spinning={loading}>
+                        {!loading && reportForm}
+                    </Spin>}
                 </>
             </Modal>
         </>
